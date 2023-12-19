@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
+using BusinessManagementApi.DAL;
+using BusinessManagementApi.Services;   
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddDbContext<ApplicationContext>(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IClientService, ClientService>();
 
 var app = builder.Build();
 

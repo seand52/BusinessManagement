@@ -23,20 +23,19 @@ public class Client
     [StringLength(255)]
     public string Address { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
-    public string Province { get; set; } = string.Empty;
+    public string? Province { get; set; } = string.Empty;
 
     [StringLength(7)]
-    public string Postcode { get; set; } = string.Empty;
+    public string? Postcode { get; set; } = string.Empty;
     public string DocumentNum { get; set; } = string.Empty;
     public DocumentType DocumentType { get; set; }
 
     [StringLength(12)]
-    public string Telephone { get; set; } = string.Empty;
+    public string? Telephone { get; set; } = string.Empty;
 
     [EmailAddress]
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; } = string.Empty;
     public int UserId { get; set; }
-    public User User { get; set; } = null!;
     public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
     public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 

@@ -109,7 +109,6 @@ namespace BusinessManagement.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -118,12 +117,10 @@ namespace BusinessManagement.Migrations
                         .HasColumnType("character varying(80)");
 
                     b.Property<string>("Postcode")
-                        .IsRequired()
                         .HasMaxLength(7)
                         .HasColumnType("character varying(7)");
 
                     b.Property<string>("Province")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ShopName")
@@ -132,7 +129,6 @@ namespace BusinessManagement.Migrations
                         .HasColumnType("character varying(80)");
 
                     b.Property<string>("Telephone")
-                        .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("character varying(12)");
 
