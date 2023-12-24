@@ -1,3 +1,4 @@
+using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.DAL

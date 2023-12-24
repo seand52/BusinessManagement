@@ -1,21 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
 using System.Data;
+using AutoMapper;
 using BusinessManagementApi.Services;
-
-public record ClientDto
-{
-    public int Id { get; set; }
-    public required string Name { get; set; }
-    public string? ShopName { get; set; }
-    public string? Address { get; set; }
-    public string? City { get; set; }
-    public string? Province { get; set; }
-    public string? Postcode { get; set; }
-    public string? DocumentNum { get; set; }
-    public string? Telephone { get; set; }
-    public string Email { get; set; }
-}
+using BusinessManagementApi.Dto;
 
 namespace BusinessManagement.Controllers
 {
@@ -23,11 +11,13 @@ namespace BusinessManagement.Controllers
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
     {
-        private IClientService _clientService;
+        private readonly IClientService _clientService;
+        private readonly IMapper _mapper;
 
-        public ClientsController(IClientService clientService)
+        public ClientsController(IClientService clientService, IMapper mapper)
         {
             _clientService = clientService;
+            _mapper = mapper;
         }
 
         [HttpGet("{id}")]
@@ -38,22 +28,23 @@ namespace BusinessManagement.Controllers
             {
                 return NotFound();
             }
-            return Ok(client);
+            return Ok(_mapper.Map<ClientDto>(client));
         }
 
         [HttpPost]
-        public ActionResult<Client> Create([FromBody] Client client)
+        public ActionResult<ClientDto> Create([FromBody] CreateClientDto client)
         {
             try
             {
-                var isSuccess  = _clientService.CreateClient(client, ModelState);
+                var clientEntity = _mapper.Map<Client>(client);
+                var isSuccess  = _clientService.CreateClient(clientEntity, ModelState);
 
                 if (!isSuccess)
                 {
                     return BadRequest(ModelState);
                 }
 
-                return CreatedAtAction(nameof(Get), new { id = client.Id }, client);
+                return CreatedAtAction(nameof(Get), new { id = clientEntity.Id }, _mapper.Map<ClientDto>(clientEntity));
             }
             catch (DataException)
             {
@@ -63,7 +54,7 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Client> Put(int id, [FromBody] Client? client)
+        public ActionResult<Client> Put(int id, [FromBody] UpdateClientDto? client)
         {
             try
             {
@@ -79,7 +70,8 @@ namespace BusinessManagement.Controllers
                     return NotFound();
                 }
 
-                _clientService.UpdateClient(clientToUpdate, client);
+                var clientEntity = _mapper.Map<Client>(client);
+                _clientService.UpdateClient(clientToUpdate, clientEntity);
 
                 return NoContent();
             }

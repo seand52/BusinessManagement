@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Services;   
+using BusinessManagementApi.Profiles;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
 
 var app = builder.Build();
 
