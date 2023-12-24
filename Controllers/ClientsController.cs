@@ -3,7 +3,7 @@ using BusinessManagementApi.Models;
 using System.Data;
 using BusinessManagementApi.Services;
 
-public class ClientDto
+public record ClientDto
 {
     public int Id { get; set; }
     public required string Name { get; set; }
@@ -63,7 +63,7 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Client> Put(int id, [FromBody] Client client)
+        public ActionResult<Client> Put(int id, [FromBody] Client? client)
         {
             try
             {
