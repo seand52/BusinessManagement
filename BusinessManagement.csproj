@@ -23,4 +23,26 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="BusinessManagement.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="BusinessManagement.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="BusinessManagement.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BusinessManagement.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\BusinessManagement.Tests.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\project.packagespec.json" />
+  </ItemGroup>
+
 </Project>
