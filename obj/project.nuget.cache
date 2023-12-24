@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "ZEtrVnrYN3P5B/Xu+UtnzbQyFvJcL+1PION07ll0CqOVnCw5lsEkyhtKmG33eoPscqGkJBD2AbgPysKN7zxsPg==",
+  "dgSpecHash": "txf3qrW6n6yJSHvQiVgCS1n1GKyYrRIHAsisCpRZtNK3LRdW3q3nLbaOjqsPuSKKOG3so8bp2+xFpxk/j1lL9w==",
   "success": true,
   "projectFilePath": "/home/sean/projects/BusinessManagement/BusinessManagement.csproj",
   "expectedPackageFiles": [
-    "/home/sean/.nuget/packages/awssdk.core/3.7.108.1/awssdk.core.3.7.108.1.nupkg.sha512",
-    "/home/sean/.nuget/packages/awssdk.dynamodbv2/3.7.105.5/awssdk.dynamodbv2.3.7.105.5.nupkg.sha512",
     "/home/sean/.nuget/packages/azure.core/1.24.0/azure.core.1.24.0.nupkg.sha512",
     "/home/sean/.nuget/packages/azure.identity/1.6.0/azure.identity.1.6.0.nupkg.sha512",
     "/home/sean/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
