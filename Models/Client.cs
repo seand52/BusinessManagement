@@ -39,6 +39,6 @@ public class Client
     public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
     public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
