@@ -4,6 +4,7 @@ using BusinessManagementApi.DAL;
 using BusinessManagementApi.Services;   
 using BusinessManagementApi.Profiles;
 using AutoMapper;
+using BusinessManagementApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
 
 var app = builder.Build();
 
+app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExtensionHandler());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

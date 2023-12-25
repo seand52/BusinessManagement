@@ -28,84 +28,57 @@ namespace BusinessManagement.Controllers
             {
                 return NotFound();
             }
+
             return Ok(_mapper.Map<ClientDto>(client));
         }
 
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto client)
         {
-            try
-            {
-                var clientEntity = _mapper.Map<Client>(client);
-                var isSuccess  = await _clientService.CreateClient(clientEntity, ModelState);
+            var clientEntity = _mapper.Map<Client>(client);
+            var isSuccess = await _clientService.CreateClient(clientEntity, ModelState);
 
-                if (!isSuccess)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                return CreatedAtAction(nameof(Get), new { id = clientEntity.Id }, _mapper.Map<ClientDto>(clientEntity));
-            }
-            catch (DataException)
+            if (!isSuccess)
             {
-                ModelState.AddModelError(string.Empty, "Unable to save changes");
                 return BadRequest(ModelState);
             }
+
+            return CreatedAtAction(nameof(Get), new { id = clientEntity.Id }, _mapper.Map<ClientDto>(clientEntity));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Client>> Put(int id, [FromBody] UpdateClientDto? client)
         {
-            try
+            if (client == null)
             {
-                if (client == null)
-                {
-                    return BadRequest();
-                }
-
-                var clientToUpdate = await _clientService.GetClientById(id);
-
-                if (clientToUpdate == null)
-                {
-                    return NotFound();
-                }
-
-                var clientEntity = _mapper.Map<Client>(client);
-                await _clientService.UpdateClient(clientToUpdate, clientEntity);
-
-                return NoContent();
+                return BadRequest();
             }
-            catch (Exception)
+
+            var clientToUpdate = await _clientService.GetClientById(id);
+
+            if (clientToUpdate == null)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    "Error creating employee"
-                );
+                return NotFound();
             }
+
+            var clientEntity = _mapper.Map<Client>(client);
+            await _clientService.UpdateClient(clientToUpdate, clientEntity);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                Client? client = await _clientService.GetClientById(id);
+            Client? client = await _clientService.GetClientById(id);
 
-                if (client == null)
-                {
-                    return NotFound();
-                }
-
-                await _clientService.DeleteClient(client);
-                return Ok();
-            }
-            catch (Exception)
+            if (client == null)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    "Unexpected error deleting client"
-                );
+                return NotFound();
             }
+
+            await _clientService.DeleteClient(client);
+            return Ok();
         }
     }
 }
