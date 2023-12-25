@@ -5,13 +5,13 @@ namespace BusinessManagementApi.DAL
 {
     public interface IClientRepository : IDisposable
     {
-        Client? GetClientById(int clientId);
-        void InsertClient(Client client);
+        Task<Client?> GetClientById(int clientId);
+        Task InsertClient(Client client);
         void UpdateClient(Client client);
 
         void DeleteClient(Client client);
 
-        void Save();
+        Task Save();
 
     }
 }

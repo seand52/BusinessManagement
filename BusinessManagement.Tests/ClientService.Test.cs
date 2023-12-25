@@ -22,55 +22,55 @@ public class Tests
     }
 
     [Test]
-    public void GetClientById_ValidId_ReturnsClient()
+    public async Task GetClientById_ValidId_ReturnsClient()
     {
         var client = _fixture.Create<Client>();
-        _mockRepository.Setup(p => p.GetClientById(1)).Returns(client);
+        _mockRepository.Setup(p => p.GetClientById(1)).ReturnsAsync(client);
 
-        var result = _clientService.GetClientById(1);
+        var result = await _clientService.GetClientById(1);
         Assert.That(client, Is.EqualTo(result));
         
     }
 
     [Test]
-    public void GetClientById_InvalidId_ReturnsNull()
+    public async Task GetClientById_InvalidId_ReturnsNull()
     {
         var client = _fixture.Create<Client>();
 
-        _mockRepository.Setup(p => p.GetClientById(1)).Returns(client);
+        _mockRepository.Setup(p => p.GetClientById(1)).ReturnsAsync(client);
 
-        var result = _clientService.GetClientById(2);
+        var result = await _clientService.GetClientById(2);
         Assert.That(result, Is.Null);
     }
     
     [Test]
-    public void CreateClient_InvalidModel_ReturnsFalse()
+    public async Task CreateClient_InvalidModel_ReturnsFalse()
     {
         var client = new Client();
         var modelState = new ModelStateDictionary();
         modelState.AddModelError("Name", "Is Invalid");
-        var result = _clientService.CreateClient(client, modelState);
+        var result = await _clientService.CreateClient(client, modelState);
         Assert.IsFalse(result);
     }
     
     [Test]
-    public void CreateClient_ValidModel_ReturnsTrue()
+    public async Task CreateClient_ValidModel_ReturnsTrue()
     {
         var client = _fixture.Create<Client>();
         var modelState = new ModelStateDictionary();
-        var result = _clientService.CreateClient(client, modelState);
+        var result = await _clientService.CreateClient(client, modelState);
         Assert.IsTrue(result);
         _mockRepository.Verify(p => p.InsertClient(client), Times.Once);
         _mockRepository.Verify(p => p.Save(), Times.Once);
     }
     
     [Test]
-    public void UpdateClient_ValidClient_ReplacesWithNewDataCorrectly()
+    public async Task UpdateClient_ValidClient_ReplacesWithNewDataCorrectly()
     {
         var client = _fixture.Create<Client>();
         var newClient = _fixture.Create<Client>();
         
-        _clientService.UpdateClient(client, newClient);
+        await _clientService.UpdateClient(client, newClient);
         // TODO: Refactor this
         Assert.That(client.Name, Is.EqualTo(newClient.Name));
         Assert.That(client.ShopName, Is.EqualTo(newClient.ShopName));
@@ -87,10 +87,10 @@ public class Tests
     }
     
     [Test]
-    public void DeleteClient_ValidClient_CallsTheDALMethodsCorrectly()
+    public async Task DeleteClient_ValidClient_CallsTheDALMethodsCorrectly()
     {
         var client = _fixture.Create<Client>();
-        _clientService.DeleteClient(client);
+        await _clientService.DeleteClient(client);
         _mockRepository.Verify(p => p.DeleteClient(client), Times.Once);
         _mockRepository.Verify(p => p.Save(), Times.Once);
     }

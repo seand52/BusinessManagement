@@ -21,9 +21,9 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ClientDto> Get(int id)
+        public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            Client? client = _clientService.GetClientById(id);
+            Client? client = await _clientService.GetClientById(id);
             if (client == null)
             {
                 return NotFound();
@@ -32,12 +32,12 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ClientDto> Create([FromBody] CreateClientDto client)
+        public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto client)
         {
             try
             {
                 var clientEntity = _mapper.Map<Client>(client);
-                var isSuccess  = _clientService.CreateClient(clientEntity, ModelState);
+                var isSuccess  = await _clientService.CreateClient(clientEntity, ModelState);
 
                 if (!isSuccess)
                 {
@@ -54,7 +54,7 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Client> Put(int id, [FromBody] UpdateClientDto? client)
+        public async Task<ActionResult<Client>> Put(int id, [FromBody] UpdateClientDto? client)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace BusinessManagement.Controllers
                     return BadRequest();
                 }
 
-                var clientToUpdate = _clientService.GetClientById(id);
+                var clientToUpdate = await _clientService.GetClientById(id);
 
                 if (clientToUpdate == null)
                 {
@@ -71,7 +71,7 @@ namespace BusinessManagement.Controllers
                 }
 
                 var clientEntity = _mapper.Map<Client>(client);
-                _clientService.UpdateClient(clientToUpdate, clientEntity);
+                await _clientService.UpdateClient(clientToUpdate, clientEntity);
 
                 return NoContent();
             }
@@ -85,18 +85,18 @@ namespace BusinessManagement.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                Client? client = _clientService.GetClientById(id);
+                Client? client = await _clientService.GetClientById(id);
 
                 if (client == null)
                 {
                     return NotFound();
                 }
 
-                _clientService.DeleteClient(client);
+                await _clientService.DeleteClient(client);
                 return Ok();
             }
             catch (Exception)

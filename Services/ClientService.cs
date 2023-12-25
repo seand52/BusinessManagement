@@ -13,12 +13,12 @@ namespace BusinessManagementApi.Services
             _clientRepository = clientRepository;
         }
 
-        public Client? GetClientById(int clientId)
+        public async Task<Client?> GetClientById(int clientId)
         {
-            return _clientRepository.GetClientById(clientId);
+            return await _clientRepository.GetClientById(clientId);
         }
 
-        public bool CreateClient(Client client, ModelStateDictionary modelState)
+        public async Task<bool> CreateClient(Client client, ModelStateDictionary modelState)
         {
             if (!modelState.IsValid)
             {
@@ -27,12 +27,12 @@ namespace BusinessManagementApi.Services
             }
 
             Console.WriteLine("inside model is valid");
-            _clientRepository.InsertClient(client);
-            _clientRepository.Save();
+            await _clientRepository.InsertClient(client);
+            await _clientRepository.Save();
             return true;
         }
 
-        public void UpdateClient(Client client, Client newData)
+        public async Task UpdateClient(Client client, Client newData)
         {
             client.Name = newData.Name;
             client.ShopName = newData.ShopName;
@@ -46,13 +46,13 @@ namespace BusinessManagementApi.Services
             client.Email = newData.Email;
 
             _clientRepository.UpdateClient(client);
-            _clientRepository.Save();
+            await _clientRepository.Save();
         }
 
-        public void DeleteClient(Client client)
+        public async Task DeleteClient(Client client)
         {
             _clientRepository.DeleteClient(client);
-            _clientRepository.Save();
+            await _clientRepository.Save();
         }
     }
 }

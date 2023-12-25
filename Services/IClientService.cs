@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BusinessManagementApi.Services {
     public interface IClientService {
-        Client? GetClientById(int clientId);
-        bool CreateClient(Client client, ModelStateDictionary modelState);
-        void UpdateClient(Client client, Client? newData);
-        void DeleteClient(Client client);
+        Task<Client?> GetClientById(int clientId);
+        Task<bool> CreateClient(Client client, ModelStateDictionary modelState);
+        Task UpdateClient(Client client, Client? newData);
+        Task DeleteClient(Client client);
     }
 }

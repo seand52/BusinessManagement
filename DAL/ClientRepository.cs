@@ -1,6 +1,7 @@
 using BusinessManagement.Database;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementApi.DAL
 {
@@ -13,14 +14,14 @@ namespace BusinessManagementApi.DAL
             _context = context;
         }
 
-        public Client? GetClientById(int clientId)
+        public async Task<Client?> GetClientById(int clientId)
         {
-            return _context.Clients.Find(clientId);
+            return await _context.Clients.FindAsync(clientId);
         }
 
-        public void InsertClient(Client client)
+        public async Task InsertClient(Client client)
         {
-            _context.Clients.Add(client);
+            await _context.Clients.AddAsync(client);
         }
 
         public void UpdateClient(Client client)
@@ -33,9 +34,9 @@ namespace BusinessManagementApi.DAL
             _context.Clients.Remove(client);
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;
