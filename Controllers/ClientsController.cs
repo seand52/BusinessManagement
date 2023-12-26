@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
-using System.Data;
 using AutoMapper;
+using BusinessManagement.Filter;
 using BusinessManagementApi.Services;
 using BusinessManagementApi.Dto;
 
@@ -30,6 +30,14 @@ namespace BusinessManagement.Controllers
             }
 
             return Ok(_mapper.Map<ClientDto>(client));
+        }
+        
+        [HttpGet]
+        public  async Task<ActionResult<Client>> GetClients([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            var clients = await _clientService.GetClients(validFilter, SearchTerm);
+            return Ok(clients);
         }
 
         [HttpPost]

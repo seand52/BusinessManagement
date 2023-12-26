@@ -1,4 +1,6 @@
 using BusinessManagement.Database;
+using BusinessManagement.Filter;
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,18 @@ namespace BusinessManagementApi.DAL
             return await _context.Clients.FindAsync(clientId);
         }
 
+        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm)
+        {
+            IQueryable<Client> clientsQuery = _context.Clients;
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                clientsQuery = clientsQuery.Where(p => p.Name.Contains(searchTerm));
+            }
+
+            return await PagedList<Client>.CreateAsync(clientsQuery, filter.PageNumber, filter.PageSize);
+        }
+
         public async Task InsertClient(Client client)
         {
             await _context.Clients.AddAsync(client);
@@ -29,7 +43,7 @@ namespace BusinessManagementApi.DAL
             _context.Clients.Update(client);
         }
 
-        public void DeleteClient (Client client)
+        public void DeleteClient(Client client)
         {
             _context.Clients.Remove(client);
         }
@@ -50,6 +64,7 @@ namespace BusinessManagementApi.DAL
                     _context.Dispose();
                 }
             }
+
             this.disposed = true;
         }
 

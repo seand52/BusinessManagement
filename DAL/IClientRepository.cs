@@ -1,3 +1,5 @@
+using BusinessManagement.Filter;
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 
@@ -6,6 +8,7 @@ namespace BusinessManagementApi.DAL
     public interface IClientRepository : IDisposable
     {
         Task<Client?> GetClientById(int clientId);
+        Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm);
         Task InsertClient(Client client);
         void UpdateClient(Client client);
 

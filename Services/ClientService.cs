@@ -1,3 +1,5 @@
+using BusinessManagement.Filter;
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
 using BusinessManagementApi.DAL;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,6 +18,11 @@ namespace BusinessManagementApi.Services
         public async Task<Client?> GetClientById(int clientId)
         {
             return await _clientRepository.GetClientById(clientId);
+        }
+        
+        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm)
+        {
+            return await _clientRepository.GetClients(filter, searchTerm);
         }
 
         public async Task<bool> CreateClient(Client client, ModelStateDictionary modelState)
