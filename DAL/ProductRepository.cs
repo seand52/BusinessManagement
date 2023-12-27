@@ -5,45 +5,45 @@ using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.DAL
 {
-    public class ClientRepository : IClientRepository, IDisposable
+    public class ProductRepository : IProductRepository, IDisposable
     {
         private readonly ApplicationContext _context;
 
-        public ClientRepository(ApplicationContext context)
+        public ProductRepository(ApplicationContext context)
         {
             _context = context;
         }
 
-        public async Task<Client?> GetClientById(int clientId)
+        public async Task<Product?> GetProductById(int productId)
         {
-            return await _context.Clients.FindAsync(clientId);
+            return await _context.Products.FindAsync(productId);
         }
 
-        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm)
+        public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm)
         {
-            IQueryable<Client> clientsQuery = _context.Clients;
+            IQueryable<Product> productsQuery = _context.Products;
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                clientsQuery = clientsQuery.Where(p => p.Name.Contains(searchTerm));
+                productsQuery = productsQuery.Where(p => p.Reference.Contains(searchTerm));
             }
 
-            return await PagedList<Client>.CreateAsync(clientsQuery, filter.PageNumber, filter.PageSize);
+            return await PagedList<Product>.CreateAsync(productsQuery, filter.PageNumber, filter.PageSize);
         }
 
-        public async Task InsertClient(Client client)
+        public async Task InsertProduct(Product product)
         {
-            await _context.Clients.AddAsync(client);
+            await _context.Products.AddAsync(product);
         }
 
-        public void UpdateClient(Client client)
+        public void UpdateProduct(Product product)
         {
-            _context.Clients.Update(client);
+            _context.Products.Update(product);
         }
 
-        public void DeleteClient(Client client)
+        public void DeleteProduct(Product product)
         {
-            _context.Clients.Remove(client);
+            _context.Products.Remove(product);
         }
 
         public async Task Save()

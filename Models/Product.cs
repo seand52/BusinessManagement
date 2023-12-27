@@ -20,13 +20,12 @@ public class Product
 
     [Required]
     public int UserId { get; set; }
-    public User User { get; set; } = null!;
 
     [Required]
     public List<Invoice> Invoices { get; } = new();
 
     [Required]
     public List<SalesOrder> SalesOrders { get; } = new();
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

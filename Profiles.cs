@@ -8,12 +8,12 @@ namespace BusinessManagementApi.Profiles
     {
         public BusinessManagementProfile()
         {
-            CreateMap<Client, ClientDto>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            CreateMap<CreateClientDto, Client>();
-            CreateMap<Client, CreateClientDto>();
+            CreateMap<Client, ClientDto>().ReverseMap();
+            CreateMap<CreateClientDto, Client>().ReverseMap();
             CreateMap<UpdateClientDto, Client>();
-            CreateMap<ClientDto, Client>()
-                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<CreateProductDto, Product>().ReverseMap();
+            CreateMap<UpdateProductDto, Product>();
         }
     }
 }

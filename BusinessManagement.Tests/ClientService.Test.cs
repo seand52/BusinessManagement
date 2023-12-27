@@ -3,7 +3,7 @@ using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace BusinessManagement.Tests;
+namespace BusinessManagement.Tests.ClientService;
 
 public class Tests
 {
@@ -15,7 +15,7 @@ public class Tests
     public void Setup()
     {
         _mockRepository = new Mock<IClientRepository>();
-        _clientService = new ClientService(_mockRepository.Object);
+        _clientService = new BusinessManagementApi.Services.ClientService(_mockRepository.Object);
         _fixture = new Fixture();
         _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
