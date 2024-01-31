@@ -14,6 +14,9 @@ namespace BusinessManagementApi.Profiles
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<CreateProductDto, Product>().ReverseMap();
             CreateMap<UpdateProductDto, Product>();
+            CreateMap<BusinessInfo, BusinessInfoDto>().ReverseMap();
+            CreateMap<CreateBusinessInfoDto, BusinessInfo>().ReverseMap();
+            CreateMap<UpdateBusinessInfoDto, BusinessInfo>();
         }
     }
 }

@@ -4,6 +4,7 @@ using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.DAL
+
 {
     public class ClientRepository : IClientRepository, IDisposable
     {

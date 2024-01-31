@@ -39,6 +39,7 @@ namespace BusinessManagementApi.Services
             businessInfo.Address = newData.Address;
             businessInfo.City = newData.City;
             businessInfo.Country = newData.Country;
+            businessInfo.Postcode = newData.Postcode;
             businessInfo.Telephone = newData.Telephone;
             businessInfo.Email = newData.Email;
 
