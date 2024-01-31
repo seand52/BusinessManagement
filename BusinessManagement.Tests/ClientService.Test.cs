@@ -71,6 +71,7 @@ public class Tests
         var newClient = _fixture.Create<Client>();
         
         await _clientService.UpdateClient(client, newClient);
+        //
         // TODO: Refactor this
         Assert.That(client.Name, Is.EqualTo(newClient.Name));
         Assert.That(client.ShopName, Is.EqualTo(newClient.ShopName));
