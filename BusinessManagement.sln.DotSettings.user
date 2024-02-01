@@ -2,7 +2,10 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AControllers_002Ff_003AClientsController_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AModels_002Ff_003ABusinessInfo_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7781743c_002Dfd3f_002D4439_002D97f3_002D17a1b99a65aa/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.Tests.ProductService.Tests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.Tests.ProductService.Tests&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;ProjectFile&gt;FB296C31-C74B-4694-BC5F-0660FD51172C/f:BusinessInfoService.Test.cs&lt;/ProjectFile&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
