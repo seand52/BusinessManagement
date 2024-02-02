@@ -1,9 +1,11 @@
 using BusinessManagementApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagement.Database;
 
-public class ApplicationContext : DbContext
+public class ApplicationContext : IdentityDbContext<User>
 {
     public DbSet<Client> Clients { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
@@ -15,18 +17,20 @@ public class ApplicationContext : DbContext
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options) { }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .Entity<Invoice>()
             .HasMany(e => e.Products)
             .WithMany(e => e.Invoices)
             .UsingEntity<InvoiceProduct>();
-
+        
         modelBuilder
             .Entity<SalesOrder>()
             .HasMany(e => e.Products)
             .WithMany(e => e.SalesOrders)
             .UsingEntity<SalesOrderProduct>();
+        
+        base.OnModelCreating(modelBuilder);
     }
 }

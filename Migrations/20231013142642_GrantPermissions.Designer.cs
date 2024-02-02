@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusinessManagement.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231218113219_GrantPermissions")]
+    [Migration("20231013142642_GrantPermissions")]
     partial class GrantPermissions
     {
         /// <inheritdoc />

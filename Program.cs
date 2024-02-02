@@ -5,6 +5,8 @@ using BusinessManagementApi.Services;
 using BusinessManagementApi.Profiles;
 using AutoMapper;
 using BusinessManagementApi.Extensions;
+using BusinessManagementApi.Models;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<ApplicationContext>(
 );
 
 // builder.Services.AddTransient<DatabaseSeeder>();
+builder.Services.AddAuthentication();
+builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -38,8 +42,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<User>();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

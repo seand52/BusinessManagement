@@ -18,8 +18,8 @@ public class Product
     [Required]
     public int Stock { get; set; }
 
-    [Required]
-    public int UserId { get; set; }
+    // [Required]
+    public string UserId { get; set; }
 
     [Required]
     public List<Invoice> Invoices { get; } = new();

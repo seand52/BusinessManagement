@@ -35,7 +35,7 @@ public class Client
 
     [EmailAddress]
     public string? Email { get; set; } = string.Empty;
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
     public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 

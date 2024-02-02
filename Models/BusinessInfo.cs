@@ -37,7 +37,7 @@ public class BusinessInfo
     [StringLength(55)]
 
     public string Email { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; } = null!;
+    public string UserId { get; set; }
+    // public User User { get; set; } = null!;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
