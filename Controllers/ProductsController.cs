@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace BusinessManagement.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ProductsController : BusinessManagementController
     {
@@ -30,6 +31,11 @@ namespace BusinessManagement.Controllers
                 return NotFound();
             }
 
+            if (product.UserId != GetUserId())
+            {
+                return Unauthorized("Insufficient permissions");
+            }
+
             return Ok(_mapper.Map<ProductDto>(product));
         }
         
@@ -37,7 +43,7 @@ namespace BusinessManagement.Controllers
         public  async Task<ActionResult<Product>> GetProducts([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var products = await _productService.GetProducts(validFilter, SearchTerm);
+            var products = await _productService.GetProducts(validFilter, SearchTerm, GetUserId());
             return Ok(products);
         }
 
@@ -45,6 +51,7 @@ namespace BusinessManagement.Controllers
         public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto product)
         {
             var productEntity = _mapper.Map<Product>(product);
+            productEntity.UserId = GetUserId();
             var isSuccess = await _productService.CreateProduct(productEntity, ModelState);
 
             if (!isSuccess)
@@ -70,6 +77,11 @@ namespace BusinessManagement.Controllers
                 return NotFound();
             }
 
+            if (productToUpdate.UserId != GetUserId())
+            {
+                return Unauthorized("Insufficient permissions");
+            }
+
             var productEntity = _mapper.Map<Product>(product);
             await _productService.UpdateProduct(productToUpdate, productEntity);
 
@@ -84,6 +96,11 @@ namespace BusinessManagement.Controllers
             if (product == null)
             {
                 return NotFound();
+            }
+
+            if (product.UserId != GetUserId())
+            {
+                return Unauthorized("Insufficient permissions");
             }
 
             await _productService.DeleteProduct(product);

@@ -3,10 +3,12 @@ using BusinessManagementApi.Models;
 using AutoMapper;
 using BusinessManagementApi.Services;
 using BusinessManagementApi.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class BusinessInfoController : BusinessManagementController
     {
@@ -19,10 +21,10 @@ namespace BusinessManagement.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<BusinessInfoDto>> Get(int userId)
+        [HttpGet]
+        public async Task<ActionResult<BusinessInfoDto>> Get()
         {
-            BusinessInfo? businessInfo = await _businessInfoService.GetBusinessInfoByUserId(userId);
+            BusinessInfo? businessInfo = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
             if (businessInfo == null)
             {
                 return NotFound();
@@ -34,7 +36,14 @@ namespace BusinessManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<BusinessInfoDto>> Create([FromBody] CreateBusinessInfoDto businessInfo)
         {
+            var existingBusinessInfo = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
+
+            if (existingBusinessInfo != null)
+            {
+                return Forbid("Only allowed to have one business associated");
+            }
             var businessInfoEntity = _mapper.Map<BusinessInfo>(businessInfo);
+            businessInfoEntity.UserId = GetUserId();
             var isSuccess = await _businessInfoService.CreateBusinessInfo(businessInfoEntity, ModelState);
 
             if (!isSuccess)
@@ -45,19 +54,24 @@ namespace BusinessManagement.Controllers
             return CreatedAtAction(nameof(Get), new { id = businessInfoEntity.Id }, _mapper.Map<BusinessInfoDto>(businessInfoEntity));
         }
 
-        [HttpPut("{userId}")]
-        public async Task<ActionResult<BusinessInfo>> Put(int userId, [FromBody] UpdateBusinessInfoDto? businessInfo)
+        [HttpPut]
+        public async Task<ActionResult<BusinessInfo>> Put([FromBody] UpdateBusinessInfoDto? businessInfo)
         {
             if (businessInfo == null)
             {
                 return BadRequest();
             }
 
-            var businessInfoToUpdate = await _businessInfoService.GetBusinessInfoByUserId(userId);
+            var businessInfoToUpdate = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
 
             if (businessInfoToUpdate == null)
             {
                 return NotFound();
+            }
+
+            if (businessInfoToUpdate.UserId != GetUserId())
+            {
+                return Unauthorized("Insufficient Permissions");
             }
 
             var businessInfoEntity = _mapper.Map<BusinessInfo>(businessInfo);

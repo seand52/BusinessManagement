@@ -11,7 +11,7 @@ namespace BusinessManagementApi.Dto
         public string? Telephone { get; set; }
         public string? Postcode { get; set; }
         public string? Email { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 
     public class CreateBusinessInfoDto {
@@ -23,7 +23,6 @@ namespace BusinessManagementApi.Dto
         public string? Telephone { get; set; }
         public string? Postcode { get; set; }
         public string? Email { get; set; }
-        public int UserId { get; set; }
     }
 
     public class UpdateBusinessInfoDto : CreateBusinessInfoDto;

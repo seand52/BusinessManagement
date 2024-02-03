@@ -19,9 +19,9 @@ namespace BusinessManagementApi.DAL
             return await _context.Products.FindAsync(productId);
         }
 
-        public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm)
+        public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm, string userId)
         {
-            IQueryable<Product> productsQuery = _context.Products;
+            IQueryable<Product> productsQuery = _context.Products.Where(p => p.UserId == userId);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {

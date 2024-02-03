@@ -20,9 +20,9 @@ namespace BusinessManagementApi.Services
             return await _productRepository.GetProductById(productId);
         }
         
-        public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm)
+        public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm, string userId)
         {
-            return await _productRepository.GetProducts(filter, searchTerm);
+            return await _productRepository.GetProducts(filter, searchTerm, userId);
         }
 
         public async Task<bool> CreateProduct(Product product, ModelStateDictionary modelState)

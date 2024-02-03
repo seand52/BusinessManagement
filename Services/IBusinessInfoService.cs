@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BusinessManagementApi.Services {
     public interface IBusinessInfoService {
-        Task<BusinessInfo?> GetBusinessInfoByUserId(int userId);
+        Task<BusinessInfo?> GetBusinessInfoByUserId(string userId);
         Task<bool> CreateBusinessInfo(BusinessInfo businessInfo, ModelStateDictionary modelState);
         Task UpdateBusinessInfo(BusinessInfo business, BusinessInfo? newData);
     }

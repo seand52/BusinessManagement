@@ -16,7 +16,7 @@ namespace BusinessManagementApi.DAL
             _context = context;
         }
 
-        public async Task<BusinessInfo?> GetBusinessUserByUserId(int userId)
+        public async Task<BusinessInfo?> GetBusinessUserByUserId(string userId)
         {
             // TODO: need to make query look for user id, this is looking for the primary id
             // return await _context.BusinessInfo.Where(x => x.UserId == userId).FirstOrDefaultAsync();

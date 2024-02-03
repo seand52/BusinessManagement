@@ -13,7 +13,7 @@ namespace BusinessManagementApi.Services
             _businessInfoRepository = businessInfoRepository;
         }
 
-        public async Task<BusinessInfo?> GetBusinessInfoByUserId(int userId)
+        public async Task<BusinessInfo?> GetBusinessInfoByUserId(string userId)
         {
             return await _businessInfoRepository.GetBusinessUserByUserId(userId);
         }

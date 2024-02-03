@@ -7,7 +7,7 @@ namespace BusinessManagementApi.DAL
     public interface IProductRepository : IDisposable
     {
         Task<Product?> GetProductById(int productId);
-        Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm);
+        Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm, string userId);
         Task InsertProduct(Product product);
         void UpdateProduct(Product product);
 

@@ -4,7 +4,7 @@ namespace BusinessManagementApi.DAL
 {
     public interface IBusinessInfoRepository : IDisposable
     {
-        Task<BusinessInfo?> GetBusinessUserByUserId(int userId);
+        Task<BusinessInfo?> GetBusinessUserByUserId(string userId);
         Task InsertBusinessInfo(BusinessInfo businessInfo);
         void UpdateBusinessInfo(BusinessInfo businessInfo);
 
