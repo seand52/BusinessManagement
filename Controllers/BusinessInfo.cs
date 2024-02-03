@@ -8,7 +8,7 @@ namespace BusinessManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BusinessInfoController : ControllerBase
+    public class BusinessInfoController : BusinessManagementController
     {
         private readonly IBusinessInfoService _businessInfoService;
         private readonly IMapper _mapper;

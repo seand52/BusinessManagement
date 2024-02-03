@@ -4,12 +4,13 @@ using AutoMapper;
 using BusinessManagement.Filter;
 using BusinessManagementApi.Services;
 using BusinessManagementApi.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BusinessManagementController
     {
         private readonly IProductService _productService;
         private readonly IMapper _mapper;

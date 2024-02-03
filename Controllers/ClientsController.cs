@@ -11,7 +11,7 @@ namespace BusinessManagement.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class ClientsController : ControllerBase
+    public class ClientsController : BusinessManagementController
     {
         private readonly IClientService _clientService;
         private readonly IMapper _mapper;
@@ -25,7 +25,6 @@ namespace BusinessManagement.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            var userId =  User.Claims.First().Value;
             Client? client = await _clientService.GetClientById(id);
             
             if (client == null)
@@ -33,7 +32,7 @@ namespace BusinessManagement.Controllers
                 return NotFound();
             }
 
-            if (client.UserId != userId)
+            if (client.UserId != GetUserId())
             {
                 return Unauthorized("You do not have permissions to view this client");
             }
@@ -44,8 +43,7 @@ namespace BusinessManagement.Controllers
         public  async Task<ActionResult<Client>> GetClients([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var userId = User.Claims.First().Value;
-            var clients = await _clientService.GetClients(validFilter, SearchTerm, userId);
+            var clients = await _clientService.GetClients(validFilter, SearchTerm, GetUserId());
             return Ok(clients);
         }
 
@@ -53,7 +51,7 @@ namespace BusinessManagement.Controllers
         public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto client)
         {
             var clientEntity = _mapper.Map<Client>(client);
-            clientEntity.UserId = User.Claims.First().Value;
+            clientEntity.UserId = GetUserId();
             var isSuccess = await _clientService.CreateClient(clientEntity, ModelState);
 
             if (!isSuccess)
@@ -79,7 +77,7 @@ namespace BusinessManagement.Controllers
                 return NotFound();
             }
 
-            if (clientToUpdate.UserId != User.Claims.First().Value)
+            if (clientToUpdate.UserId != GetUserId())
             {
                 return Unauthorized("not authorized to perform this request");
             }
@@ -100,7 +98,7 @@ namespace BusinessManagement.Controllers
                 return NotFound();
             }
 
-            if (client.UserId != User.Claims.First().Value)
+            if (client.UserId != GetUserId())
             {
                 return Unauthorized("not authorized to perform this request");
             }
