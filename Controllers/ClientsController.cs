@@ -4,10 +4,12 @@ using AutoMapper;
 using BusinessManagement.Filter;
 using BusinessManagementApi.Services;
 using BusinessManagementApi.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
     {
@@ -23,12 +25,18 @@ namespace BusinessManagement.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientDto>> Get(int id)
         {
+            var userId =  User.Claims.First().Value;
             Client? client = await _clientService.GetClientById(id);
+            
             if (client == null)
             {
                 return NotFound();
             }
 
+            if (client.UserId != userId)
+            {
+                return Unauthorized("You do not have permissions to view this client");
+            }
             return Ok(_mapper.Map<ClientDto>(client));
         }
         
@@ -36,7 +44,8 @@ namespace BusinessManagement.Controllers
         public  async Task<ActionResult<Client>> GetClients([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var clients = await _clientService.GetClients(validFilter, SearchTerm);
+            var userId = User.Claims.First().Value;
+            var clients = await _clientService.GetClients(validFilter, SearchTerm, userId);
             return Ok(clients);
         }
 
@@ -44,6 +53,7 @@ namespace BusinessManagement.Controllers
         public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto client)
         {
             var clientEntity = _mapper.Map<Client>(client);
+            clientEntity.UserId = User.Claims.First().Value;
             var isSuccess = await _clientService.CreateClient(clientEntity, ModelState);
 
             if (!isSuccess)
@@ -61,12 +71,17 @@ namespace BusinessManagement.Controllers
             {
                 return BadRequest();
             }
-
+            
             var clientToUpdate = await _clientService.GetClientById(id);
 
             if (clientToUpdate == null)
             {
                 return NotFound();
+            }
+
+            if (clientToUpdate.UserId != User.Claims.First().Value)
+            {
+                return Unauthorized("not authorized to perform this request");
             }
 
             var clientEntity = _mapper.Map<Client>(client);
@@ -83,6 +98,11 @@ namespace BusinessManagement.Controllers
             if (client == null)
             {
                 return NotFound();
+            }
+
+            if (client.UserId != User.Claims.First().Value)
+            {
+                return Unauthorized("not authorized to perform this request");
             }
 
             await _clientService.DeleteClient(client);

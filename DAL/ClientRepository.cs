@@ -20,9 +20,9 @@ namespace BusinessManagementApi.DAL
             return await _context.Clients.FindAsync(clientId);
         }
 
-        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm)
+        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm, string userId)
         {
-            IQueryable<Client> clientsQuery = _context.Clients;
+            IQueryable<Client> clientsQuery = _context.Clients.Where(p => p.UserId == userId);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {

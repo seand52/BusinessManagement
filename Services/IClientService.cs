@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace BusinessManagementApi.Services {
     public interface IClientService {
         Task<Client?> GetClientById(int clientId);
-        Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm);
+        Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm, string userId);
         Task<bool> CreateClient(Client client, ModelStateDictionary modelState);
         Task UpdateClient(Client client, Client? newData);
         Task DeleteClient(Client client);

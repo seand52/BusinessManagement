@@ -12,7 +12,7 @@ namespace BusinessManagementApi.Dto
         public string? DocumentNum { get; set; }
         public string? Telephone { get; set; }
         public string? Email { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 
     public class CreateClientDto
@@ -26,7 +26,6 @@ namespace BusinessManagementApi.Dto
         public string? DocumentNum { get; set; }
         public string? Telephone { get; set; }
         public string? Email { get; set; }
-        public int UserId { get; set; }
     }
 
     public class UpdateClientDto : CreateClientDto

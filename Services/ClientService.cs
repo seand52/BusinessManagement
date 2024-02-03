@@ -20,9 +20,9 @@ namespace BusinessManagementApi.Services
             return await _clientRepository.GetClientById(clientId);
         }
         
-        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm)
+        public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm, string userId)
         {
-            return await _clientRepository.GetClients(filter, searchTerm);
+            return await _clientRepository.GetClients(filter, searchTerm, userId);
         }
 
         public async Task<bool> CreateClient(Client client, ModelStateDictionary modelState)
