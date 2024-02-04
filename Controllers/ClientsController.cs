@@ -15,16 +15,19 @@ namespace BusinessManagement.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IMapper _mapper;
+        private readonly ILogger<ClientsController> _logger;
 
-        public ClientsController(IClientService clientService, IMapper mapper)
+        public ClientsController(IClientService clientService, IMapper mapper, ILogger<ClientsController> logger)
         {
             _clientService = clientService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientDto>> Get(int id)
         {
+            _logger.LogInformation("Requesting client with id");
             Client? client = await _clientService.GetClientById(id);
             
             if (client == null)

@@ -8,17 +8,17 @@ using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
 
-// add postgres cofiguration to DI
-
 builder.Services.AddDbContext<ApplicationContext>(
     options => options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management")
 );
 
+builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 // builder.Services.AddTransient<DatabaseSeeder>();
 builder.Services.AddAuthentication();
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>();
@@ -74,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 app.MapIdentityApi<User>();
 app.UseHttpsRedirection();
