@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessManagement", "Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessManagement.Tests", "BusinessManagement.Tests\BusinessManagement.Tests.csproj", "{FB296C31-C74B-4694-BC5F-0660FD51172C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2C04711-AF8C-420F-A265-939D4AB92B77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{70601F4D-2BE2-407E-A2B7-22B504271D91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,5 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0330703D-69AF-48A1-A12E-48FEE5B3A875}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{826DA59F-EB19-4222-8066-5AEF1C98D49A} = {E2C04711-AF8C-420F-A265-939D4AB92B77}
+		{FB296C31-C74B-4694-BC5F-0660FD51172C} = {70601F4D-2BE2-407E-A2B7-22B504271D91}
 	EndGlobalSection
 EndGlobal

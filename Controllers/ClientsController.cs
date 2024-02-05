@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
-using AutoMapper;
+using BusinessManagement.Commands;
 using BusinessManagement.Filter;
-using BusinessManagementApi.Services;
+using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
@@ -13,101 +14,56 @@ namespace BusinessManagement.Controllers
     [Route("api/[controller]")]
     public class ClientsController : BusinessManagementController
     {
-        private readonly IClientService _clientService;
-        private readonly IMapper _mapper;
-        private readonly ILogger<ClientsController> _logger;
+        private readonly IMediator _mediator;
 
-        public ClientsController(IClientService clientService, IMapper mapper, ILogger<ClientsController> logger)
+        public ClientsController(IMediator mediator)
         {
-            _clientService = clientService;
-            _mapper = mapper;
-            _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientDto>> Get(int id)
         {
-            _logger.LogInformation("Requesting client with id");
-            Client? client = await _clientService.GetClientById(id);
-            
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            if (client.UserId != GetUserId())
-            {
-                return Unauthorized("You do not have permissions to view this client");
-            }
-            return Ok(_mapper.Map<ClientDto>(client));
+            var result = await _mediator.Send(new GetClientQuery(id, GetUserId()));
+            return result != null ? Ok(result) : NotFound();
         }
         
         [HttpGet]
-        public  async Task<ActionResult<Client>> GetClients([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
+        public async Task<ActionResult<Client>> GetClients([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var clients = await _clientService.GetClients(validFilter, SearchTerm, GetUserId());
-            return Ok(clients);
+            var result = await _mediator.Send(new GetAllClientsQuery(filter, SearchTerm, GetUserId()));
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto client)
         {
-            var clientEntity = _mapper.Map<Client>(client);
-            clientEntity.UserId = GetUserId();
-            var isSuccess = await _clientService.CreateClient(clientEntity, ModelState);
-
-            if (!isSuccess)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
-
-            return CreatedAtAction(nameof(Get), new { id = clientEntity.Id }, _mapper.Map<ClientDto>(clientEntity));
+            var result = await _mediator.Send(new CreateClientRequest(client, GetUserId()));
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Client>> Put(int id, [FromBody] UpdateClientDto? client)
+        public async Task<ActionResult> Put(int id, [FromBody] UpdateClientDto? client)
         {
             if (client == null)
             {
                 return BadRequest();
             }
             
-            var clientToUpdate = await _clientService.GetClientById(id);
-
-            if (clientToUpdate == null)
-            {
-                return NotFound();
-            }
-
-            if (clientToUpdate.UserId != GetUserId())
-            {
-                return Unauthorized("not authorized to perform this request");
-            }
-
-            var clientEntity = _mapper.Map<Client>(client);
-            await _clientService.UpdateClient(clientToUpdate, clientEntity);
-
-            return NoContent();
+            var success = await _mediator.Send(new UpdateClientRequest(client, id, GetUserId()));
+            
+            return success ? NoContent() : BadRequest();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            Client? client = await _clientService.GetClientById(id);
-
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            if (client.UserId != GetUserId())
-            {
-                return Unauthorized("not authorized to perform this request");
-            }
-
-            await _clientService.DeleteClient(client);
-            return Ok();
+            var result = await _mediator.Send(new DeleteClientRequest(id, GetUserId()));
+            return result ? NoContent() : BadRequest();
         }
     }
 }

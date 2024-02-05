@@ -2,6 +2,7 @@ using BusinessManagement.Database;
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementApi.DAL
 
@@ -15,9 +16,9 @@ namespace BusinessManagementApi.DAL
             _context = context;
         }
 
-        public async Task<Client?> GetClientById(int clientId)
+        public async Task<Client?> GetClientById(int clientId, string userId)
         {
-            return await _context.Clients.FindAsync(clientId);
+            return await _context.Clients.Where(p => p.UserId == userId && p.Id == clientId).FirstOrDefaultAsync();
         }
 
         public async Task<PagedList<Client>> GetClients(PaginationFilter filter, string searchTerm, string userId)
@@ -37,8 +38,18 @@ namespace BusinessManagementApi.DAL
             await _context.Clients.AddAsync(client);
         }
 
-        public void UpdateClient(Client client)
+        public void UpdateClient(Client client, Client newData)
         {
+            client.Name = newData.Name;
+            client.ShopName = newData.ShopName;
+            client.Address = newData.Address;
+            client.City = newData.City;
+            client.Province = newData.Province;
+            client.Postcode = newData.Postcode;
+            client.DocumentNum = newData.DocumentNum;
+            client.DocumentType = newData.DocumentType;
+            client.Telephone = newData.Telephone;
+            client.Email = newData.Email;
             _context.Clients.Update(client);
         }
 

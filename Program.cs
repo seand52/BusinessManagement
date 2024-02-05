@@ -58,12 +58,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBusinessInfoRepository, BusinessInfoRepository>();
 builder.Services.AddScoped<IBusinessInfoService, BusinessInfoService>();
 builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
+
+//Inject the MediatR to oun DI
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));
 
 var app = builder.Build();
 
