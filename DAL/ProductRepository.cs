@@ -2,6 +2,7 @@ using BusinessManagement.Database;
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementApi.DAL
 {
@@ -14,9 +15,9 @@ namespace BusinessManagementApi.DAL
             _context = context;
         }
 
-        public async Task<Product?> GetProductById(int productId)
+        public async Task<Product?> GetProductById(int productId, string userId)
         {
-            return await _context.Products.FindAsync(productId);
+            return await _context.Products.Where(p => p.Id == productId && p.UserId == userId).FirstOrDefaultAsync();
         }
 
         public async Task<PagedList<Product>> GetProducts(PaginationFilter filter, string searchTerm, string userId)
@@ -36,8 +37,12 @@ namespace BusinessManagementApi.DAL
             await _context.Products.AddAsync(product);
         }
 
-        public void UpdateProduct(Product product)
+        public void UpdateProduct(Product product, Product newData)
         {
+            product.Reference = newData.Reference;
+            product.Description = newData.Description;
+            product.Price = newData.Price;
+            product.Stock = newData.Stock;
             _context.Products.Update(product);
         }
 

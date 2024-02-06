@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
 using AutoMapper;
+using BusinessManagement.Commands;
 using BusinessManagement.Filter;
-using BusinessManagementApi.Services;
+using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
@@ -13,53 +15,36 @@ namespace BusinessManagement.Controllers
     [Route("api/[controller]")]
     public class ProductsController : BusinessManagementController
     {
-        private readonly IProductService _productService;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ProductsController(IProductService productService, IMapper mapper)
+        public ProductsController(IMediator mediator)
         {
-            _productService = productService;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> Get(int id)
         {
-            Product? product = await _productService.GetProductById(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            if (product.UserId != GetUserId())
-            {
-                return Unauthorized("Insufficient permissions");
-            }
-
-            return Ok(_mapper.Map<ProductDto>(product));
+            var result = await _mediator.Send(new GetProductQuery(id, GetUserId()));
+            return result != null ? Ok(result) : NotFound();
         }
         
         [HttpGet]
         public  async Task<ActionResult<Product>> GetProducts([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var products = await _productService.GetProducts(validFilter, SearchTerm, GetUserId());
-            return Ok(products);
+            var result = await _mediator.Send(new GetAllProductsQuery(filter, SearchTerm, GetUserId()));
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto product)
         {
-            var productEntity = _mapper.Map<Product>(product);
-            productEntity.UserId = GetUserId();
-            var isSuccess = await _productService.CreateProduct(productEntity, ModelState);
-
-            if (!isSuccess)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest();
             }
-
-            return CreatedAtAction(nameof(Get), new { id = productEntity.Id }, _mapper.Map<ProductDto>(productEntity));
+            var result = await _mediator.Send(new CreateProductRequest(product, GetUserId()));
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
@@ -69,42 +54,17 @@ namespace BusinessManagement.Controllers
             {
                 return BadRequest();
             }
-
-            var productToUpdate = await _productService.GetProductById(id);
-
-            if (productToUpdate == null)
-            {
-                return NotFound();
-            }
-
-            if (productToUpdate.UserId != GetUserId())
-            {
-                return Unauthorized("Insufficient permissions");
-            }
-
-            var productEntity = _mapper.Map<Product>(product);
-            await _productService.UpdateProduct(productToUpdate, productEntity);
-
-            return NoContent();
+            
+            var success = await _mediator.Send(new UpdateProductRequest(product, id, GetUserId()));
+            
+            return success ? NoContent() : BadRequest();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            Product? product = await _productService.GetProductById(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            if (product.UserId != GetUserId())
-            {
-                return Unauthorized("Insufficient permissions");
-            }
-
-            await _productService.DeleteProduct(product);
-            return Ok();
+            var result = await _mediator.Send(new DeleteProductRequest(id, GetUserId()));
+            return result ? NoContent() : BadRequest();
         }
     }
 }
