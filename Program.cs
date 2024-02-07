@@ -1,12 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
 using BusinessManagementApi.DAL;
-using BusinessManagementApi.Services;   
 using BusinessManagementApi.Profiles;
-using AutoMapper;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -60,7 +57,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBusinessInfoRepository, BusinessInfoRepository>();
-builder.Services.AddScoped<IBusinessInfoService, BusinessInfoService>();
 builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
 
 //Inject the MediatR to oun DI

@@ -6,7 +6,7 @@ namespace BusinessManagementApi.DAL
     {
         Task<BusinessInfo?> GetBusinessUserByUserId(string userId);
         Task InsertBusinessInfo(BusinessInfo businessInfo);
-        void UpdateBusinessInfo(BusinessInfo businessInfo);
+        void UpdateBusinessInfo(BusinessInfo businessInfo, BusinessInfo newBusinessInfo);
 
 
         Task Save();

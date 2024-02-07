@@ -18,9 +18,7 @@ namespace BusinessManagementApi.DAL
 
         public async Task<BusinessInfo?> GetBusinessUserByUserId(string userId)
         {
-            // TODO: need to make query look for user id, this is looking for the primary id
-            // return await _context.BusinessInfo.Where(x => x.UserId == userId).FirstOrDefaultAsync();
-            return new BusinessInfo();
+            return await _context.BusinessInfo.Where(x => x.UserId == userId).FirstOrDefaultAsync();
         }
 
         public async Task InsertBusinessInfo(BusinessInfo businessInfo)
@@ -28,8 +26,16 @@ namespace BusinessManagementApi.DAL
             await _context.BusinessInfo.AddAsync(businessInfo);
         }
 
-        public void UpdateBusinessInfo(BusinessInfo businessInfo)
+        public void UpdateBusinessInfo(BusinessInfo businessInfo, BusinessInfo newBusinessInfo)
         {
+            businessInfo.Name = newBusinessInfo.Name;
+            businessInfo.Cif = newBusinessInfo.Cif;
+            businessInfo.Address = newBusinessInfo.Address;
+            businessInfo.City = newBusinessInfo.City;
+            businessInfo.Country = newBusinessInfo.Country;
+            businessInfo.Postcode = newBusinessInfo.Postcode;
+            businessInfo.Telephone = newBusinessInfo.Telephone;
+            businessInfo.Email = newBusinessInfo.Email;
             _context.BusinessInfo.Update(businessInfo);
         }
 

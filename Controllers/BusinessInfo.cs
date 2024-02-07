@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
 using AutoMapper;
-using BusinessManagementApi.Services;
+using BusinessManagement.Commands;
+using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessManagement.Controllers
@@ -12,46 +14,31 @@ namespace BusinessManagement.Controllers
     [Route("api/[controller]")]
     public class BusinessInfoController : BusinessManagementController
     {
-        private readonly IBusinessInfoService _businessInfoService;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public BusinessInfoController(IBusinessInfoService businessInfoService, IMapper mapper)
+        public BusinessInfoController(IMediator mediator, IMapper mapper)
         {
-            _businessInfoService = businessInfoService;
+            _mediator = mediator;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<BusinessInfoDto>> Get()
         {
-            BusinessInfo? businessInfo = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
-            if (businessInfo == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<BusinessInfoDto>(businessInfo));
+            var result = await _mediator.Send(new GetBusinessInfoQuery(GetUserId()));
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpPost]
         public async Task<ActionResult<BusinessInfoDto>> Create([FromBody] CreateBusinessInfoDto businessInfo)
         {
-            var existingBusinessInfo = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
-
-            if (existingBusinessInfo != null)
-            {
-                return Forbid("Only allowed to have one business associated");
-            }
-            var businessInfoEntity = _mapper.Map<BusinessInfo>(businessInfo);
-            businessInfoEntity.UserId = GetUserId();
-            var isSuccess = await _businessInfoService.CreateBusinessInfo(businessInfoEntity, ModelState);
-
-            if (!isSuccess)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            return CreatedAtAction(nameof(Get), new { id = businessInfoEntity.Id }, _mapper.Map<BusinessInfoDto>(businessInfoEntity));
+            var result = await _mediator.Send(new CreateBusinessInfoRequest(businessInfo, GetUserId()));
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         [HttpPut]
@@ -61,23 +48,10 @@ namespace BusinessManagement.Controllers
             {
                 return BadRequest();
             }
-
-            var businessInfoToUpdate = await _businessInfoService.GetBusinessInfoByUserId(GetUserId());
-
-            if (businessInfoToUpdate == null)
-            {
-                return NotFound();
-            }
-
-            if (businessInfoToUpdate.UserId != GetUserId())
-            {
-                return Unauthorized("Insufficient Permissions");
-            }
-
-            var businessInfoEntity = _mapper.Map<BusinessInfo>(businessInfo);
-            await _businessInfoService.UpdateBusinessInfo(businessInfoToUpdate, businessInfoEntity);
-
-            return NoContent();
+            
+            var success = await _mediator.Send(new UpdateBusinessInfoRequest(businessInfo, GetUserId()));
+            
+            return success ? NoContent() : BadRequest();
         }
     }
 }
