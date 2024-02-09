@@ -13,28 +13,35 @@ public class Client
 {
     public int Id { get; set; }
 
-    [StringLength(80)]
     [Required]
-    public string Name { get; set; } = string.Empty;
-
-    [StringLength(80)]
-    public string ShopName { get; set; } = string.Empty;
-
-    [StringLength(255)]
-    public string Address { get; set; } = string.Empty;
-    public string City { get; set; } = string.Empty;
-    public string? Province { get; set; } = string.Empty;
-
+    public string Name { get; set; }
+    [Required]
+    public string ShopName { get; set; }
+    [Required]
+    public string Address { get; set; }
+    [Required]
+    public string City { get; set; } 
+    [Required]
+    public string? Province { get; set; }
+    [Required]
     [StringLength(7)]
-    public string? Postcode { get; set; } = string.Empty;
-    public string DocumentNum { get; set; } = string.Empty;
+    public string Postcode { get; set; }
+    
+    [Required]
+    public string DocumentNum { get; set; }
+    
+    [Required]
+    [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
     public DocumentType DocumentType { get; set; }
 
+    [Required]
     [StringLength(12)]
-    public string? Telephone { get; set; } = string.Empty;
+    public string Telephone { get; set; } = string.Empty;
 
+    [Required]
     [EmailAddress]
-    public string? Email { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    
     public string UserId { get; set; }
     public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
     public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();

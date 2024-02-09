@@ -54,6 +54,11 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            
             var success = await _mediator.Send(new UpdateClientRequest(client, id, GetUserId()));
             
             return success ? NoContent() : BadRequest();

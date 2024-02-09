@@ -7,11 +7,9 @@ public class BusinessInfo
     public int Id { get; set; }
 
     [Required]
-    [StringLength(100)]
     public string Name { get; set; }
 
     [Required]
-    [StringLength(11)]
     public string Cif { get; set; }
 
     [Required]
@@ -34,10 +32,7 @@ public class BusinessInfo
 
     [Required]
     [EmailAddress]
-    [StringLength(55)]
-
     public string Email { get; set; }
     public string UserId { get; set; }
-    // public User User { get; set; } = null!;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

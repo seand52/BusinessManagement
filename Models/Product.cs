@@ -6,7 +6,7 @@ public class Product
 {
     public int Id { get; set; }
 
-    [Required]
+    [Required] 
     public string Reference { get; set; }
 
     [Required]
@@ -15,7 +15,6 @@ public class Product
     [Required]
     public decimal Price { get; set; }
 
-    [Required]
     public int Stock { get; set; }
 
     // [Required]
