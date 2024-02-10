@@ -57,6 +57,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBusinessInfoRepository, BusinessInfoRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
 
 //Inject the MediatR to oun DI

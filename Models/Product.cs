@@ -20,8 +20,8 @@ public class Product
     // [Required]
     public string UserId { get; set; }
 
-    [Required]
-    public List<Invoice> Invoices { get; } = new();
+    public List<Invoice> Invoices { get; } = [];
+    public List<InvoiceProduct> InvoiceProducts { get; } = [];
 
     [Required]
     public List<SalesOrder> SalesOrders { get; } = new();

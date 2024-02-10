@@ -26,20 +26,16 @@ public class Invoice
     public double TransportPrice { get; set; } = 0;
 
     [Required]
+    // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
     public PaymentType PaymentType { get; set; }
 
     // [Required]
     public string UserId { get; set; }
-    //
-    // public User User { get; set; } = null!;
-
     [Required]
     public int ClientId { get; set; }
     public Client Client { get; set; } = null!;
-
-    [Required]
-    public List<Product> Products { get; } = new();
-    public DateTime Date { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public List<Product> Products { get; } = [];
+    public List<InvoiceProduct> InvoiceProducts { get; } = [];
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

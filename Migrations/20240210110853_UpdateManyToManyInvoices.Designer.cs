@@ -3,6 +3,7 @@ using System;
 using BusinessManagement.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusinessManagement.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240210110853_UpdateManyToManyInvoices")]
+    partial class UpdateManyToManyInvoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +77,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BusinessInfo", (string)null);
+                    b.ToTable("BusinessInfo");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.Client", b =>
@@ -140,7 +143,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.Invoice", b =>
@@ -185,7 +188,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.InvoiceProduct", b =>
@@ -225,7 +228,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoiceProduct", (string)null);
+                    b.ToTable("InvoiceProduct");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.Product", b =>
@@ -264,7 +267,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.SalesOrder", b =>
@@ -318,7 +321,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SalesOrders", (string)null);
+                    b.ToTable("SalesOrders");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.SalesOrderProduct", b =>
@@ -358,7 +361,7 @@ namespace BusinessManagement.Migrations
 
                     b.HasIndex("SalesOrderId");
 
-                    b.ToTable("SalesOrderProduct", (string)null);
+                    b.ToTable("SalesOrderProduct");
                 });
 
             modelBuilder.Entity("BusinessManagementApi.Models.User", b =>

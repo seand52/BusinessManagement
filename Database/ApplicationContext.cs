@@ -9,6 +9,7 @@ public class ApplicationContext : IdentityDbContext<User>
 {
     public DbSet<Client> Clients { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceProduct> InvoiceProduct { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<User> Users { get; set; }

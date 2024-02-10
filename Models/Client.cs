@@ -43,8 +43,6 @@ public class Client
     public string Email { get; set; } = string.Empty;
     
     public string UserId { get; set; }
-    public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
-    public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

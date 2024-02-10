@@ -16,7 +16,7 @@ public class TestDataController : ControllerBase
     }
 
     [HttpGet("seed", Name = "SeedData")]
-    public IActionResult SeedData()
+    public IActionResult SeedData(string userId)
     {
         if (_env.IsProduction())
         {
@@ -29,7 +29,7 @@ public class TestDataController : ControllerBase
         {
             clients.Add(new Client
             {
-                Name = Faker.CompanyFaker.Name(),
+	    	Name = Faker.LocationFaker.Street(),
                 Address = Faker.LocationFaker.Street(),
                 Email = Faker.InternetFaker.Email(),
                 ShopName = Faker.CompanyFaker.Name(),
@@ -38,9 +38,8 @@ public class TestDataController : ControllerBase
                 Postcode = "08001",
                 DocumentNum = "479725158",
                 DocumentType = DocumentType.Nif,
-                Telephone = Faker.PhoneFaker.Phone().Substring(0,12),
-                //  TODO: fix this hardcoded value
-                UserId = "a8f33f28-8dff-49eb-b779-585c02960ab9"
+                Telephone = Faker.PhoneFaker.Phone().Substring(0,12  ),
+                UserId = userId
                 
             });
         }
@@ -52,7 +51,7 @@ public class TestDataController : ControllerBase
                 Description = Faker.TextFaker.Sentence(),
                 Price = Faker.NumberFaker.Number(1, 500),
                 Stock = Faker.NumberFaker.Number(1, 100),
-                UserId = "a8f33f28-8dff-49eb-b779-585c02960ab9"
+                UserId = userId
             });
         }
         
@@ -66,7 +65,7 @@ public class TestDataController : ControllerBase
             Telephone = Faker.PhoneFaker.Phone().Substring(0,12),
             Email = Faker.InternetFaker.Email(),
             Cif = "B12345678",
-            UserId = "a8f33f28-8dff-49eb-b779-585c02960ab9"
+            UserId = userId
         };
         
         _context.Clients.AddRange(clients);
