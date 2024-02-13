@@ -27,16 +27,17 @@ namespace BusinessManagementApi.Models
 
         [Required]
         public int ClientId { get; set; }
+        public Client Client { get; set; } = null!;
+
 
         [Required]
         public DateTime Date { get; set; }
-        public DateTime ExpirationDate { get; set; }
-        public Client Client { get; set; } = null!;
         public byte Expired { get; set; } = 0;
 
         [Required]
         public List<Product> Products { get; } = new();
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public List<SalesOrderProduct> SalesOrderProducts { get; } = [];
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
