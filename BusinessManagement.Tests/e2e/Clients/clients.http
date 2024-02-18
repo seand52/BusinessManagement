@@ -1,0 +1,100 @@
+###
+
+POST {{AUTH_PATH}}/
+Content-Type: application/json
+
+{
+    "email": "seand52@gmail.com",
+    "password": "Bcn_123456"
+}
+
+> {% 
+ client.global.set("token", response.body.accessToken);
+ %}
+### 
+
+GET {{BUSINESS_MANAGEMENT_URL}}/Clients/9
+#Authorization: Bearer {{token}}
+Content-Type: application/json
+
+> {% 
+  client.test("Status code is 401 when not authenticated", function() {
+    client.assert(response.status === 401, "Response status is not 401");
+  });
+ %}
+
+### 
+
+GET {{BUSINESS_MANAGEMENT_URL}}/Clients/9
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+> {%
+    client.test("Status code is 200 when authenticated", function() {
+      client.assert(response.status === 200, "Response status is not 200");
+    });
+    
+    client.test("Response body contains the expected data", function() {
+        client.assert(response.body.email === "user@example.com", "Response body email is not correct");
+        client.assert(response.body.name === "string", "Response body name is not correct");
+        client.assert(response.body.shopName === "string", "Response body shopName is not correct");
+        client.assert(response.body.address === "string", "Response body address is not correct");
+        client.assert(response.body.city === "string", "Response body city is not correct");
+        client.assert(response.body.postcode === "string", "Response body postcode is not correct");
+        client.assert(response.body.documentNum === "string", "Response body documentNum is not correct");
+        client.assert(response.body.documentType === "Nif", "Response body documentType is not correct");
+        client.assert(response.body.telephone === "string", "Response body telephone is not correct");
+        
+    });
+    
+%}
+
+### 
+GET {{BUSINESS_MANAGEMENT_URL}}/Clients?PageNumber=1&PageSize=3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+> {%
+    client.test("Status code is 200 when authenticated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response body length is correct", function() {
+        client.assert(response.body.items.length === 3, "Response body length is not correct");
+    });
+%}
+
+### 
+PUT {{BUSINESS_MANAGEMENT_URL}}/Clients/9
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "string",
+  "shopName": "string",
+  "address": "string",
+  "city": "string",
+  "province": "string",
+  "postcode": "string",
+  "documentNum": "string",
+  "documentType": "Nif",
+  "telephone": "string",
+  "email": "user@example.com"
+}
+
+> {%
+    client.test("Status code is 204 when authenticated", function() {
+        client.assert(response.status === 204, "Response status is not 200");
+    });
+%}
+
+### 
+DELETE {{BUSINESS_MANAGEMENT_URL}}/Clients/9
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+> {%
+    client.test("Status code is 204", function() {
+        client.assert(response.status === 204, "Response status is not 200");
+    });
+%}
