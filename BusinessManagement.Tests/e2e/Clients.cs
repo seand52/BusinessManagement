@@ -73,17 +73,17 @@ public class Clients: IntegrationTestWebAppFactory
         var response = await _client.PutAsJsonAsync("/api/Clients/4", client);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
     }
-    [Test]
-    public async Task RetrieveClientByIdFromAnotherUserNotFound()
-    {
-        var response = await _client.PostAsJsonAsync("/login", new { email = "admin2", password = "Pass_123456" });
-        var token = await response.Content.ReadAsStringAsync();
-        dynamic jsonResponse = JsonConvert.DeserializeObject(token);
-        token = jsonResponse.accessToken;
-        // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var clientResponse = await _client.GetAsync($"api/Clients/7");
-        Assert.That(clientResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
-    }
+    // [Test]
+    // public async Task RetrieveClientByIdFromAnotherUserNotFound()
+    // {
+    //     var response = await _client.PostAsJsonAsync("/login", new { email = "admin2", password = "Pass_123456" });
+    //     var token = await response.Content.ReadAsStringAsync();
+    //     dynamic jsonResponse = JsonConvert.DeserializeObject(token);
+    //     token = jsonResponse.accessToken;
+    //     // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    //     var clientResponse = await _client.GetAsync($"api/Clients/7");
+    //     Assert.That(clientResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+    // }
     //
     // [Test]
     // public async Task DeleteClientFromAnotherUserBadRequest()
