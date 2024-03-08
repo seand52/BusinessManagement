@@ -40,6 +40,7 @@ namespace BusinessManagementApi.Dto
         [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
         public string DocumentType { get; set; }
         [Required]
+        [StringLength(12)]
         public string Telephone { get; set; }
         [EmailAddress]
         public string Email { get; set; }
