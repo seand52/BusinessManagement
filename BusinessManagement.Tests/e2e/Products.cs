@@ -5,10 +5,10 @@ using BusinessManagement.Tests;
 using BusinessManagementApi.Dto;
 using Newtonsoft.Json;
 
-namespace BusinessManagement.ClientTests;
+namespace BusinessManagement.ProductTests;
 
 [TestFixture]
-public class Clients: IntegrationTestWebAppFactory
+public class Products: IntegrationTestWebAppFactory
 {
     private HttpClient _client;
     
@@ -34,66 +34,64 @@ public class Clients: IntegrationTestWebAppFactory
     }
     
     [Test]
-    public async Task CreateClientSuccess()
+    public async Task CreateProductSuccess()
     {
         var fixture = new Fixture();
-        var client = fixture.Create<CreateClientDto>();
-        client.Email = "test@gmail.com";
-        var response = await _client.PostAsJsonAsync("/api/Clients", client);
+        var product = fixture.Create<CreateProductDto>();
+        var response = await _client.PostAsJsonAsync("/api/Products", product);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
     }
     
     [Test]
-    public async Task RetrieveClientByIdSuccess()
+    public async Task RetrieveProductByIdSuccess()
     {
-        var response = await _client.GetAsync("/api/Clients/2");
+        var response = await _client.GetAsync("/api/Products/2");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
     
     [Test]
-    public async Task RetrieveClientSuccess()
+    public async Task RetrieveProductSuccess()
     {
-        var response = await _client.GetAsync("/api/Clients?PageNumber=1&PageSize=10");
+        var response = await _client.GetAsync("/api/Products?PageNumber=1&PageSize=10");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
     
     [Test]
-    public async Task DeleteClientSuccess()
+    public async Task DeleteProductSuccess()
     {
-        var response = await _client.DeleteAsync("/api/Clients/1");
+        var response = await _client.DeleteAsync("/api/Products/1");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
     }
     
     [Test]
-    public async Task UpdateClientSuccess()
+    public async Task UpdateProductSuccess()
     {
         var fixture = new Fixture();
-        var client = fixture.Create<CreateClientDto>();
-        client.Email = "test2@gmail.com";
-        var response = await _client.PutAsJsonAsync("/api/Clients/4", client);
+        var client = fixture.Create<CreateProductDto>();
+        var response = await _client.PutAsJsonAsync("/api/Products/4", client);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
     }
     // [Test]
-    // public async Task RetrieveClientByIdFromAnotherUserNotFound()
+    // public async Task RetrieveProductByIdFromAnotherUserNotFound()
     // {
     //     var response = await _client.PostAsJsonAsync("/login", new { email = "admin2", password = "Pass_123456" });
     //     var token = await response.Content.ReadAsStringAsync();
     //     dynamic jsonResponse = JsonConvert.DeserializeObject(token);
     //     token = jsonResponse.accessToken;
     //     // _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    //     var clientResponse = await _client.GetAsync($"api/Clients/7");
+    //     var clientResponse = await _client.GetAsync($"api/Products/7");
     //     Assert.That(clientResponse.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
     // }
     //
     // [Test]
-    // public async Task DeleteClientFromAnotherUserBadRequest()
+    // public async Task DeleteProductFromAnotherUserBadRequest()
     // {
     //     var response = await _client.PostAsJsonAsync("/login", new { email = "admin2", password = "Pass_123456" });
     //     var token = await response.Content.ReadAsStringAsync();
     //     dynamic jsonResponse = JsonConvert.DeserializeObject(token);
     //     token = jsonResponse.accessToken;
     //     _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    //     var clientResponse = await _client.DeleteAsync($"api/Clients/5");
+    //     var clientResponse = await _client.DeleteAsync($"api/Products/5");
     //     Assert.That(clientResponse.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
     // }
 }

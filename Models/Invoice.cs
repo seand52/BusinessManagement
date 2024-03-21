@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementApi.Models;
 
@@ -11,6 +12,7 @@ public enum PaymentType
 
 public class Invoice
 {
+    [Key]
     public int Id { get; set; }
 
     [Required]
@@ -35,7 +37,7 @@ public class Invoice
     public int ClientId { get; set; }
     public Client Client { get; set; } = null!;
     public List<Product> Products { get; } = [];
-    public List<InvoiceProduct> InvoiceProducts { get; } = [];
+    public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

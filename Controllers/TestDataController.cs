@@ -1,4 +1,5 @@
 using BusinessManagement.Database;
+using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,14 @@ public class TestDataController : ControllerBase
         var clients = new List<Client>();
         var products = new  List<Product>();
         var businessInfos  = new List<BusinessInfo>();
+        var invoices = new List<Invoice>();
+        var salesOrders = new List<SalesOrder>();
         
         User[] users = { user1, user2 };
-        
-        
+
+
+        int invoiceId = 0;
+        int salesOrderId = 0;
         foreach (var user in users)
         {
             for (var j = 0; j < 10; j++)
@@ -82,6 +87,78 @@ public class TestDataController : ControllerBase
                 UserId = user.Id
             };
             businessInfos.Add(businessInfo);
+            
+            for (var j = 0; j < 10; j++)
+            {
+                invoiceId += 1;
+                var clientId = Faker.NumberFaker.Number(1, clients.Count - 1);
+                var invoice = new Invoice
+                {
+                    ClientId = clientId,
+                    UserId = user.Id,
+                    Re = 0.05,
+                    Tax = 0.21,
+                    TransportPrice = 0,
+                    PaymentType = PaymentType.CASH,
+                };
+                invoice.InvoiceProducts.Add(new InvoiceProduct
+                {
+                    ProductId = Faker.NumberFaker.Number(1, products.Count - 1),
+                    InvoiceId = invoiceId,
+                    Discount = 0,
+                    Price = Faker.NumberFaker.Number(1, 500),
+                    Quantity = Faker.NumberFaker.Number(1, 10),
+                    Reference = Faker.StringFaker.AlphaNumeric(5),
+                    Description = Faker.TextFaker.Sentence()
+                });
+                invoice.InvoiceProducts.Add(new InvoiceProduct
+                {
+                    ProductId = Faker.NumberFaker.Number(1, products.Count - 1),
+                    InvoiceId = invoiceId,
+                    Discount = 0,
+                    Price = Faker.NumberFaker.Number(1, 500),
+                    Quantity = Faker.NumberFaker.Number(1, 10),
+                    Reference = Faker.StringFaker.AlphaNumeric(5),
+                    Description = Faker.TextFaker.Sentence()
+                });
+                invoices.Add(invoice);
+            }
+            
+            for (var j = 0; j < 10; j++)
+            {
+                salesOrderId += 1;
+                var clientId = Faker.NumberFaker.Number(1, clients.Count - 1);
+                var salesOrder = new SalesOrder()
+                {
+                    ClientId = clientId,
+                    UserId = user.Id,
+                    Re = 0.05,
+                    Tax = 0.21,
+                    TransportPrice = 0,
+                    PaymentType = PaymentType.CASH,
+                };
+                salesOrder.SalesOrderProducts.Add(new SalesOrderProduct()
+                {
+                    ProductId = Faker.NumberFaker.Number(1, products.Count - 1),
+                    SalesOrderId = salesOrderId,
+                    Discount = 0,
+                    Price = Faker.NumberFaker.Number(1, 500),
+                    Quantity = Faker.NumberFaker.Number(1, 10),
+                    Reference = Faker.StringFaker.AlphaNumeric(5),
+                    Description = Faker.TextFaker.Sentence()
+                });
+                salesOrder.SalesOrderProducts.Add(new SalesOrderProduct()
+                {
+                    ProductId = Faker.NumberFaker.Number(1, products.Count - 1),
+                    SalesOrderId = salesOrderId,
+                    Discount = 0,
+                    Price = Faker.NumberFaker.Number(1, 500),
+                    Quantity = Faker.NumberFaker.Number(1, 10),
+                    Reference = Faker.StringFaker.AlphaNumeric(5),
+                    Description = Faker.TextFaker.Sentence()
+                });
+                salesOrders.Add(salesOrder);
+            }
         }
 
         
@@ -89,6 +166,8 @@ public class TestDataController : ControllerBase
         _context.Clients.AddRange(clients);
         _context.Products.AddRange(products);
         _context.BusinessInfo.AddRange(businessInfos);
+        _context.Invoices.AddRange(invoices);
+        _context.SalesOrders.AddRange(salesOrders);
         _context.SaveChanges();
         return Ok();
     }

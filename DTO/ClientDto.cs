@@ -13,7 +13,7 @@ namespace BusinessManagementApi.Dto
         public string Province { get; set; }
         public string Postcode { get; set; }
         public string DocumentNum { get; set; }
-        public string DocumentType { get; set; }
+        public DocumentType DocumentType { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string UserId { get; set; }

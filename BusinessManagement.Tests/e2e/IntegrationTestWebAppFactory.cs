@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using Testcontainers.PostgreSql;
 
 namespace BusinessManagement.Tests;
 public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
 {
+    private static readonly string uniqueDatabaseName = $"testdb_{Guid.NewGuid()}";
     private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
         .WithImage("postgres:latest")
-        .WithDatabase("dev_business_management")
+        .WithDatabase(uniqueDatabaseName)
         .WithUsername("root")
         .WithPassword("root")
         .WithPortBinding(5432)
@@ -32,7 +32,8 @@ public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
             services.AddDbContext<ApplicationContext>(options =>
             {
                 // var connectionString = _dbContainer.GetConnectionString();
-                options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management");
+                var connectionString = $"Host=localhost;Port=5432;Username=root;Password=root;Database={uniqueDatabaseName};Include Error Detail=True";
+                options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management;Include Error Detail=True");
             });
         });
     }
@@ -49,6 +50,6 @@ public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
     [OneTimeTearDown]
     public async Task OneTimeTearDown()
     {
-        await _dbContainer.StopAsync();
+        await _dbContainer.DisposeAsync().AsTask();
     }
 }
