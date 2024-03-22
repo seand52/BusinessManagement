@@ -23,14 +23,9 @@ public class Invoices: IntegrationTestWebAppFactory
     [OneTimeSetUp]
     public async Task Init()
     {
-        var client = CreateHttpClient();
-        client.BaseAddress = new Uri("http://localhost:5206");
-        await client.GetAsync("/seed");
-        var response = await client.PostAsJsonAsync("/login", new { email = "admin", password = "Pass_123456" });
-        var token = await response.Content.ReadAsStringAsync();
-        dynamic jsonResponse = JsonConvert.DeserializeObject(token);
-        token = jsonResponse.accessToken;
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var client = HttpClientSetup();
+        await SeedData(client);
+        await AuthenticateUser(client, "admin", "Pass_123456");
         _client = client;
     }
     
