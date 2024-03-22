@@ -4,6 +4,7 @@ using BusinessManagementApi.DAL;
 using BusinessManagementApi.Profiles;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -18,7 +19,8 @@ builder.Services.AddDbContext<ApplicationContext>(
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 // builder.Services.AddTransient<DatabaseSeeder>();
 builder.Services.AddAuthentication();
-builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>();
+builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>()
+    .AddUserManager<UserManager<User>>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -86,3 +88,4 @@ app.MapControllers();
 
 app.Run();
 
+public partial class Program { }

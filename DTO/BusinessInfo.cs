@@ -26,8 +26,10 @@ namespace BusinessManagementApi.Dto
         [Required]
         public string City { get; set; }
         [Required]
+        [StringLength(30)]
         public string Country { get; set; }
         [Required]
+        [StringLength(12)]
         public string Telephone { get; set; }
         [Required]
         [StringLength(7)]

@@ -21,7 +21,7 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
     }
     public async Task<InvoiceDetailDto> Handle(CreateInvoiceRequest request, CancellationToken cancellationToken)
     {
-        var invoice = _mapper.Map<Invoice>(request.Invoice);
+        var invoice = request.Invoice.ToModel();
         invoice.UserId = request.UserId;
         //TODO: calculate total price
         invoice.TotalPrice = 50;

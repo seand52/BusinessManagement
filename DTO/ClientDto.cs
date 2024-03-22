@@ -13,7 +13,7 @@ namespace BusinessManagementApi.Dto
         public string Province { get; set; }
         public string Postcode { get; set; }
         public string DocumentNum { get; set; }
-        public string DocumentType { get; set; }
+        public DocumentType DocumentType { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string UserId { get; set; }
@@ -40,6 +40,7 @@ namespace BusinessManagementApi.Dto
         [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
         public string DocumentType { get; set; }
         [Required]
+        [StringLength(12)]
         public string Telephone { get; set; }
         [EmailAddress]
         public string Email { get; set; }

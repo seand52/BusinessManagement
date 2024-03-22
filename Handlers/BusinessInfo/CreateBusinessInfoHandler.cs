@@ -28,6 +28,7 @@ public class CreateBusinessInfoHandler: IRequestHandler<CreateBusinessInfoReques
         businessInfoEntity.UserId = request.UserId;
         await _businessInfoRepository.InsertBusinessInfo(businessInfoEntity);
         await _businessInfoRepository.Save();
-        return _mapper.Map<BusinessInfoDto>(businessInfoEntity);
+        var test = _mapper.Map<BusinessInfoDto>(businessInfoEntity);
+        return test;
     }
 }

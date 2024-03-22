@@ -14,13 +14,21 @@
       &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.UnitTests.Handlers.ProductHandlers&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.UnitTests.PaginationFilterTest.PaginationFilterTest.GetClientHandler_InputIsValid_ReturnsClient&lt;/TestId&gt;
       &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.UnitTests.PagedList.PagedList.PagedList_ValidInput_ReturnsPaginatedData&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.Tests.Clients.CreateClientSuccess&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.Tests.Clients&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
     &lt;ProjectFile&gt;FB296C31-C74B-4694-BC5F-0660FD51172C/f:InvoicesHandler.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;FB296C31-C74B-4694-BC5F-0660FD51172C/f:SalesOrdersHandler.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;FB296C31-C74B-4694-BC5F-0660FD51172C/f:BusinessInfoHandler.cs&lt;/ProjectFile&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7781743c_002Dfd3f_002D4439_002D97f3_002D17a1b99a65aa/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6e28895b_002Df91e_002D4f7c_002Db405_002D5555c80deb51/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="CreateInvoiceSuccess" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.Tests.Invoices.CreateInvoiceSuccess&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9d2200c5_002Df3d7_002D4b8e_002D8028_002Da93abc3f9848/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Clients" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/home/sean/projects/BusinessManagement/BusinessManagement.Tests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;BusinessManagement.Tests&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	
