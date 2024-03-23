@@ -96,8 +96,8 @@ public class TestDataController : ControllerBase
                 {
                     ClientId = clientId,
                     UserId = user.Id,
-                    Re = 0.05,
-                    Tax = 0.21,
+                    Re = 0.05m,
+                    Tax = 0.21m,
                     TransportPrice = 0,
                     PaymentType = PaymentType.CASH,
                 };
@@ -132,8 +132,8 @@ public class TestDataController : ControllerBase
                 {
                     ClientId = clientId,
                     UserId = user.Id,
-                    Re = 0.05,
-                    Tax = 0.21,
+                    Re = 0.05m,
+                    Tax = 0.21m,
                     TransportPrice = 0,
                     PaymentType = PaymentType.CASH,
                 };
