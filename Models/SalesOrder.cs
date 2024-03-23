@@ -2,21 +2,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BusinessManagementApi.Models
 {
-    public class SalesOrder
+    public class SalesOrder: IPriceCalculable
     {
         public int Id { get; set; }
 
         [Required]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         [Required]
-        public double Re { get; set; }
+        [Range(0, 1, ErrorMessage = "The Re must be between 0 and 1.")]
+        public decimal Re { get; set; }
 
         [Required]
-        public double Tax { get; set; }
+        [Range(0, 1, ErrorMessage = "The Tax must be between 0 and 1.")]
+        public decimal Tax { get; set; }
 
         [Required]
-        public double TransportPrice { get; set; }
+        public decimal TransportPrice { get; set; }
 
         [Required]
         public PaymentType PaymentType { get; set; }
@@ -37,6 +39,7 @@ namespace BusinessManagementApi.Models
         [Required]
         public List<Product> Products { get; } = new();
         public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
+        IEnumerable<ICalculableItem> IPriceCalculable.Items => SalesOrderProducts;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }

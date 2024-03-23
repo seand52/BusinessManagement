@@ -6,12 +6,14 @@ namespace BusinessManagementApi.Dto;
 public class BaseInvoiceDto
 {
     [Required]
-    public double Re { get; set; }
+    [Range(0, 1, ErrorMessage = "The Re must be between 0 and 1.")]
+    public decimal Re { get; set; }
     [Required]
-    public double Tax { get; set; }
+    [Range(0, 1, ErrorMessage = "The Tax must be between 0 and 1.")]
+    public decimal Tax { get; set; }
 
     [Required]
-    public double TransportPrice { get; set; } = 0;
+    public decimal TransportPrice { get; set; } = 0;
 
     [Required]
     // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
@@ -22,7 +24,7 @@ public class InvoiceDetailDto: BaseInvoiceDto
 {
     public int Id { get; set; }
     [Required]
-    public double TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
     [Required]
     public ClientDto Client { get; set; }
     [Required]

@@ -10,22 +10,24 @@ public enum PaymentType
     TRANSFER
 }
 
-public class Invoice
+public class Invoice: IPriceCalculable
 {
     [Key]
     public int Id { get; set; }
 
     [Required]
-    public double TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
     [Required]
-    public double Re { get; set; }
+    [Range(0, 1, ErrorMessage = "The Re must be between 0 and 1.")]
+    public decimal Re { get; set; }
 
     [Required]
-    public double Tax { get; set; }
+    [Range(0, 1, ErrorMessage = "The Tax must be between 0 and 1.")]
+    public decimal Tax { get; set; }
 
     [Required]
-    public double TransportPrice { get; set; } = 0;
+    public decimal TransportPrice { get; set; } = 0;
 
     [Required]
     // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
@@ -38,6 +40,7 @@ public class Invoice
     public Client Client { get; set; } = null!;
     public List<Product> Products { get; } = [];
     public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
+    IEnumerable<ICalculableItem> IPriceCalculable.Items => InvoiceProducts;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

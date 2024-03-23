@@ -23,6 +23,14 @@ public static class ModelExtensions
             UserId = invoice.UserId
         };
     }
+
+    public static decimal CalculateTotalPrice(this IPriceCalculable order)
+    {
+        var totalPriceOfItems = order.Items.Sum(x => x.Price * x.Quantity * (1 - x.Discount));
+        var tax = order.Tax * totalPriceOfItems;
+        var re = order.Re * totalPriceOfItems;
+        return totalPriceOfItems + tax + re + order.TransportPrice;
+    }
     
     public static Invoice ToModel(this CreateInvoiceDto createInvoiceDto)
     {

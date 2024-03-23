@@ -20,8 +20,7 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
     {
         var salesOrder = request.SalesOrder.ToModel();
         salesOrder.UserId = request.UserId;
-        //TODO: calculate total price
-        salesOrder.TotalPrice = 50;
+        salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
         await _salesOrderRepository.InsertSalesOrder(salesOrder);
         await _salesOrderRepository.Save();
         // TODO: find a better way of returning the client

@@ -20,8 +20,7 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
     {
         var invoice = request.Invoice.ToModel();
         invoice.UserId = request.UserId;
-        //TODO: calculate total price
-        invoice.TotalPrice = 50;
+        invoice.TotalPrice = invoice.CalculateTotalPrice();
         await _invoiceRepository.InsertInvoice(invoice);
         await _invoiceRepository.Save();
         // TODO: find a better way of returning the client
