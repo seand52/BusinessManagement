@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
 using BusinessManagementApi.DAL;
-using BusinessManagementApi.Profiles;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
 using Microsoft.AspNetCore.Identity;
@@ -61,7 +60,6 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IBusinessInfoRepository, BusinessInfoRepository>();
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
-builder.Services.AddAutoMapper(typeof(BusinessManagementProfile));
 
 //Inject the MediatR to oun DI
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));

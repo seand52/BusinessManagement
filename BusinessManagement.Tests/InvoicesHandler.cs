@@ -1,5 +1,4 @@
 
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagement.Filter;
 using BusinessManagement.Handlers;
@@ -8,7 +7,6 @@ using BusinessManagement.Queries;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
-using BusinessManagementApi.Profiles;
 
 namespace BusinessManagement.UnitTests.Handlers
 {
@@ -16,14 +14,12 @@ namespace BusinessManagement.UnitTests.Handlers
     public class InvoiceHandlers
     {
         private Mock<IInvoiceRepository> _invoiceRepository;
-        private IMapper _mapper;
         private Fixture _fixture;
 
         [SetUp]
         public void SetUp()
         {
             _invoiceRepository = new Mock<IInvoiceRepository>();
-            _mapper = new MapperConfiguration(cfg => cfg.AddProfile<BusinessManagementProfile>()).CreateMapper();
             _fixture = new Fixture();
 
         }
@@ -33,7 +29,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var invoice = _fixture.Create<Invoice>();
             _invoiceRepository.Setup(x => x.GetInvoiceById(1, "1")).ReturnsAsync(invoice);
-            var handler = new GetInvoiceHandler(_invoiceRepository.Object, _mapper);
+            var handler = new GetInvoiceHandler(_invoiceRepository.Object);
             var result = handler.Handle(new GetInvoiceQuery(1, "1"), CancellationToken.None).Result;
             Assert.That(result.Id, Is.EqualTo(invoice.Id));
         }
@@ -84,7 +80,7 @@ namespace BusinessManagement.UnitTests.Handlers
         public void UpdateInvoiceHandler_InvalidInvoice_ReturnsError()
         {
             _invoiceRepository.Setup(x => x.GetInvoiceById(1, "1")).ReturnsAsync(null as Invoice);
-            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object, _mapper);
+            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object);
             async Task Code() => await handler.Handle(new UpdateInvoiceRequest(new UpdateInvoiceDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<Exception>(Code);
             Assert.That(ex.Message, Is.EqualTo("Invoice not found"));
@@ -94,7 +90,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var invoice = _fixture.Build<Invoice>().With(x => x.UserId, "2").Create();
             _invoiceRepository.Setup(x => x.GetInvoiceById(1, "1")).ReturnsAsync(invoice);
-            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object, _mapper);
+            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object);
             async Task Code() => await handler.Handle(new UpdateInvoiceRequest(new UpdateInvoiceDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(Code);
             Assert.That(ex.Message, Is.EqualTo("Insufficient Permissions"));
@@ -104,7 +100,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var invoice = _fixture.Build<Invoice>().With(x => x.UserId, "1").Create();
             _invoiceRepository.Setup(x => x.GetInvoiceById(1, "1")).ReturnsAsync(invoice);
-            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object, _mapper);
+            var handler = new UpdateInvoiceHandler(_invoiceRepository.Object);
             var result = handler.Handle(new UpdateInvoiceRequest(new UpdateInvoiceDto(), 1, "1"), CancellationToken.None);
             Assert.That(result.Result, Is.True);
         
@@ -113,12 +109,12 @@ namespace BusinessManagement.UnitTests.Handlers
         public async Task CreateInvoiceHandler_ValidInput_Success()
         {
             var invoice = _fixture.Build<Invoice>().With(x => x.UserId, "1").Create();
-            var invoiceDto = _mapper.Map<CreateInvoiceDto>(invoice);
+            var invoiceDto = _fixture.Build<CreateInvoiceDto>().With(x => x.ClientId, invoice.ClientId).Create();
             var clientRepository = new Mock<IClientRepository>();
             _invoiceRepository.Setup(x => x.InsertInvoice(invoice)).Returns(Task.CompletedTask);
             clientRepository.Setup(x => x.GetClientById(invoice.ClientId, "1")).ReturnsAsync(invoice.Client);
             _invoiceRepository.Setup(x => x.Save()).Returns(Task.CompletedTask);
-            var handler = new CreateInvoiceHandler(_invoiceRepository.Object, clientRepository.Object, _mapper);
+            var handler = new CreateInvoiceHandler(_invoiceRepository.Object, clientRepository.Object);
             var result = await handler.Handle(new CreateInvoiceRequest(invoiceDto, "1"), CancellationToken.None);
             // TODO: consider refactoring to not use It.IsAny
             _invoiceRepository.Verify(x => x.InsertInvoice(It.IsAny<Invoice>()), Times.Once);

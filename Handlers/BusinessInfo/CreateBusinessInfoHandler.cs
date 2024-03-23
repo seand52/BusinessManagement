@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -9,13 +8,11 @@ namespace BusinessManagement.Handlers;
 
 public class CreateBusinessInfoHandler: IRequestHandler<CreateBusinessInfoRequest, BusinessInfoDto> 
 {
-    private readonly IMapper _mapper;
     private readonly IBusinessInfoRepository _businessInfoRepository;
 
-    public CreateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository, IMapper mapper)
+    public CreateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository)
     {
         _businessInfoRepository = businessInfoRepository;
-        _mapper = mapper;
     }
     public async Task<BusinessInfoDto> Handle(CreateBusinessInfoRequest request, CancellationToken cancellationToken)
     {
@@ -24,11 +21,10 @@ public class CreateBusinessInfoHandler: IRequestHandler<CreateBusinessInfoReques
         // {
         //     return Forbid("Only allowed to have one business associated");
         // }
-        var businessInfoEntity = _mapper.Map<BusinessInfo>(request.BusinessInfo);
+        var businessInfoEntity = request.BusinessInfo.ToModel();
         businessInfoEntity.UserId = request.UserId;
         await _businessInfoRepository.InsertBusinessInfo(businessInfoEntity);
         await _businessInfoRepository.Save();
-        var test = _mapper.Map<BusinessInfoDto>(businessInfoEntity);
-        return test;
+        return businessInfoEntity.ToDto();
     }
 }

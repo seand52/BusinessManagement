@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Queries;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -10,12 +9,10 @@ namespace BusinessManagement.Handlers;
 public class GetInvoiceHandler: IRequestHandler<GetInvoiceQuery, InvoiceDetailDto?>
 {
     private readonly IInvoiceRepository _invoiceRepository;
-    private readonly IMapper _mapper;
 
-    public GetInvoiceHandler(IInvoiceRepository invoiceRepository, IMapper mapper)
+    public GetInvoiceHandler(IInvoiceRepository invoiceRepository)
     {
         _invoiceRepository = invoiceRepository;
-        _mapper = mapper;
     }
     
     public async Task<InvoiceDetailDto?> Handle(GetInvoiceQuery request, CancellationToken cancellationToken)
