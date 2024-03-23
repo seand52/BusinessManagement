@@ -18,6 +18,6 @@ public class GetSalesOrderHandler: IRequestHandler<GetSalesOrderQuery, SalesOrde
     public async Task<SalesOrderDetailDto?> Handle(GetSalesOrderQuery request, CancellationToken cancellationToken)
     {
         SalesOrder? salesOrder = await _salesOrderRepository.GetSalesOrderById(request.SalesOrderId, request.UserId);
-        return salesOrder.ToDto();
+        return salesOrder.ToDetailDto();
     }
 }

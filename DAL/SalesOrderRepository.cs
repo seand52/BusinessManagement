@@ -28,7 +28,6 @@ namespace BusinessManagementApi.DAL
         {
             var query = _context.SalesOrders.Where(p => p.UserId == userId)
                 .Include(p => p.Client)
-                .Include(x => x.SalesOrderProducts)
                 .AsQueryable();
             var res  = await PagedList<SalesOrder>.CreateAsync(query, filter.PageNumber, filter.PageSize);
             return res;

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
 using BusinessManagement.Commands;
 using BusinessManagement.Filter;
+using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
 using MediatR;
@@ -29,7 +30,7 @@ namespace BusinessManagement.Controllers
         }
         
         [HttpGet]
-        public  async Task<ActionResult<Product>> GetProducts([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
+        public  async Task<ActionResult<PagedList<ProductDto>>> GetProducts([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
             var result = await _mediator.Send(new GetAllProductsQuery(filter, SearchTerm, GetUserId()));
             return Ok(result);

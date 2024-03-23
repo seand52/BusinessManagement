@@ -42,7 +42,7 @@ namespace BusinessManagement.UnitTests.Handlers
             var handler = new GetAllClientsHandler(_clientRepository.Object);
             var result = handler.Handle(new GetAllClientsQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
-            Assert.That(result, Is.TypeOf<PagedList<Client>>());
+            Assert.That(result, Is.TypeOf<PagedList<ClientDto>>());
             
         }
         

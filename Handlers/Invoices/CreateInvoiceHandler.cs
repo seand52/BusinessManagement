@@ -30,6 +30,6 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
             throw new Exception("Client not found");
         }
         invoice.Client = client;
-        return invoice.ToDto();
+        return invoice.ToDetailDto();
     }
 }
