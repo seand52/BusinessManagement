@@ -4,11 +4,11 @@ using MediatR;
 
 namespace BusinessManagement.Handlers;
 
-public class DeletClientHandler: IRequestHandler<DeleteClientRequest, bool>
+public class DeleteClientHandler: IRequestHandler<DeleteClientRequest, bool>
 {
     private readonly IClientRepository _clientRepository;
 
-    public DeletClientHandler (IClientRepository clientRepository)
+    public DeleteClientHandler (IClientRepository clientRepository)
     {
         _clientRepository = clientRepository;
     }

@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
@@ -9,16 +8,14 @@ namespace BusinessManagement.Handlers;
 public class UpdateProductHandler: IRequestHandler<UpdateProductRequest, bool>
 {
     private readonly IProductRepository _productRepository;
-    private readonly IMapper _mapper;
 
-    public UpdateProductHandler (IProductRepository productRepository, IMapper mapper)
+    public UpdateProductHandler (IProductRepository productRepository)
     {
         _productRepository = productRepository;
-        _mapper = mapper;
     }
     public async Task<bool> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        var productEntity = _mapper.Map<Product>(request.Product);
+        var productEntity = request.Product.ToModel();
         var clientToUpdate = await _productRepository.GetProductById(request.Id, request.UserId);
         
         if (clientToUpdate == null)

@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -9,15 +8,13 @@ namespace BusinessManagement.Handlers;
 
 public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, InvoiceDetailDto> 
 {
-    private readonly IMapper _mapper;
     private readonly IInvoiceRepository _invoiceRepository;
     private readonly IClientRepository _clientRepository;
 
-    public CreateInvoiceHandler (IInvoiceRepository invoiceRepository, IClientRepository clientRepository, IMapper mapper)
+    public CreateInvoiceHandler (IInvoiceRepository invoiceRepository, IClientRepository clientRepository)
     {
         _invoiceRepository = invoiceRepository;
         _clientRepository = clientRepository;
-        _mapper = mapper;
     }
     public async Task<InvoiceDetailDto> Handle(CreateInvoiceRequest request, CancellationToken cancellationToken)
     {
@@ -34,7 +31,6 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
             throw new Exception("Client not found");
         }
         invoice.Client = client;
-        var test = _mapper.Map<InvoiceDetailDto>(invoice);
-        return test;
+        return invoice.ToDto();
     }
 }

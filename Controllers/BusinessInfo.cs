@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagementApi.Models;
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
@@ -15,12 +14,10 @@ namespace BusinessManagement.Controllers
     public class BusinessInfoController : BusinessManagementController
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
 
-        public BusinessInfoController(IMediator mediator, IMapper mapper)
+        public BusinessInfoController(IMediator mediator)
         {
             _mediator = mediator;
-            _mapper = mapper;
         }
 
         [HttpGet]

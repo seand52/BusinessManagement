@@ -25,8 +25,8 @@ public class SalesOrderDetailDto: BaseSalesOrderDto
     public double TotalPrice { get; set; }
     [Required]
     public ClientDto Client { get; set; }
-    [Required]
-    public List<SalesOrderProduct> SalesOrderProducts { get; set; }
+
+    [Required] public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
     [Required]
     public string UserId { get; set; }
 }
@@ -46,12 +46,12 @@ public class CreateSalesOrderDto : BaseSalesOrderDto
 {
     [Required]
     public int ClientId { get; set; }
-    [Required]
-    public List<CreateSalesOrderProductDto> SalesOrderProducts { get; set; }
+    public byte Expired { get; set; } = 0;
+
+    [Required] public List<CreateSalesOrderProductDto> SalesOrderProducts { get; set; } = [];
 }
 
 public class UpdateSalesOrderDto : CreateSalesOrderDto
 {
-    [Required]
-    public byte Expired { get; set; } = 0;
+    
 }

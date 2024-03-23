@@ -36,7 +36,7 @@ namespace BusinessManagementApi.Models
 
         [Required]
         public List<Product> Products { get; } = new();
-        public List<SalesOrderProduct> SalesOrderProducts { get; } = [];
+        public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }

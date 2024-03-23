@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Queries;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -10,17 +9,15 @@ namespace BusinessManagement.Handlers;
 public class GetBusinessInfoHandler: IRequestHandler<GetBusinessInfoQuery, BusinessInfoDto?>
 {
     private readonly IBusinessInfoRepository _businessInfoRepository;
-    private readonly IMapper _mapper;
 
-    public GetBusinessInfoHandler(IBusinessInfoRepository businessInfoRepository, IMapper mapper)
+    public GetBusinessInfoHandler(IBusinessInfoRepository businessInfoRepository)
     {
         _businessInfoRepository = businessInfoRepository;
-        _mapper = mapper;
     }
     
     public async Task<BusinessInfoDto?> Handle(GetBusinessInfoQuery request, CancellationToken cancellationToken)
     {
         BusinessInfo? businessInfo = await _businessInfoRepository.GetBusinessUserByUserId(request.UserId);
-        return _mapper.Map<BusinessInfoDto>(businessInfo);
+        return businessInfo.ToDto();
     }
 }

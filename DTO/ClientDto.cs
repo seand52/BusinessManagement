@@ -38,7 +38,7 @@ namespace BusinessManagementApi.Dto
         public string DocumentNum { get; set; }
         [Required]
         [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
-        public string DocumentType { get; set; }
+        public DocumentType DocumentType { get; set; }
         [Required]
         [StringLength(12)]
         public string Telephone { get; set; }

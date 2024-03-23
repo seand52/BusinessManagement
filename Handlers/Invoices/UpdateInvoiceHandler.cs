@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
@@ -9,16 +8,14 @@ namespace BusinessManagement.Handlers;
 public class UpdateInvoiceHandler: IRequestHandler<UpdateInvoiceRequest, bool>
 {
     private readonly IInvoiceRepository _invoiceRepository;
-    private readonly IMapper _mapper;
 
-    public UpdateInvoiceHandler (IInvoiceRepository invoiceRepository, IMapper mapper)
+    public UpdateInvoiceHandler (IInvoiceRepository invoiceRepository)
     {
         _invoiceRepository = invoiceRepository;
-        _mapper = mapper;
     }
     public async Task<bool> Handle(UpdateInvoiceRequest request, CancellationToken cancellationToken)
     {
-        var invoiceEntity = _mapper.Map<Invoice>(request.Invoice);
+        var invoiceEntity = request.Invoice.ToModel();
         var invoiceToUpdate = await _invoiceRepository.GetInvoiceById(request.Id, request.UserId);
         
         if (invoiceToUpdate == null)

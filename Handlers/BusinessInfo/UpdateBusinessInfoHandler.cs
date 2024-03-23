@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
@@ -9,12 +8,10 @@ namespace BusinessManagement.Handlers;
 public class UpdateBusinessInfoHandler: IRequestHandler<UpdateBusinessInfoRequest, bool>
 {
     private readonly IBusinessInfoRepository _businessInfoRepository;
-    private readonly IMapper _mapper;
 
-    public UpdateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository, IMapper mapper)
+    public UpdateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository)
     {
         _businessInfoRepository = businessInfoRepository;
-        _mapper = mapper;
     }
     public async Task<bool> Handle(UpdateBusinessInfoRequest request, CancellationToken cancellationToken)
     {
@@ -25,7 +22,7 @@ public class UpdateBusinessInfoHandler: IRequestHandler<UpdateBusinessInfoReques
             throw new Exception("Business Info not found");
         }
 
-        var businessInfoEntity = _mapper.Map<BusinessInfo>(request.BusinessInfo);
+        var businessInfoEntity = request.BusinessInfo.ToModel();
         _businessInfoRepository.UpdateBusinessInfo(businessInfoToUpdate, businessInfoEntity);
         await _businessInfoRepository.Save();
         return true;

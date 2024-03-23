@@ -36,7 +36,7 @@ public class CreateInvoiceDto : BaseInvoiceDto
     [Required]
     public int ClientId { get; set; }
     [Required]
-    public List<CreateInvoiceProductDto> InvoiceProducts { get; set; }
+    public List<CreateInvoiceProductDto> InvoiceProducts { get; set; } = new List<CreateInvoiceProductDto>();
 }
 
 public class UpdateInvoiceDto : CreateInvoiceDto

@@ -1,4 +1,3 @@
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -9,19 +8,17 @@ namespace BusinessManagement.Handlers;
 
 public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, SalesOrderDetailDto> 
 {
-    private readonly IMapper _mapper;
     private readonly ISalesOrderRepository _salesOrderRepository;
     private readonly IClientRepository _clientRepository;
 
-    public CreateSalesOrderHandler (ISalesOrderRepository salesOrderRepository, IClientRepository clientRepository, IMapper mapper)
+    public CreateSalesOrderHandler (ISalesOrderRepository salesOrderRepository, IClientRepository clientRepository)
     {
         _salesOrderRepository = salesOrderRepository;
         _clientRepository = clientRepository;
-        _mapper = mapper;
     }
     public async Task<SalesOrderDetailDto> Handle(CreateSalesOrderRequest request, CancellationToken cancellationToken)
     {
-        var salesOrder = _mapper.Map<SalesOrder>(request.SalesOrder);
+        var salesOrder = request.SalesOrder.ToModel();
         salesOrder.UserId = request.UserId;
         //TODO: calculate total price
         salesOrder.TotalPrice = 50;
@@ -34,7 +31,6 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
             throw new Exception("Client not found");
         }
         salesOrder.Client = client;
-        var test = _mapper.Map<SalesOrderDetailDto>(salesOrder);
-        return test;
+        return salesOrder.ToDto();
     }
 }

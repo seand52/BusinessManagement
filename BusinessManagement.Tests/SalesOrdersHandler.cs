@@ -1,5 +1,4 @@
 
-using AutoMapper;
 using BusinessManagement.Commands;
 using BusinessManagement.Filter;
 using BusinessManagement.Handlers;
@@ -8,7 +7,6 @@ using BusinessManagement.Queries;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
-using BusinessManagementApi.Profiles;
 
 namespace BusinessManagement.UnitTests.Handlers
 {
@@ -16,14 +14,12 @@ namespace BusinessManagement.UnitTests.Handlers
     public class SalesOrderHandlers
     {
         private Mock<ISalesOrderRepository> _salesOrderRepository;
-        private IMapper _mapper;
         private Fixture _fixture;
 
         [SetUp]
         public void SetUp()
         {
             _salesOrderRepository = new Mock<ISalesOrderRepository>();
-            _mapper = new MapperConfiguration(cfg => cfg.AddProfile<BusinessManagementProfile>()).CreateMapper();
             _fixture = new Fixture();
 
         }
@@ -33,7 +29,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var salesOrder = _fixture.Create<SalesOrder>();
             _salesOrderRepository.Setup(x => x.GetSalesOrderById(1, "1")).ReturnsAsync(salesOrder);
-            var handler = new GetSalesOrderHandler(_salesOrderRepository.Object, _mapper);
+            var handler = new GetSalesOrderHandler(_salesOrderRepository.Object);
             var result = handler.Handle(new GetSalesOrderQuery(1, "1"), CancellationToken.None).Result;
             Assert.That(result.Id, Is.EqualTo(salesOrder.Id));
         }
@@ -84,7 +80,7 @@ namespace BusinessManagement.UnitTests.Handlers
         public void UpdateSalesOrderHandler_InvalidSalesOrder_ReturnsError()
         {
             _salesOrderRepository.Setup(x => x.GetSalesOrderById(1, "1")).ReturnsAsync(null as SalesOrder);
-            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object, _mapper);
+            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object);
             async Task Code() => await handler.Handle(new UpdateSalesOrderRequest(new UpdateSalesOrderDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<Exception>(Code);
             Assert.That(ex.Message, Is.EqualTo("SalesOrder not found"));
@@ -94,7 +90,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var salesOrder = _fixture.Build<SalesOrder>().With(x => x.UserId, "2").Create();
             _salesOrderRepository.Setup(x => x.GetSalesOrderById(1, "1")).ReturnsAsync(salesOrder);
-            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object, _mapper);
+            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object);
             async Task Code() => await handler.Handle(new UpdateSalesOrderRequest(new UpdateSalesOrderDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(Code);
             Assert.That(ex.Message, Is.EqualTo("Insufficient Permissions"));
@@ -104,7 +100,7 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var salesOrder = _fixture.Build<SalesOrder>().With(x => x.UserId, "1").Create();
             _salesOrderRepository.Setup(x => x.GetSalesOrderById(1, "1")).ReturnsAsync(salesOrder);
-            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object, _mapper);
+            var handler = new UpdateSalesOrderHandler(_salesOrderRepository.Object);
             var result = handler.Handle(new UpdateSalesOrderRequest(new UpdateSalesOrderDto(), 1, "1"), CancellationToken.None);
             Assert.That(result.Result, Is.True);
         
@@ -113,12 +109,12 @@ namespace BusinessManagement.UnitTests.Handlers
         public async Task CreateSalesOrderHandler_ValidInput_Success()
         {
             var salesOrder = _fixture.Build<SalesOrder>().With(x => x.UserId, "1").Create();
-            var salesOrderDto = _mapper.Map<CreateSalesOrderDto>(salesOrder);
+            var salesOrderDto = _fixture.Build<CreateSalesOrderDto>().With(x => x.ClientId, salesOrder.ClientId).Create();
             var clientRepository = new Mock<IClientRepository>();
             _salesOrderRepository.Setup(x => x.InsertSalesOrder(salesOrder)).Returns(Task.CompletedTask);
             clientRepository.Setup(x => x.GetClientById(salesOrder.ClientId, "1")).ReturnsAsync(salesOrder.Client);
             _salesOrderRepository.Setup(x => x.Save()).Returns(Task.CompletedTask);
-            var handler = new CreateSalesOrderHandler(_salesOrderRepository.Object, clientRepository.Object, _mapper);
+            var handler = new CreateSalesOrderHandler(_salesOrderRepository.Object, clientRepository.Object);
             var result = await handler.Handle(new CreateSalesOrderRequest(salesOrderDto, "1"), CancellationToken.None);
             // TODO: consider refactoring to not use It.IsAny
             _salesOrderRepository.Verify(x => x.InsertSalesOrder(It.IsAny<SalesOrder>()), Times.Once);
