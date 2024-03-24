@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -7,29 +8,31 @@ namespace BusinessManagement.Handlers;
 
 public class UpdateProductHandler: IRequestHandler<UpdateProductRequest, bool>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateProductHandler (IProductRepository productRepository)
+    public UpdateProductHandler (IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
     {
         var productEntity = request.Product.ToModel();
-        var clientToUpdate = await _productRepository.GetProductById(request.Id, request.UserId);
+        var productToUpdate = await _unitOfWork.ProductRepository.GetBy(p => p.Id == request.Id && p.UserId == request.UserId);
         
-        if (clientToUpdate == null)
+        if (productToUpdate == null)
         {
             throw new Exception("Product not found");
         }
         
-        if (clientToUpdate.UserId != request.UserId)
+        if (productToUpdate.UserId != request.UserId)
         {
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
         
-        _productRepository.UpdateProduct(clientToUpdate, productEntity);
-        await _productRepository.Save();
+        productEntity.Id = productToUpdate.Id;
+        productEntity.UserId = productToUpdate.UserId;
+        _unitOfWork.ProductRepository.Update(productEntity);
+        await _unitOfWork.Save();
         return true;
     }
 }

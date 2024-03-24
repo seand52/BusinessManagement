@@ -1,8 +1,9 @@
+using BusinessManagement.DAL;
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
+using ContosoUniversity.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -16,7 +17,6 @@ builder.Services.AddDbContext<ApplicationContext>(
 );
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
-// builder.Services.AddTransient<DatabaseSeeder>();
 builder.Services.AddAuthentication();
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>()
     .AddUserManager<UserManager<User>>();
@@ -55,11 +55,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IBusinessInfoRepository, BusinessInfoRepository>();
-builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-builder.Services.AddScoped<ISalesOrderRepository, SalesOrderRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Inject the MediatR to oun DI
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));

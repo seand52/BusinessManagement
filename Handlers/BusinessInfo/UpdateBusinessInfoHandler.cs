@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -7,15 +8,15 @@ namespace BusinessManagement.Handlers;
 
 public class UpdateBusinessInfoHandler: IRequestHandler<UpdateBusinessInfoRequest, bool>
 {
-    private readonly IBusinessInfoRepository _businessInfoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository)
+    public UpdateBusinessInfoHandler (IUnitOfWork unitOfWork)
     {
-        _businessInfoRepository = businessInfoRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(UpdateBusinessInfoRequest request, CancellationToken cancellationToken)
     {
-        var businessInfoToUpdate = await _businessInfoRepository.GetBusinessUserByUserId(request.UserId);
+        var businessInfoToUpdate = await _unitOfWork.BusinessInfoRepository.GetBy(b => b.UserId == request.UserId);
 
         if (businessInfoToUpdate == null)
         {
@@ -23,8 +24,10 @@ public class UpdateBusinessInfoHandler: IRequestHandler<UpdateBusinessInfoReques
         }
 
         var businessInfoEntity = request.BusinessInfo.ToModel();
-        _businessInfoRepository.UpdateBusinessInfo(businessInfoToUpdate, businessInfoEntity);
-        await _businessInfoRepository.Save();
+        businessInfoEntity.Id = businessInfoToUpdate.Id;
+        businessInfoEntity.UserId = businessInfoToUpdate.UserId;
+        _unitOfWork.BusinessInfoRepository.Update(businessInfoEntity);
+        await _unitOfWork.Save();
         return true;
     }
 }

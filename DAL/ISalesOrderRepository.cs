@@ -1,19 +1,11 @@
-using BusinessManagement.Filter;
-using BusinessManagement.Helpers;
+using BusinessManagement.DAL;
 using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.DAL
 {
-    public interface ISalesOrderRepository : IDisposable
+    public interface ISalesOrderRepository : IGenericRepository<SalesOrder>
     {
-        Task InsertSalesOrder(SalesOrder salesOrder);
-        Task<SalesOrder?> GetSalesOrderById(int salesOrderId, string userId);
-        Task<PagedList<SalesOrder>> GetSalesOrders(PaginationFilter filter, string searchTerm, string userId);
-        void UpdateSalesOrder(SalesOrder salesOrder, SalesOrder newData);
-        
-        void DeleteSalesOrder(SalesOrder salesOrder);
-        
-        Task Save();
-
+        Task<SalesOrder?> GetBy(int salesOrderId, string userId);
+        void Update(SalesOrder salesOrder, SalesOrder newData);
     }
 }

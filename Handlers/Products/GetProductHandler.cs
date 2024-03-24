@@ -1,5 +1,5 @@
+using BusinessManagement.DAL;
 using BusinessManagement.Queries;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -8,16 +8,16 @@ namespace BusinessManagement.Handlers;
 
 public class GetProductHandler: IRequestHandler<GetProductQuery, ProductDto?>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetProductHandler(IProductRepository productRepository)
+    public GetProductHandler(IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
-        Product? product = await _productRepository.GetProductById(request.ProductId, request.UserId);
+        Product? product = await _unitOfWork.ProductRepository.GetBy(p => p.Id == request.ProductId && p.UserId == request.UserId);
         return product.ToDto();
     }
 }  

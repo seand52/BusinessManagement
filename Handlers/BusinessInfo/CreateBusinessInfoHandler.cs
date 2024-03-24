@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
@@ -8,11 +9,11 @@ namespace BusinessManagement.Handlers;
 
 public class CreateBusinessInfoHandler: IRequestHandler<CreateBusinessInfoRequest, BusinessInfoDto> 
 {
-    private readonly IBusinessInfoRepository _businessInfoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateBusinessInfoHandler (IBusinessInfoRepository businessInfoRepository)
+    public CreateBusinessInfoHandler (IUnitOfWork unitOfWork)
     {
-        _businessInfoRepository = businessInfoRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<BusinessInfoDto> Handle(CreateBusinessInfoRequest request, CancellationToken cancellationToken)
     {
@@ -23,8 +24,8 @@ public class CreateBusinessInfoHandler: IRequestHandler<CreateBusinessInfoReques
         // }
         var businessInfoEntity = request.BusinessInfo.ToModel();
         businessInfoEntity.UserId = request.UserId;
-        await _businessInfoRepository.InsertBusinessInfo(businessInfoEntity);
-        await _businessInfoRepository.Save();
+        await _unitOfWork.BusinessInfoRepository.Insert(businessInfoEntity);
+        await _unitOfWork.Save();
         return businessInfoEntity.ToDto();
     }
 }

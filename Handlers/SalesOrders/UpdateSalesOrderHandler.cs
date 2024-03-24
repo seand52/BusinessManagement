@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -7,16 +8,16 @@ namespace BusinessManagement.Handlers;
 
 public class UpdateSalesOrderHandler: IRequestHandler<UpdateSalesOrderRequest, bool>
 {
-    private readonly ISalesOrderRepository _salesOrderRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateSalesOrderHandler (ISalesOrderRepository salesOrderRepository)
+    public UpdateSalesOrderHandler (IUnitOfWork unitOfWork)
     {
-        _salesOrderRepository = salesOrderRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(UpdateSalesOrderRequest request, CancellationToken cancellationToken)
     {
         var salesOrderEntity = request.SalesOrder.ToModel();
-        var salesOrderToUpdate = await _salesOrderRepository.GetSalesOrderById(request.Id, request.UserId);
+        var salesOrderToUpdate = await _unitOfWork.SalesOrderRepository.GetBy(request.Id, request.UserId);
         
         if (salesOrderToUpdate == null)
         {
@@ -28,8 +29,8 @@ public class UpdateSalesOrderHandler: IRequestHandler<UpdateSalesOrderRequest, b
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
         
-        _salesOrderRepository.UpdateSalesOrder(salesOrderToUpdate, salesOrderEntity);
-        await _salesOrderRepository.Save();
+        _unitOfWork.SalesOrderRepository.Update(salesOrderToUpdate, salesOrderEntity);
+        await _unitOfWork.Save();
         return true;
     }
 }

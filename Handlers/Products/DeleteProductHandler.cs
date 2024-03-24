@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using MediatR;
 
@@ -6,15 +7,15 @@ namespace BusinessManagement.Handlers;
 
 public class DeleteProductHandler: IRequestHandler<DeleteProductRequest, bool>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProductHandler (IProductRepository productRepository)
+    public DeleteProductHandler (IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(DeleteProductRequest request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetProductById(request.Id, request.UserId);
+        var product = await _unitOfWork.ProductRepository.GetBy(p => p.Id == request.Id && p.UserId == request.UserId);
 
         if (product == null)
         {
@@ -26,8 +27,8 @@ public class DeleteProductHandler: IRequestHandler<DeleteProductRequest, bool>
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
 
-        _productRepository.DeleteProduct(product);
-        await _productRepository.Save();
+        _unitOfWork.ProductRepository.Delete(product);
+        await _unitOfWork.Save();
         return true;
     }
 }

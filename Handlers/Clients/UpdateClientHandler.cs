@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -7,16 +8,16 @@ namespace BusinessManagement.Handlers;
 
 public class UpdateClientHandler: IRequestHandler<UpdateClientRequest, bool>
 {
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateClientHandler (IClientRepository clientRepository)
+    public UpdateClientHandler (IUnitOfWork unitOfWork)
     {
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(UpdateClientRequest request, CancellationToken cancellationToken)
     {
         var clientEntity = request.Client.ToModel();
-        var clientToUpdate = await _clientRepository.GetClientById(request.Id, request.UserId);
+        var clientToUpdate = await _unitOfWork.ClientRepository.GetBy( p=> p.Id == request.Id && p.UserId == request.UserId);
         
         if (clientToUpdate == null)
         {
@@ -27,9 +28,11 @@ public class UpdateClientHandler: IRequestHandler<UpdateClientRequest, bool>
         {
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
-        
-        _clientRepository.UpdateClient(clientToUpdate, clientEntity);
-        await _clientRepository.Save();
+
+        clientEntity.Id = clientToUpdate.Id;
+        clientEntity.UserId = clientToUpdate.UserId;
+        _unitOfWork.ClientRepository.Update(clientEntity);
+        await _unitOfWork.Save();
         return true;
     }
 }

@@ -1,5 +1,5 @@
 using BusinessManagement.Commands;
-using BusinessManagementApi.DAL;
+using BusinessManagement.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -8,23 +8,21 @@ namespace BusinessManagement.Handlers;
 
 public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, InvoiceDetailDto> 
 {
-    private readonly IInvoiceRepository _invoiceRepository;
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateInvoiceHandler (IInvoiceRepository invoiceRepository, IClientRepository clientRepository)
+    public CreateInvoiceHandler (IUnitOfWork unitOfWork)
     {
-        _invoiceRepository = invoiceRepository;
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<InvoiceDetailDto> Handle(CreateInvoiceRequest request, CancellationToken cancellationToken)
     {
         var invoice = request.Invoice.ToModel();
         invoice.UserId = request.UserId;
         invoice.TotalPrice = invoice.CalculateTotalPrice();
-        await _invoiceRepository.InsertInvoice(invoice);
-        await _invoiceRepository.Save();
+        await _unitOfWork.InvoiceRepository.Insert(invoice);
+        await _unitOfWork.Save();
         // TODO: find a better way of returning the client
-        var client = await _clientRepository.GetClientById(invoice.ClientId, request.UserId);
+        var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == invoice.ClientId && p.UserId == request.UserId);
         if (client == null)
         {
             throw new Exception("Client not found");

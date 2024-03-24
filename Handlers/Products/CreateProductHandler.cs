@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
@@ -8,18 +9,18 @@ namespace BusinessManagement.Handlers;
 
 public class CreateProductHandler: IRequestHandler<CreateProductRequest, ProductDto> 
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateProductHandler (IProductRepository productRepository)
+    public CreateProductHandler (IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<ProductDto> Handle(CreateProductRequest request, CancellationToken cancellationToken)
     {
         var productEntity = request.Product.ToModel();
         productEntity.UserId = request.UserId;
-        await _productRepository.InsertProduct(productEntity);
-        await _productRepository.Save();
+        await _unitOfWork.ProductRepository.Insert(productEntity);
+        await _unitOfWork.Save();
         return productEntity.ToDto();
     }
 }

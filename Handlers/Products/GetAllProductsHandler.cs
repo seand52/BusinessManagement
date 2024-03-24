@@ -1,7 +1,8 @@
+using System.Linq.Expressions;
+using BusinessManagement.DAL;
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -10,16 +11,27 @@ namespace BusinessManagement.Handlers;
 
 public class GetAllProductsHandler: IRequestHandler<GetAllProductsQuery, PagedList<ProductDto>>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllProductsHandler(IProductRepository productRepository)
+    public GetAllProductsHandler(IUnitOfWork unitOfWork)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
+    }
+    
+    private Expression<Func<Product, bool>>?  BuildSearchTerm(GetAllProductsQuery request)
+    {
+        if (request.SearchTerm == null)
+        {
+            return null;
+        }
+
+        return p => p.Reference.Contains(request.SearchTerm);
     }
     public async Task<PagedList<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
-        var products = await _productRepository.GetProducts(validFilter, request.SearchTerm, request.UserId);
+        var searchTerm = BuildSearchTerm(request);
+        var products = await _unitOfWork.ProductRepository.GetAllBy(p => p.UserId == request.UserId, validFilter, searchTerm);
         var productDtos = products.Items.Select(item => item.ToDto()).ToList();
         return new PagedList<ProductDto>(productDtos, products.TotalCount, products.Page, products.PageSize);
     }
