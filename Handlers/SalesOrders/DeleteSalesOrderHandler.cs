@@ -1,20 +1,20 @@
 using BusinessManagement.Commands;
-using BusinessManagementApi.DAL;
+using BusinessManagement.DAL;
 using MediatR;
 
 namespace BusinessManagement.Handlers;
 
 public class DeletSalesOrderHandler: IRequestHandler<DeleteSalesOrderRequest, bool>
 {
-    private readonly ISalesOrderRepository _salesOrderRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeletSalesOrderHandler (ISalesOrderRepository salesOrderRepository)
+    public DeletSalesOrderHandler (IUnitOfWork unitOfWork)
     {
-        _salesOrderRepository = salesOrderRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(DeleteSalesOrderRequest request, CancellationToken cancellationToken)
     {
-        var salesOrder = await _salesOrderRepository.GetSalesOrderById(request.Id, request.UserId);
+        var salesOrder = await _unitOfWork.SalesOrderRepository.GetBy(request.Id, request.UserId);
 
         if (salesOrder == null)
         {
@@ -26,8 +26,8 @@ public class DeletSalesOrderHandler: IRequestHandler<DeleteSalesOrderRequest, bo
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
 
-        _salesOrderRepository.DeleteSalesOrder(salesOrder);
-        await _salesOrderRepository.Save();
+        _unitOfWork.SalesOrderRepository.Delete(salesOrder);
+        await _unitOfWork.Save();
         return true;
     }
 }

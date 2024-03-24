@@ -1,10 +1,11 @@
 
+using System.Linq.Expressions;
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagement.Filter;
 using BusinessManagement.Handlers;
 using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 
@@ -13,13 +14,13 @@ namespace BusinessManagement.UnitTests.Handlers
     [TestFixture]
     public class ClientHandlers
     {
-        private Mock<IClientRepository> _clientRepository;
+        private Mock<IUnitOfWork> _unitOfWork;
         private Fixture _fixture;
 
         [SetUp]
         public void SetUp()
         {
-            _clientRepository = new Mock<IClientRepository>();
+            _unitOfWork = new Mock<IUnitOfWork>();
             _fixture = new Fixture();
 
         }
@@ -28,8 +29,9 @@ namespace BusinessManagement.UnitTests.Handlers
         public void GetClientHandler_InputIsValid_ReturnsClient()
         {
             var client = _fixture.Create<Client>();
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(client);
-            var handler = new GetClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>()))
+                .ReturnsAsync(client);
+            var handler = new GetClientHandler(_unitOfWork.Object);
             var result = handler.Handle(new GetClientQuery(1, "1"), CancellationToken.None).Result;
             Assert.That(result.Id, Is.EqualTo(client.Id));
         }
@@ -38,20 +40,22 @@ namespace BusinessManagement.UnitTests.Handlers
         public void GetAllClientsHandler_InputIsValid_ReturnsClients()
         {
             var clients = _fixture.CreateMany<Client>(2).ToList();
-            _clientRepository.Setup(x => x.GetClients(It.IsAny<PaginationFilter>(), "Test", "1")).ReturnsAsync(new PagedList<Client>(clients, 1, 2, 2));
-            var handler = new GetAllClientsHandler(_clientRepository.Object);
+            
+            _unitOfWork.Setup(x => x.ClientRepository.GetAllBy(It.IsAny<Expression<Func<Client, bool>>>(), It.IsAny<PaginationFilter>(), It.IsAny<Expression<Func<Client, bool>>>(), It.IsAny<string>()))
+                .ReturnsAsync(new PagedList<Client>(clients, 1, 2, 2));
+            var handler = new GetAllClientsHandler(_unitOfWork.Object);
             var result = handler.Handle(new GetAllClientsQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
             Assert.That(result, Is.TypeOf<PagedList<ClientDto>>());
             
         }
-        
+        //
         [Test]
         public void DeleteClientsHandler_InputIsValid_ReturnsTrue()
         {
             var client = _fixture.Build<Client>().With(x => x.UserId, "1").Create();
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(client);
-            var handler = new DeleteClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(client);
+            var handler = new DeleteClientHandler(_unitOfWork.Object);
             var result = handler.Handle(new DeleteClientRequest(1, "1"), CancellationToken.None).Result;
             Assert.That(result, Is.True);
         }
@@ -60,8 +64,8 @@ namespace BusinessManagement.UnitTests.Handlers
         public void DeleteClientsHandler_InvalidUserId_ReturnsException()
         {
             var client = _fixture.Build<Client>().With(x => x.UserId, "5").Create();
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(client);
-            var handler = new DeleteClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(client);
+            var handler = new DeleteClientHandler(_unitOfWork.Object);
             async Task Code() => await handler.Handle(new DeleteClientRequest(1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(Code);
             Assert.That(ex.Message, Is.EqualTo("Insufficient Permissions"));
@@ -70,8 +74,8 @@ namespace BusinessManagement.UnitTests.Handlers
         [Test]
         public void DeleteClientsHandler_InvalidClient_ReturnsFalse()
         {
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(null as Client);
-            var handler = new DeleteClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(null as Client);            
+            var handler = new DeleteClientHandler(_unitOfWork.Object);
             var result = handler.Handle(new DeleteClientRequest(1, "1"), CancellationToken.None).Result;
             Assert.That(result, Is.False);
             
@@ -79,8 +83,8 @@ namespace BusinessManagement.UnitTests.Handlers
         [Test]
         public void UpdateClientHandler_InvalidClient_ReturnsError()
         {
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(null as Client);
-            var handler = new UpdateClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(null as Client);
+            var handler = new UpdateClientHandler(_unitOfWork.Object);
             async Task Code() => await handler.Handle(new UpdateClientRequest(new UpdateClientDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<Exception>(Code);
             Assert.That(ex.Message, Is.EqualTo("Client not found"));
@@ -89,8 +93,8 @@ namespace BusinessManagement.UnitTests.Handlers
         public void UpdateClientHandler_InvalidUserId_ReturnsError()
         {
             var client = _fixture.Build<Client>().With(x => x.UserId, "2").Create();
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(client);
-            var handler = new UpdateClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(client);
+            var handler = new UpdateClientHandler(_unitOfWork.Object);
             async Task Code() => await handler.Handle(new UpdateClientRequest(new UpdateClientDto(), 1, "1"), CancellationToken.None);
             var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(Code);
             Assert.That(ex.Message, Is.EqualTo("Insufficient Permissions"));
@@ -99,8 +103,8 @@ namespace BusinessManagement.UnitTests.Handlers
         public void UpdateClientHandler_ValidInput_ReturnsTrue()
         {
             var client = _fixture.Build<Client>().With(x => x.UserId, "1").Create();
-            _clientRepository.Setup(x => x.GetClientById(1, "1")).ReturnsAsync(client);
-            var handler = new UpdateClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.GetBy(It.IsAny<Expression<Func<Client, bool>>>())).ReturnsAsync(client);
+            var handler = new UpdateClientHandler(_unitOfWork.Object);
             var result = handler.Handle(new UpdateClientRequest(new UpdateClientDto(), 1, "1"), CancellationToken.None);
             Assert.That(result.Result, Is.True);
         
@@ -110,13 +114,13 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var client = _fixture.Build<Client>().With(x => x.UserId, "1").Create();
             var clientDto = _fixture.Build<CreateClientDto>().Create();
-            _clientRepository.Setup(x => x.InsertClient(client)).Returns(Task.CompletedTask);
-            _clientRepository.Setup(x => x.Save()).Returns(Task.CompletedTask);
-            var handler = new CreateClientHandler(_clientRepository.Object);
+            _unitOfWork.Setup(x => x.ClientRepository.Insert(client)).Returns(Task.CompletedTask);
+            _unitOfWork.Setup(x => x.Save()).Returns(Task.CompletedTask);
+            var handler = new CreateClientHandler(_unitOfWork.Object);
             await handler.Handle(new CreateClientRequest(clientDto, "1"), CancellationToken.None);
             // TODO: consider refactoring to not use It.IsAny
-            _clientRepository.Verify(x => x.InsertClient(It.IsAny<Client>()), Times.Once);
-            _clientRepository.Verify(x => x.Save(), Times.Once);
+            _unitOfWork.Verify(x => x.ClientRepository.Insert(It.IsAny<Client>()), Times.Once);
+            _unitOfWork.Verify(x => x.Save(), Times.Once);
         
         }
     }

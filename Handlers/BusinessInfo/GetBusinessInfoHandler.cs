@@ -1,3 +1,4 @@
+using BusinessManagement.DAL;
 using BusinessManagement.Queries;
 using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
@@ -8,16 +9,16 @@ namespace BusinessManagement.Handlers;
 
 public class GetBusinessInfoHandler: IRequestHandler<GetBusinessInfoQuery, BusinessInfoDto?>
 {
-    private readonly IBusinessInfoRepository _businessInfoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetBusinessInfoHandler(IBusinessInfoRepository businessInfoRepository)
+    public GetBusinessInfoHandler(IUnitOfWork unitOfWork)
     {
-        _businessInfoRepository = businessInfoRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<BusinessInfoDto?> Handle(GetBusinessInfoQuery request, CancellationToken cancellationToken)
     {
-        BusinessInfo? businessInfo = await _businessInfoRepository.GetBusinessUserByUserId(request.UserId);
+        BusinessInfo? businessInfo = await _unitOfWork.BusinessInfoRepository.GetBy(b => b.UserId == request.UserId);
         return businessInfo.ToDto();
     }
 }

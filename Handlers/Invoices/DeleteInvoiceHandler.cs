@@ -1,20 +1,20 @@
 using BusinessManagement.Commands;
-using BusinessManagementApi.DAL;
+using BusinessManagement.DAL;
 using MediatR;
 
 namespace BusinessManagement.Handlers;
 
-public class DeletInvoiceHandler: IRequestHandler<DeleteInvoiceRequest, bool>
+public class DeleteInvoiceHandler: IRequestHandler<DeleteInvoiceRequest, bool>
 {
-    private readonly IInvoiceRepository _invoiceRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeletInvoiceHandler (IInvoiceRepository invoiceRepository)
+    public DeleteInvoiceHandler (IUnitOfWork unitOfWork)
     {
-        _invoiceRepository = invoiceRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(DeleteInvoiceRequest request, CancellationToken cancellationToken)
     {
-        var invoice = await _invoiceRepository.GetInvoiceById(request.Id, request.UserId);
+        var invoice = await _unitOfWork.InvoiceRepository.GetBy(request.Id, request.UserId);
 
         if (invoice == null)
         {
@@ -26,8 +26,8 @@ public class DeletInvoiceHandler: IRequestHandler<DeleteInvoiceRequest, bool>
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
 
-        _invoiceRepository.DeleteInvoice(invoice);
-        await _invoiceRepository.Save();
+        _unitOfWork.InvoiceRepository.Delete(invoice);
+        await _unitOfWork.Save();
         return true;
     }
 }

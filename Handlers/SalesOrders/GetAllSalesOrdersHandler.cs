@@ -1,7 +1,7 @@
+using BusinessManagement.DAL;
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -10,17 +10,17 @@ namespace BusinessManagement.Handlers;
 
 public class GetAllSalesOrdersHandler: IRequestHandler<GetAllSalesOrdersQuery, PagedList<SalesOrderDto>>
 {
-    private readonly ISalesOrderRepository _salesOrderRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllSalesOrdersHandler(ISalesOrderRepository salesOrderRepository)
+    public GetAllSalesOrdersHandler(IUnitOfWork unitOfWork)
     {
-        _salesOrderRepository = salesOrderRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<PagedList<SalesOrderDto>> Handle(GetAllSalesOrdersQuery request, CancellationToken cancellationToken)
     {
         var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
-        var salesOrder = await _salesOrderRepository.GetSalesOrders(validFilter, request.SearchTerm, request.UserId);
-        var salesOrderDtos = salesOrder.Items.Select(item => item.ToDto()).ToList();
-        return new PagedList<SalesOrderDto>(salesOrderDtos, salesOrder.TotalCount, salesOrder.Page, salesOrder.PageSize);
+        var salesOrders = await _unitOfWork.SalesOrderRepository.GetAllBy(p => p.UserId  == request.UserId, validFilter, null, "Client");
+        var salesOrderDtos = salesOrders.Items.Select(p => p.ToDto()).ToList();
+        return new PagedList<SalesOrderDto>(salesOrderDtos, salesOrders.TotalCount, salesOrders.Page, salesOrders.PageSize);
     }
 }

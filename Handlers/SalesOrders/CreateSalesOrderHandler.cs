@@ -1,5 +1,5 @@
 using BusinessManagement.Commands;
-using BusinessManagementApi.DAL;
+using BusinessManagement.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -8,23 +8,21 @@ namespace BusinessManagement.Handlers;
 
 public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, SalesOrderDetailDto> 
 {
-    private readonly ISalesOrderRepository _salesOrderRepository;
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateSalesOrderHandler (ISalesOrderRepository salesOrderRepository, IClientRepository clientRepository)
+    public CreateSalesOrderHandler (IUnitOfWork unitOfWork)
     {
-        _salesOrderRepository = salesOrderRepository;
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<SalesOrderDetailDto> Handle(CreateSalesOrderRequest request, CancellationToken cancellationToken)
     {
         var salesOrder = request.SalesOrder.ToModel();
         salesOrder.UserId = request.UserId;
         salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
-        await _salesOrderRepository.InsertSalesOrder(salesOrder);
-        await _salesOrderRepository.Save();
+        await _unitOfWork.SalesOrderRepository.Insert(salesOrder);
+        await _unitOfWork.Save();
         // TODO: find a better way of returning the client
-        var client = await _clientRepository.GetClientById(salesOrder.ClientId, request.UserId);
+        var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == salesOrder.ClientId && p.UserId == request.UserId);
         if (client == null)
         {
             throw new Exception("Client not found");

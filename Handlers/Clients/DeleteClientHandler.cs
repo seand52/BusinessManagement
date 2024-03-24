@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.DAL;
 using BusinessManagementApi.DAL;
 using MediatR;
 
@@ -6,15 +7,15 @@ namespace BusinessManagement.Handlers;
 
 public class DeleteClientHandler: IRequestHandler<DeleteClientRequest, bool>
 {
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteClientHandler (IClientRepository clientRepository)
+    public DeleteClientHandler (IUnitOfWork unitOfWork)
     {
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<bool> Handle(DeleteClientRequest request, CancellationToken cancellationToken)
     {
-        var client = await _clientRepository.GetClientById(request.Id, request.UserId);
+        var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == request.Id && p.UserId == request.UserId);
 
         if (client == null)
         {
@@ -26,8 +27,8 @@ public class DeleteClientHandler: IRequestHandler<DeleteClientRequest, bool>
             throw new UnauthorizedAccessException("Insufficient Permissions");
         }
 
-        _clientRepository.DeleteClient(client);
-        await _clientRepository.Save();
+        _unitOfWork.ClientRepository.Delete(client);
+        await _unitOfWork.Save();
         return true;
     }
 }

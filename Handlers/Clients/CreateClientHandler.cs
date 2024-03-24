@@ -1,5 +1,5 @@
 using BusinessManagement.Commands;
-using BusinessManagementApi.DAL;
+using BusinessManagement.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
@@ -8,18 +8,18 @@ namespace BusinessManagement.Handlers;
 
 public class CreateClientHandler: IRequestHandler<CreateClientRequest, ClientDto> 
 {
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateClientHandler (IClientRepository clientRepository)
+    public CreateClientHandler (IUnitOfWork unitOfWork)
     {
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<ClientDto> Handle(CreateClientRequest request, CancellationToken cancellationToken)
     {
         var clientEntity = request.Client.ToModel();
         clientEntity.UserId = request.UserId;
-        await _clientRepository.InsertClient(clientEntity);
-        await _clientRepository.Save();
+        await _unitOfWork.ClientRepository.Insert(clientEntity);
+        await _unitOfWork.Save();
         return clientEntity.ToDto();
     }
 }

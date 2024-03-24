@@ -1,23 +1,24 @@
+using BusinessManagement.DAL;
 using BusinessManagement.Queries;
-using BusinessManagementApi.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
+using ContosoUniversity.DAL;
 using MediatR;
 
 namespace BusinessManagement.Handlers;
 
 public class GetClientHandler: IRequestHandler<GetClientQuery, ClientDto?>
 {
-    private readonly IClientRepository _clientRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetClientHandler(IClientRepository clientRepository)
+    public GetClientHandler(IUnitOfWork unitOfWork)
     {
-        _clientRepository = clientRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<ClientDto?> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
-        Client? client = await _clientRepository.GetClientById(request.ClientId, request.UserId);
+        Client? client  = await _unitOfWork.ClientRepository.GetBy(p => p.UserId == request.UserId && p.Id == request.ClientId);
         return client.ToDto();
     }
 }  
