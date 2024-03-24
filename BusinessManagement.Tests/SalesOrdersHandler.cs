@@ -42,7 +42,7 @@ namespace BusinessManagement.UnitTests.Handlers
             var handler = new GetAllSalesOrdersHandler(_salesOrderRepository.Object);
             var result = handler.Handle(new GetAllSalesOrdersQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
-            Assert.That(result, Is.TypeOf<PagedList<SalesOrder>>());
+            Assert.That(result, Is.TypeOf<PagedList<SalesOrderDto>>());
             
         }
         

@@ -28,7 +28,6 @@ namespace BusinessManagementApi.DAL
         {
             var query = _context.Invoices.Where(p => p.UserId == userId)
                 .Include(p => p.Client)
-                .Include(x => x.InvoiceProducts)
                 .AsQueryable();
             var res  = await PagedList<Invoice>.CreateAsync(query, filter.PageNumber, filter.PageSize);
             return res;

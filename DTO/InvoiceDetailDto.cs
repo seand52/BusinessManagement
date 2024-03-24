@@ -33,6 +33,17 @@ public class InvoiceDetailDto: BaseInvoiceDto
     public string UserId { get; set; }
 }
 
+public class InvoiceDto
+{
+    public int Id { get; set; }
+    public decimal TotalPrice { get; set; }
+    public ClientDto Client { get; set; }
+    public decimal TransportPrice { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public PaymentType PaymentType { get; set; }
+        
+}
+
 public class CreateInvoiceDto : BaseInvoiceDto
 {
     [Required]

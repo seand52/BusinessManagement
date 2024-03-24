@@ -1,11 +1,12 @@
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
+using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
 
 namespace BusinessManagement.Queries;
 
-public class GetAllSalesOrdersQuery: IRequest<PagedList<SalesOrder>>
+public class GetAllSalesOrdersQuery: IRequest<PagedList<SalesOrderDto>>
 {
     public PaginationFilter Filter;
     public string SearchTerm;

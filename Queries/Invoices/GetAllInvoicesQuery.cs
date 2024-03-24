@@ -1,11 +1,12 @@
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
+using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
 
 namespace BusinessManagement.Queries;
 
-public class GetAllInvoicesQuery: IRequest<PagedList<Invoice>>
+public class GetAllInvoicesQuery: IRequest<PagedList<InvoiceDto>>
 {
     public PaginationFilter Filter;
     public string SearchTerm;

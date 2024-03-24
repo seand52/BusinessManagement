@@ -4,7 +4,7 @@ namespace BusinessManagementApi.Models;
 
 public static class ModelExtensions
 {
-    public static InvoiceDetailDto ToDto(this Invoice? invoice)
+    public static InvoiceDetailDto ToDetailDto(this Invoice? invoice)
     {
         if (invoice is null)
         {
@@ -21,6 +21,22 @@ public static class ModelExtensions
             Client = invoice.Client.ToDto(),
             InvoiceProducts = invoice.InvoiceProducts,
             UserId = invoice.UserId
+        };
+    }
+    
+    public static InvoiceDto ToDto(this Invoice? invoice)
+    {
+        if (invoice is null)
+        {
+            return null;
+        }
+        return new InvoiceDto()
+        {
+            Id = invoice.Id,
+            TransportPrice = invoice.TransportPrice,
+            PaymentType = invoice.PaymentType,
+            TotalPrice = invoice.TotalPrice,
+            Client = invoice.Client.ToDto(),
         };
     }
 
@@ -153,7 +169,7 @@ public static class ModelExtensions
         };
     }
 
-    public static SalesOrderDetailDto ToDto(this SalesOrder salesOrder)
+    public static SalesOrderDetailDto ToDetailDto(this SalesOrder salesOrder)
     {
         return new SalesOrderDetailDto() 
         {
@@ -166,6 +182,18 @@ public static class ModelExtensions
             Client = salesOrder.Client.ToDto(),
             SalesOrderProducts = salesOrder.SalesOrderProducts,
             UserId = salesOrder.UserId
+        };
+    }
+    
+    public static SalesOrderDto ToDto(this SalesOrder salesOrder)
+    {
+        return new SalesOrderDto() 
+        {
+            Id = salesOrder.Id,
+            TransportPrice = salesOrder.TransportPrice,
+            PaymentType = salesOrder.PaymentType,
+            TotalPrice = salesOrder.TotalPrice,
+            Client = salesOrder.Client.ToDto(),
         };
     }
     

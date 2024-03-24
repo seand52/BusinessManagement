@@ -42,7 +42,7 @@ namespace BusinessManagement.UnitTests.Handlers
             var handler = new GetAllInvoicesHandler(_invoiceRepository.Object);
             var result = handler.Handle(new GetAllInvoicesQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
-            Assert.That(result, Is.TypeOf<PagedList<Invoice>>());
+            Assert.That(result, Is.TypeOf<PagedList<InvoiceDto>>());
             
         }
         

@@ -30,6 +30,6 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
             throw new Exception("Client not found");
         }
         salesOrder.Client = client;
-        return salesOrder.ToDto();
+        return salesOrder.ToDetailDto();
     }
 }

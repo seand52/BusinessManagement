@@ -42,7 +42,7 @@ namespace BusinessManagement.UnitTests.Handlers
             var handler = new GetAllProductsHandler(_productRepository.Object);
             var result = handler.Handle(new GetAllProductsQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
-            Assert.That(result, Is.TypeOf<PagedList<Product>>());
+            Assert.That(result, Is.TypeOf<PagedList<ProductDto>>());
             
         }
         
