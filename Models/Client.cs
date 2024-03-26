@@ -21,8 +21,10 @@ public class Client
     public string Address { get; set; }
     [Required]
     public string City { get; set; } 
-    [Required]
     public string? Province { get; set; }
+    
+    public string? Country { get; set; }
+    
     [Required]
     [StringLength(7)]
     public string Postcode { get; set; }

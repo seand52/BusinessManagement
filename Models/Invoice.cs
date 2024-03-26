@@ -39,6 +39,9 @@ public class Invoice: IPriceCalculable
     public int ClientId { get; set; }
     public Client Client { get; set; } = null!;
     public List<Product> Products { get; } = [];
+    
+    [Required]
+    public DateTime DateIssued { get; set; } = DateTime.UtcNow;
     public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
     IEnumerable<ICalculableItem> IPriceCalculable.Items => InvoiceProducts;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
