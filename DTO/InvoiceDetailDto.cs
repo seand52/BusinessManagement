@@ -14,6 +14,9 @@ public class BaseInvoiceDto
 
     [Required]
     public decimal TransportPrice { get; set; } = 0;
+    
+    [Required]
+    public DateTime DateIssued { get; set; } = DateTime.UtcNow;
 
     [Required]
     // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]

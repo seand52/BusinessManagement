@@ -33,7 +33,7 @@ namespace BusinessManagementApi.Models
 
 
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime DateIssued { get; set; }
         public byte Expired { get; set; } = 0;
 
         [Required]

@@ -57,7 +57,7 @@ public class InvoiceDocument : IDocument
                 {
                     // TODO: implement date issued
                     text.Span("Fecha de emisión: ").SemiBold();
-                    text.Span("23/05/2024");
+                    text.Span(Model.DateIssued.ToString("dd/MM/yyyy"));
                 });
             });
             
