@@ -4,7 +4,7 @@ using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
 using BusinessManagementApi.Dto;
-using BusinessManagementApi.Models;
+using BusinessManagementApi.Extensions.Events;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 
@@ -26,6 +26,8 @@ namespace BusinessManagement.Controllers
         public async Task<ActionResult<InvoiceDetailDto>> Get(int id)
         {
             var result = await _mediator.Send(new GetInvoiceQuery(id, GetUserId()));
+            // var document = new InvoiceDocument(result);
+            // document.GeneratePdf("invoice.pdf");
             return result != null ? Ok(result) : NotFound();
         }
         
@@ -44,6 +46,7 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             var result = await _mediator.Send(new CreateInvoiceRequest(invoice, GetUserId()));
+            await _mediator.Publish(new InvoiceCreatedEvent(result));
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
         

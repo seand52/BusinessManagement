@@ -1,24 +1,21 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using BusinessManagement.Templates;
 using BusinessManagement.Tests;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using Newtonsoft.Json;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 
 namespace BusinessManagement.InvoiceTests;
+
 
 [TestFixture]
 public class Invoices: IntegrationTestWebAppFactory
 {
     private HttpClient _client;
-    
-    private static HttpClient CreateHttpClient()
-    {
-        var factory = new IntegrationTestWebAppFactory();
-        var client = factory.CreateClient();
-        return client;
-    }
 
     [OneTimeSetUp]
     public async Task Init()
