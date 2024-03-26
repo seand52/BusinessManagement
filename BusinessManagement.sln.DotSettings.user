@@ -2,12 +2,25 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AControllers_002Ff_003ABusinessInfo_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AControllers_002Ff_003AClientsController_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AModels_002Ff_003ABusinessInfo_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
-	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AModels_002Ff_003AClient_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=826DA59F_002DEB19_002D4222_002D8066_002D5AEF1C98D49A_002Fd_003AModels_002Ff_003AClient_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0e9e3ed4_002Dfbd3_002D4b16_002D8070_002Dd82d8ba2e34c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="CreateInvoiceSuccess #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.InvoiceTests.Invoices.CreateInvoiceSuccess&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9d2200c5_002Df3d7_002D4b8e_002D8028_002Da93abc3f9848/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Clients" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9d2200c5_002Df3d7_002D4b8e_002D8028_002Da93abc3f9848/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Clients" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/home/sean/projects/BusinessManagement/BusinessManagement.Tests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;BusinessManagement.Tests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ab6b58e5_002D68c5_002D40c0_002Dbc81_002D4ea6fdf9105a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CreateInvoiceSuccess #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/sean/projects/BusinessManagement/BusinessManagement.Tests" Presentation="&amp;lt;tests&amp;gt;\&amp;lt;BusinessManagement.Tests&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fdc741ff_002Da6bb_002D4d3e_002Dbf01_002D6baed0769007/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="CreateInvoiceSuccess" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;NUnit3x::FB296C31-C74B-4694-BC5F-0660FD51172C::net8.0::BusinessManagement.InvoiceTests.Invoices.CreateInvoiceSuccess&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	</wpf:ResourceDictionary>

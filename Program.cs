@@ -1,16 +1,16 @@
 using BusinessManagement.DAL;
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
+using BusinessManagement.Templates;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
 using ContosoUniversity.DAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var config = builder.Configuration;
 
 builder.Services.AddDbContext<ApplicationContext>(
     options => options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management")
@@ -56,11 +56,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IInvoiceDocumentBuilder, InvoiceDocumentBuilder>();
 
 //Inject the MediatR to oun DI
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));
 
 var app = builder.Build();
+
+QuestPDF.Settings.License = LicenseType.Community;
+QuestPDF.Settings.EnableDebugging = true;
+
 
 app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExtensionHandler());
 // Configure the HTTP request pipeline.

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Faker" Version="1.2.0" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.7" />
@@ -23,7 +24,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="QuestPDF" Version="2023.12.6" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -47,6 +50,10 @@
     <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\BusinessManagement.Tests.csproj.nuget.dgspec.json" />
     <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\project.assets.json" />
     <_ContentIncludedByDefault Remove="BusinessManagement.Tests\obj\project.packagespec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="invoices\" />
   </ItemGroup>
 
 </Project>

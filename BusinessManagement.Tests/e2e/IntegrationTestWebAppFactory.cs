@@ -1,15 +1,39 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using BusinessManagement.Database;
+using BusinessManagement.Templates;
+using BusinessManagementApi.Dto;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using QuestPDF.Infrastructure;
 using Testcontainers.PostgreSql;
 
 namespace BusinessManagement.Tests;
+
+public class NoopFactory : IInvoiceDocumentBuilder
+{
+    private IDocument _document;
+    
+    public IInvoiceDocumentBuilder Build()
+    {
+        return new NoopFactory();
+    }
+    
+    public IInvoiceDocumentBuilder CreateInvoiceDocument(InvoiceDetailDto data, BusinessInfoDto businessInfoDto)
+    {
+        return this;
+    }
+    
+    public void GeneratePdf(string path)
+    {
+       // noop
+    }
+}
+
 public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
 {
     private static readonly string uniqueDatabaseName = $"testdb_{Guid.NewGuid()}";
@@ -31,6 +55,7 @@ public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
             {
                 services.Remove(descriptor);
             }
+            services.AddScoped<IInvoiceDocumentBuilder, NoopFactory>();
 
             services.AddDbContext<ApplicationContext>(options =>
             {
