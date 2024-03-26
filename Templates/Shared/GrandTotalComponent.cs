@@ -1,10 +1,10 @@
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace BusinessManagement.Templates;
-
 
 public class PriceData {
     public decimal TotalPrice { get; set; }
@@ -14,47 +14,17 @@ public class PriceData {
     public PaymentType PaymentMethod { get; set; }
     
     public decimal Transport { get; set; }
-    public List<InvoiceProduct> Items { get; set; }
+    public List<CalculableItem> Items { get; set; }
 }
 public class GrandTotalComponent : IComponent
 {
-    private PriceData Data { get; }
+    private Calculator PriceCalculator { get; }
 
-    public GrandTotalComponent(PriceData data)
+    public GrandTotalComponent(Calculator calculator)
     {
-        Data = data;
+        PriceCalculator = calculator;
     }
 
-    // TODO: extract this logic somewhere else
-    private decimal CalculateTotalPriceOfProducts()
-    {
-        return Data.Items.Sum(x => x.Price * x.Quantity * (1 - x.Discount));
-    }
-    
-    private decimal CalculateTax()
-    {
-        return CalculateTotalPriceOfProducts() * Data.Tax;
-    }
-    
-    private decimal CalculateRe()
-    {
-        return CalculateTotalPriceOfProducts() * Data.Re;
-    }
-    
-    private decimal CalculateSubTotal()
-    {
-        return CalculateRe() + CalculateTax() + CalculateTotalPriceOfProducts();
-    }
-    
-    private decimal CalculateTransport()
-    {
-        return Data.Transport;
-    }
-    
-    private decimal CalculateGrandTotal()
-    {
-        return CalculateSubTotal() + CalculateTransport();
-    }
     
     
     public void Compose(IContainer container)
@@ -88,13 +58,13 @@ public class GrandTotalComponent : IComponent
                 }
             });
             
-            table.Cell().Element(ItemCellStyle).Text(Data.PaymentMethod);
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateTotalPriceOfProducts()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateTax()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateRe()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateSubTotal()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateTransport()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{CalculateGrandTotal()}$");
+            table.Cell().Element(ItemCellStyle).Text(PriceCalculator.PaymentMethod);
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTotalPriceOfProducts()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTax()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateRe()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateSubTotal()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTransport()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateGrandTotal()}$");
             
             static IContainer ItemCellStyle(IContainer container)
             {

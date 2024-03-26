@@ -14,13 +14,13 @@ using Testcontainers.PostgreSql;
 
 namespace BusinessManagement.Tests;
 
-public class NoopFactory : IInvoiceDocumentBuilder
+public class NoopInvoicePdfFactory : IInvoiceDocumentBuilder
 {
     private IDocument _document;
     
     public IInvoiceDocumentBuilder Build()
     {
-        return new NoopFactory();
+        return new NoopInvoicePdfFactory();
     }
     
     public IInvoiceDocumentBuilder CreateInvoiceDocument(InvoiceDetailDto data, BusinessInfoDto businessInfoDto)
@@ -33,6 +33,28 @@ public class NoopFactory : IInvoiceDocumentBuilder
        // noop
     }
 }
+
+public class NoopSalesOrderPdfFactory : ISalesOrderBuilder
+{
+    private IDocument _document;
+    
+    public ISalesOrderBuilder Build()
+    {
+        return new NoopSalesOrderPdfFactory();
+    }
+    
+    public ISalesOrderBuilder CreateSalesOrder(SalesOrderDetailDto data, BusinessInfoDto businessInfoDto)
+    {
+        return this;
+    }
+    
+    public void GeneratePdf(string path)
+    {
+        // noop
+    }
+}
+
+
 
 public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
 {
@@ -55,7 +77,8 @@ public class IntegrationTestWebAppFactory: WebApplicationFactory<Program>
             {
                 services.Remove(descriptor);
             }
-            services.AddScoped<IInvoiceDocumentBuilder, NoopFactory>();
+            services.AddScoped<IInvoiceDocumentBuilder, NoopInvoicePdfFactory>();
+            services.AddScoped<ISalesOrderBuilder, NoopSalesOrderPdfFactory>();
 
             services.AddDbContext<ApplicationContext>(options =>
             {
