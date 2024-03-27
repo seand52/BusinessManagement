@@ -61,6 +61,13 @@ public class Clients: IntegrationTestWebAppFactory
         var response = await _client.PutAsJsonAsync("/api/Clients/4", client);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
     }
+    
+    [Test]
+    public async Task GetInvoicesForClient()
+    {
+        var response = await _client.GetAsync("/api/Clients/1/invoices?PageNumber=1&PageSize=10");
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+    }
     // [Test]
     // public async Task RetrieveClientByIdFromAnotherUserNotFound()
     // {

@@ -37,7 +37,8 @@ public static class ModelExtensions
             TransportPrice = invoice.TransportPrice,
             PaymentType = invoice.PaymentType,
             TotalPrice = invoice.TotalPrice,
-            Client = invoice.Client.ToDto(),
+            DateIssued = invoice.DateIssued,
+            
         };
     }
 

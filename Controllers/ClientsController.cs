@@ -21,6 +21,9 @@ namespace BusinessManagement.Controllers
         {
             _mediator = mediator;
         }
+        
+                
+ 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientDto>> Get(int id)
@@ -71,5 +74,14 @@ namespace BusinessManagement.Controllers
             var result = await _mediator.Send(new DeleteClientRequest(id, GetUserId()));
             return result ? NoContent() : BadRequest();
         }
+        
+        [Route("{id}/invoices")]
+        [HttpGet]
+        public async Task<ActionResult<PagedList<InvoiceDto>>> GetClientInvoices(int id, [FromQuery] PaginationFilter filter)
+        {
+            var result = await _mediator.Send(new GetInvoicesForClientQuery(id, GetUserId(), filter));
+            return result != null ? Ok(result) : BadRequest();
+        }
+
     }
 }

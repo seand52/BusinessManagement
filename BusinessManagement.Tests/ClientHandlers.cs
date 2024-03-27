@@ -123,5 +123,17 @@ namespace BusinessManagement.UnitTests.Handlers
             _unitOfWork.Verify(x => x.Save(), Times.Once);
         
         }
+        
+        [Test]
+        public async Task GetInvoicesForClient_ValidInput_ReturnsInvoices()
+        {
+            var invoices = _fixture.CreateMany<Invoice>(2).ToList();
+            _unitOfWork.Setup(x => x.InvoiceRepository.GetAllBy(It.IsAny<Expression<Func<Invoice, bool>>>() , It.IsAny<PaginationFilter>(), It.IsAny<Expression<Func<Invoice, bool>>>() , It.IsAny<string>()))
+                .ReturnsAsync(new PagedList<Invoice>(invoices, 1, 2, 2));
+            var handler = new GetInvoicesForClientHandler(_unitOfWork.Object);
+            var result = await handler.Handle(new GetInvoicesForClientQuery(1, "1", new PaginationFilter(1, 2)), CancellationToken.None);
+            Assert.That(result.Items.Count, Is.EqualTo(2));
+            Assert.That(result, Is.TypeOf<PagedList<InvoiceDto>>());
+        }
     }
 }
