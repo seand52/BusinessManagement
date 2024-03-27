@@ -135,5 +135,17 @@ namespace BusinessManagement.UnitTests.Handlers
             Assert.That(result.Items.Count, Is.EqualTo(2));
             Assert.That(result, Is.TypeOf<PagedList<InvoiceDto>>());
         }
+        
+        [Test]
+        public async Task GetSalesOrdersForClient_ValidInput_ReturnsSalesOrders()
+        {
+            var salesOrders = _fixture.CreateMany<SalesOrder>(2).ToList();
+            _unitOfWork.Setup(x => x.SalesOrderRepository.GetAllBy(It.IsAny<Expression<Func<SalesOrder, bool>>>() , It.IsAny<PaginationFilter>(), It.IsAny<Expression<Func<SalesOrder, bool>>>() , It.IsAny<string>()))
+                .ReturnsAsync(new PagedList<SalesOrder>(salesOrders, 1, 2, 2));
+            var handler = new GetSalesOrdersForClientHandler(_unitOfWork.Object);
+            var result = await handler.Handle(new GetSalesOrdersForClientQuery(1, "1", new PaginationFilter(1, 2)), CancellationToken.None);
+            Assert.That(result.Items.Count, Is.EqualTo(2));
+            Assert.That(result, Is.TypeOf<PagedList<SalesOrderDto>>());
+        }
     }
 }

@@ -82,6 +82,14 @@ namespace BusinessManagement.Controllers
             var result = await _mediator.Send(new GetInvoicesForClientQuery(id, GetUserId(), filter));
             return result != null ? Ok(result) : BadRequest();
         }
+        
+        [Route("{id}/salesOrders")]
+        [HttpGet]
+        public async Task<ActionResult<PagedList<InvoiceDto>>> GetClientSalesOrders(int id, [FromQuery] PaginationFilter filter)
+        {
+            var result = await _mediator.Send(new GetSalesOrdersForClientQuery(id, GetUserId(), filter));
+            return result != null ? Ok(result) : BadRequest();
+        }
 
     }
 }

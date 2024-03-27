@@ -226,6 +226,7 @@ public static class ModelExtensions
             TransportPrice = salesOrder.TransportPrice,
             PaymentType = salesOrder.PaymentType,
             TotalPrice = salesOrder.TotalPrice,
+            DateIssued = salesOrder.DateIssued,
             Client = salesOrder.Client.ToDto(),
         };
     }

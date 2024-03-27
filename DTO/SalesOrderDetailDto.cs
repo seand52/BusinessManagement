@@ -42,7 +42,7 @@ public class SalesOrderDto
     public decimal TotalPrice { get; set; }
     public ClientDto Client { get; set; }
     public decimal TransportPrice { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime DateIssued { get; set; }
     public PaymentType PaymentType { get; set; }
         
 }
