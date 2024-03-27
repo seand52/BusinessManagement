@@ -1,5 +1,7 @@
 using System.Globalization;
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Dto;
+using BusinessManagementApi.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -109,15 +111,22 @@ public class InvoiceDocument : IDocument
             });
             column.Item().Element(ComposeTable);
 
-            column.Item().Component(new GrandTotalComponent(new PriceData()
+            var invoiceProducts = Model.InvoiceProducts.Select(x => new CalculableItem()
             {
-                Items = Model.InvoiceProducts,
+                Price = x.Price,
+                Quantity = x.Quantity,
+                Discount = x.Discount
+            }).ToList();
+
+            column.Item().Component(new GrandTotalComponent(new Calculator(new PriceData()
+            {
+                Items = invoiceProducts,
                 Tax = Model.Tax,
                 Re = Model.Re,
                 Transport = Model.TransportPrice,
                 PaymentMethod = Model.PaymentType,
-                TotalPrice = Model.TotalPrice,
-            }));
+                TotalPrice = Model.TotalPrice
+            })));
             
             if (!string.IsNullOrWhiteSpace("some comment"))
                 column.Item().PaddingTop(25).Element(ComposeComments);

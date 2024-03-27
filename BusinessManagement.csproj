@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <Folder Include="invoices\" />
+    <Folder Include="salesOrders\" />
   </ItemGroup>
 
 </Project>

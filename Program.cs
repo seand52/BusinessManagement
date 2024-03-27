@@ -57,6 +57,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IInvoiceDocumentBuilder, InvoiceDocumentBuilder>();
+builder.Services.AddScoped<ISalesOrderBuilder, SalesOrderBuilder>();
 
 //Inject the MediatR to oun DI
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));
