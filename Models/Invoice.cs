@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementApi.Models;
@@ -41,6 +42,7 @@ public class Invoice: IPriceCalculable
     public List<Product> Products { get; } = [];
     
     [Required]
+    [BindProperty]
     public DateTime DateIssued { get; set; } = DateTime.UtcNow;
     public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
     IEnumerable<ICalculableItem> IPriceCalculable.Items => InvoiceProducts;

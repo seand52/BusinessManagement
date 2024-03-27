@@ -19,6 +19,7 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
         var salesOrder = request.SalesOrder.ToModel();
         salesOrder.UserId = request.UserId;
         salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
+        salesOrder.DateIssued = salesOrder.DateIssued.ToUniversalTime();
         await _unitOfWork.SalesOrderRepository.Insert(salesOrder);
         await _unitOfWork.Save();
         // TODO: find a better way of returning the client

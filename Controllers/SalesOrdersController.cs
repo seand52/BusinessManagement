@@ -73,5 +73,13 @@ namespace BusinessManagement.Controllers
             return result ? NoContent() : BadRequest();
         }
         
+        [Route("{salesOrderId}/convertToInvoice")]
+        [HttpPost]
+        public async Task<ActionResult<SalesOrderDetailDto>> ConvertToInvoice(int salesOrderId)
+        {
+            var result = await _mediator.Send(new ConvertSalesOrderToInvoiceRequest(salesOrderId, GetUserId()));
+            // TODO: handle different error types
+            return result ? Ok() : BadRequest();
+        }
     }
 }

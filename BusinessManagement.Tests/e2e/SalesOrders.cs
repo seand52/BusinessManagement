@@ -67,4 +67,11 @@ public class SalesOrders: IntegrationTestWebAppFactory
         var response = await _client.PutAsJsonAsync($"/api/SalesOrders/4", salesOrder);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
     }
+
+    [Test]
+    public async Task ConvertSalesOrderToInvoiceSuccess()
+    {
+        var response = await _client.PostAsync("/api/SalesOrders/2/convertToInvoice", null);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+    }
 }

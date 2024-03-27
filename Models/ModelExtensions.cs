@@ -18,6 +18,7 @@ public static class ModelExtensions
             TransportPrice = invoice.TransportPrice,
             PaymentType = invoice.PaymentType,
             TotalPrice = invoice.TotalPrice,
+            DateIssued = invoice.DateIssued,
             Client = invoice.Client.ToDto(),
             InvoiceProducts = invoice.InvoiceProducts,
             UserId = invoice.UserId
@@ -57,7 +58,37 @@ public static class ModelExtensions
             TransportPrice = createInvoiceDto.TransportPrice,
             PaymentType = createInvoiceDto.PaymentType,
             ClientId = createInvoiceDto.ClientId,
+            DateIssued = createInvoiceDto.DateIssued,
             InvoiceProducts = createInvoiceDto.InvoiceProducts.Select(x => x.ToModel()).ToList()
+        };
+    }
+
+    public static Invoice ToInvoice(this SalesOrder salesOrder)
+    {
+        return new Invoice()
+        {
+            Re = salesOrder.Re,
+            Tax = salesOrder.Tax,
+            TransportPrice = salesOrder.TransportPrice,
+            PaymentType = salesOrder.PaymentType,
+            ClientId = salesOrder.ClientId,
+            UserId = salesOrder.UserId,
+            TotalPrice = salesOrder.TotalPrice,
+            DateIssued = salesOrder.DateIssued,
+            InvoiceProducts = salesOrder.SalesOrderProducts.Select(x => x.ToInvoiceProduct()).ToList()
+        };
+    }
+
+    public static InvoiceProduct ToInvoiceProduct(this SalesOrderProduct salesOrder)
+    {
+        return new InvoiceProduct()
+        {
+            ProductId = salesOrder.ProductId,
+            Quantity = salesOrder.Quantity,
+            Price = salesOrder.Price,
+            Discount = salesOrder.Discount,
+            Reference = salesOrder.Reference,
+            Description = salesOrder.Description
         };
     }
     
@@ -180,6 +211,7 @@ public static class ModelExtensions
             PaymentType = salesOrder.PaymentType,
             TotalPrice = salesOrder.TotalPrice,
             Client = salesOrder.Client.ToDto(),
+            DateIssued = salesOrder.DateIssued,
             SalesOrderProducts = salesOrder.SalesOrderProducts,
             UserId = salesOrder.UserId
         };
@@ -206,6 +238,7 @@ public static class ModelExtensions
             TransportPrice = salesOrderDto.TransportPrice,
             PaymentType = salesOrderDto.PaymentType,
             ClientId = salesOrderDto.ClientId,
+            DateIssued = salesOrderDto.DateIssued,
             SalesOrderProducts = salesOrderDto.SalesOrderProducts.Select(x => x.ToModel()).ToList()
         };
     }

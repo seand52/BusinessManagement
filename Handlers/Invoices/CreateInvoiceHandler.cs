@@ -19,6 +19,7 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
         var invoice = request.Invoice.ToModel();
         invoice.UserId = request.UserId;
         invoice.TotalPrice = invoice.CalculateTotalPrice();
+        invoice.DateIssued = request.Invoice.DateIssued.ToUniversalTime();
         await _unitOfWork.InvoiceRepository.Insert(invoice);
         await _unitOfWork.Save();
         // TODO: find a better way of returning the client
