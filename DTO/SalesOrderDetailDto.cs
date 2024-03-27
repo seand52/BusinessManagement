@@ -16,6 +16,9 @@ public class BaseSalesOrderDto
     public decimal TransportPrice { get; set; } = 0;
 
     [Required]
+    public DateTime DateIssued { get; set; }
+
+    [Required]
     // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
     public PaymentType PaymentType { get; set; }
 }

@@ -99,6 +99,7 @@ public class TestDataController : ControllerBase
                     Re = 0.05m,
                     Tax = 0.21m,
                     TransportPrice = 0,
+                    DateIssued = DateTime.UtcNow,
                     PaymentType = PaymentType.CASH,
                 };
                 invoice.InvoiceProducts.Add(new InvoiceProduct
@@ -135,6 +136,7 @@ public class TestDataController : ControllerBase
                     Re = 0.05m,
                     Tax = 0.21m,
                     TransportPrice = 0,
+                    DateIssued = DateTime.UtcNow,
                     PaymentType = PaymentType.CASH,
                 };
                 salesOrder.SalesOrderProducts.Add(new SalesOrderProduct()
