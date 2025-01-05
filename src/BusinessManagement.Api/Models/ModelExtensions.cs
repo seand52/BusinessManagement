@@ -17,7 +17,7 @@ public static class ModelExtensions
             Tax = invoice.Tax,
             TransportPrice = invoice.TransportPrice,
             PaymentType = invoice.PaymentType,
-            TotalPrice = invoice.TotalPrice,
+            TotalPrice = invoice.CalculateTotalPrice(),
             DateIssued = invoice.DateIssued,
             Client = invoice.Client.ToDto(),
             InvoiceProducts = invoice.InvoiceProducts,

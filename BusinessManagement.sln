@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessManagement", "BusinessManagement.csproj", "{826DA59F-EB19-4222-8066-5AEF1C98D49A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessManagement", "src/BusinessManagement.Api/BusinessManagement.csproj", "{826DA59F-EB19-4222-8066-5AEF1C98D49A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessManagement.Tests", "BusinessManagement.Tests\BusinessManagement.Tests.csproj", "{FB296C31-C74B-4694-BC5F-0660FD51172C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessManagement.Tests", "test\BusinessManagement.Tests\BusinessManagement.Tests.csproj", "{FB296C31-C74B-4694-BC5F-0660FD51172C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2C04711-AF8C-420F-A265-939D4AB92B77}"
 EndProject

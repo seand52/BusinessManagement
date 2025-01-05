@@ -22,7 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BusinessManagement.csproj" />
+      <ProjectReference Include="..\..\src\BusinessManagement.Api\BusinessManagement.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="http\" />
     </ItemGroup>
 
 </Project>

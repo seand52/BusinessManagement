@@ -120,8 +120,9 @@ public class TestDataController : ControllerBase
                     Price = Faker.NumberFaker.Number(1, 500),
                     Quantity = Faker.NumberFaker.Number(1, 10),
                     Reference = Faker.StringFaker.AlphaNumeric(5),
-                    Description = Faker.TextFaker.Sentence()
+                    Description = Faker.TextFaker.Sentence(),
                 });
+                invoice.TotalPrice = invoice.CalculateTotalPrice();
                 invoices.Add(invoice);
             }
             
@@ -159,6 +160,7 @@ public class TestDataController : ControllerBase
                     Reference = Faker.StringFaker.AlphaNumeric(5),
                     Description = Faker.TextFaker.Sentence()
                 });
+                salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
                 salesOrders.Add(salesOrder);
             }
         }
