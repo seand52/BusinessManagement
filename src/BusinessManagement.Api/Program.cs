@@ -16,10 +16,15 @@ builder.Services.AddDbContext<ApplicationContext>(
     options => options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management")
 );
 
+
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 builder.Services.AddAuthentication();
 builder.Services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<ApplicationContext>()
     .AddUserManager<UserManager<User>>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -76,6 +81,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// TODO: this is temporary during dev phase
+app.UseCors("AllowAll");
 app.UseSerilogRequestLogging();
 
 app.MapIdentityApi<User>();
