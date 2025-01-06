@@ -20,6 +20,9 @@ public class PagedList<T>
     public bool HasNextPage => Page * PageSize < TotalCount;
 
     public bool HasPreviousPage => Page > 1;
+    
+    public int PageCount => (int)Math.Ceiling(TotalCount / (double)PageSize);
+    
 
     public static async Task<PagedList<T>> CreateAsync(IQueryable<T> query, int page, int pageSize)
     {
