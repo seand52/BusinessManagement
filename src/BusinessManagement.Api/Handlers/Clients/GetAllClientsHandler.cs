@@ -34,6 +34,6 @@ public class GetAllClientsHandler: IRequestHandler<GetAllClientsQuery, PagedList
         var searchTerm = BuildSearchTerm(request);
         var clients = await _unitOfWork.ClientRepository.GetAllBy(p => p.UserId == request.UserId, validFilter, searchTerm);
         var clientDtos = clients.Items.Select(c => c.ToDto()).ToList();
-        return new PagedList<ClientDto>(clientDtos, clients.TotalCount, clients.Page, clients.PageSize);
+        return new PagedList<ClientDto>(clientDtos, clients.Page, clients.PageSize, clients.TotalCount);
     }
 }

@@ -46,6 +46,9 @@ namespace BusinessManagement.UnitTests.Handlers
             var handler = new GetAllClientsHandler(_unitOfWork.Object);
             var result = handler.Handle(new GetAllClientsQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
             Assert.That(result.Items.Count, Is.EqualTo(2));
+            Assert.That(result.TotalCount, Is.EqualTo(2));
+            Assert.That(result.HasNextPage, Is.EqualTo(false));
+            Assert.That(result.PageCount, Is.EqualTo(1));
             Assert.That(result, Is.TypeOf<PagedList<ClientDto>>());
             
         }

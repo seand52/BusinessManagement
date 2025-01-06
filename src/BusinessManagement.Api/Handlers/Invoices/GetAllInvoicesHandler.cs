@@ -21,6 +21,6 @@ public class GetAllInvoicesHandler: IRequestHandler<GetAllInvoicesQuery, PagedLi
         var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
         var invoices = await _unitOfWork.InvoiceRepository.GetAllBy(p => p.UserId  == request.UserId, validFilter, null, "Client");
         var invoiceDtos = invoices.Items.Select(item => item.ToDto()).ToList();
-        return new PagedList<InvoiceDto>(invoiceDtos, invoices.TotalCount, invoices.Page, invoices.PageSize);
+        return new PagedList<InvoiceDto>(invoiceDtos, invoices.Page, invoices.PageSize, invoices.TotalCount);
     }
 }

@@ -41,9 +41,12 @@ namespace BusinessManagement.UnitTests.Handlers
         {
             var salesOrders = _fixture.CreateMany<SalesOrder>(2).ToList();
             _unitOfWork.Setup(x => x.SalesOrderRepository.GetAllBy(It.IsAny<Expression<Func<SalesOrder, bool>>>(), It.IsAny<PaginationFilter>(), null, "Client"))
-                .ReturnsAsync(new PagedList<SalesOrder>(salesOrders, 1, 2, 2));
+                .ReturnsAsync(new PagedList<SalesOrder>(salesOrders, 1, 2, 5));
             var handler = new GetAllSalesOrdersHandler(_unitOfWork.Object);
             var result = handler.Handle(new GetAllSalesOrdersQuery(new PaginationFilter(1, 2), "Test", "1"), CancellationToken.None).Result;
+            Assert.That(result.TotalCount, Is.EqualTo(5));
+            Assert.That(result.HasNextPage, Is.EqualTo(true));
+            Assert.That(result.PageCount, Is.EqualTo(3));
             Assert.That(result.Items.Count, Is.EqualTo(2));
             Assert.That(result, Is.TypeOf<PagedList<SalesOrderDto>>());
             

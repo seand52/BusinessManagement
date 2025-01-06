@@ -33,6 +33,6 @@ public class GetAllProductsHandler: IRequestHandler<GetAllProductsQuery, PagedLi
         var searchTerm = BuildSearchTerm(request);
         var products = await _unitOfWork.ProductRepository.GetAllBy(p => p.UserId == request.UserId, validFilter, searchTerm);
         var productDtos = products.Items.Select(item => item.ToDto()).ToList();
-        return new PagedList<ProductDto>(productDtos, products.TotalCount, products.Page, products.PageSize);
+        return new PagedList<ProductDto>(productDtos, products.Page, products.PageSize, products.TotalCount);
     }
 }

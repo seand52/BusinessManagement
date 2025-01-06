@@ -21,6 +21,6 @@ public class GetAllSalesOrdersHandler: IRequestHandler<GetAllSalesOrdersQuery, P
         var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
         var salesOrders = await _unitOfWork.SalesOrderRepository.GetAllBy(p => p.UserId  == request.UserId, validFilter, null, "Client");
         var salesOrderDtos = salesOrders.Items.Select(p => p.ToDto()).ToList();
-        return new PagedList<SalesOrderDto>(salesOrderDtos, salesOrders.TotalCount, salesOrders.Page, salesOrders.PageSize);
+        return new PagedList<SalesOrderDto>(salesOrderDtos, salesOrders.Page, salesOrders.PageSize, salesOrders.TotalCount);
     }
 }
