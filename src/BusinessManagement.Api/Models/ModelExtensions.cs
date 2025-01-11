@@ -35,10 +35,10 @@ public static class ModelExtensions
         {
             Id = invoice.Id,
             TransportPrice = invoice.TransportPrice,
-            PaymentType = invoice.PaymentType,
+            PaymentType = invoice.PaymentType.ToString(),
             TotalPrice = invoice.TotalPrice,
             DateIssued = invoice.DateIssued,
-            
+            ClientName = invoice.Client.Name,
         };
     }
 
@@ -60,7 +60,7 @@ public static class ModelExtensions
             PaymentType = createInvoiceDto.PaymentType,
             ClientId = createInvoiceDto.ClientId,
             DateIssued = createInvoiceDto.DateIssued,
-            InvoiceProducts = createInvoiceDto.InvoiceProducts.Select(x => x.ToModel()).ToList()
+            InvoiceProducts = createInvoiceDto.InvoiceProducts.Select(x => x.ToModel()).ToList(),
         };
     }
 
@@ -154,7 +154,8 @@ public static class ModelExtensions
             Reference = product.Reference,
             Description = product.Description,
             Price = product.Price,
-            Stock = product.Stock
+            Stock = product.Stock,
+            UserId = product.UserId,
         };
     }
     
@@ -224,10 +225,10 @@ public static class ModelExtensions
         {
             Id = salesOrder.Id,
             TransportPrice = salesOrder.TransportPrice,
-            PaymentType = salesOrder.PaymentType,
+            PaymentType = salesOrder.PaymentType.ToString(),
             TotalPrice = salesOrder.TotalPrice,
             DateIssued = salesOrder.DateIssued,
-            Client = salesOrder.Client.ToDto(),
+            ClientName = salesOrder.Client.Name
         };
     }
     

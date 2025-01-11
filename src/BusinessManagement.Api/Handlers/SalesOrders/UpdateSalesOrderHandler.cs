@@ -17,6 +17,7 @@ public class UpdateSalesOrderHandler: IRequestHandler<UpdateSalesOrderRequest, b
     public async Task<bool> Handle(UpdateSalesOrderRequest request, CancellationToken cancellationToken)
     {
         var salesOrderEntity = request.SalesOrder.ToModel();
+        salesOrderEntity.TotalPrice = salesOrderEntity.CalculateTotalPrice();
         var salesOrderToUpdate = await _unitOfWork.SalesOrderRepository.GetBy(request.Id, request.UserId);
         
         if (salesOrderToUpdate == null)

@@ -5,8 +5,9 @@ namespace BusinessManagementApi.Models;
 public enum DocumentType
 {
     Nif,
-    Nie,
-    Cif
+    Cif,
+    Intra,
+    Passport
 }
 
 public class Client

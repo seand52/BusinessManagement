@@ -40,10 +40,10 @@ public class SalesOrderDto
 {
     public int Id { get; set; }
     public decimal TotalPrice { get; set; }
-    public ClientDto Client { get; set; }
+    public string ClientName { get; set; }
     public decimal TransportPrice { get; set; }
     public DateTime DateIssued { get; set; }
-    public PaymentType PaymentType { get; set; }
+    public string PaymentType { get; set; }
         
 }
 

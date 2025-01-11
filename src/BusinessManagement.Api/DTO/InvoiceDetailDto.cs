@@ -42,7 +42,8 @@ public class InvoiceDto
     public decimal TotalPrice { get; set; }
     public decimal TransportPrice { get; set; }
     public DateTime DateIssued { get; set; }
-    public PaymentType PaymentType { get; set; }
+    public string PaymentType { get; set; }
+    public string ClientName { get; set; }
         
 }
 

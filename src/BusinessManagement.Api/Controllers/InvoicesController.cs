@@ -46,7 +46,8 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             var result = await _mediator.Send(new CreateInvoiceRequest(invoice, GetUserId()));
-            await _mediator.Publish(new InvoiceCreatedEvent(result));
+            // will need to update to s3 instead of local
+            // await _mediator.Publish(new InvoiceCreatedEvent(result));
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
         

@@ -14,7 +14,6 @@ public class CreateInvoiceProductDto
     public decimal Discount { get; set; }
     [Required]
     public string Reference { get; set; } = null!;
-    [Required]
     public string Description { get; set; } = null!;
     
 }

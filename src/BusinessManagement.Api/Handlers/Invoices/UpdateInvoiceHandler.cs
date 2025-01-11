@@ -16,6 +16,7 @@ public class UpdateInvoiceHandler: IRequestHandler<UpdateInvoiceRequest, bool>
     public async Task<bool> Handle(UpdateInvoiceRequest request, CancellationToken cancellationToken)
     {
         var invoiceEntity = request.Invoice.ToModel();
+        invoiceEntity.TotalPrice = invoiceEntity.CalculateTotalPrice();
         var invoiceToUpdate = await _unitOfWork.InvoiceRepository.GetBy(request.Id, request.UserId);
         
         if (invoiceToUpdate == null)
