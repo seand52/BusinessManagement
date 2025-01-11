@@ -6,9 +6,9 @@ namespace BusinessManagementApi.Models;
 
 public enum PaymentType
 {
-    CASH,
-    CARD,
-    TRANSFER
+    Cash,
+    Card,
+    Transfer
 }
 
 public class Invoice: IPriceCalculable
@@ -31,7 +31,7 @@ public class Invoice: IPriceCalculable
     public decimal TransportPrice { get; set; } = 0;
 
     [Required]
-    // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
+    [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: Cash, Card, Transfer")]
     public PaymentType PaymentType { get; set; }
 
     // [Required]

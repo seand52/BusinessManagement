@@ -12,7 +12,7 @@ public class Calculator
         Data = priceData;
     }
     
-    public PaymentType PaymentMethod => Data.PaymentMethod;
+    public string PaymentMethod => Data.PaymentMethod;
     
     public decimal CalculateTotalPriceOfProducts()
     {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.Dto
@@ -13,7 +14,7 @@ namespace BusinessManagementApi.Dto
         public string Province { get; set; }
         public string Postcode { get; set; }
         public string DocumentNum { get; set; }
-        public DocumentType DocumentType { get; set; }
+        public string DocumentType { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
         public string UserId { get; set; }
@@ -37,7 +38,8 @@ namespace BusinessManagementApi.Dto
         [Required]
         public string DocumentNum { get; set; }
         [Required]
-        [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
+        [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public DocumentType DocumentType { get; set; }
         [Required]
         [StringLength(12)]

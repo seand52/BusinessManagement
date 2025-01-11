@@ -11,7 +11,7 @@ public class PriceData {
     public decimal Tax { get; set; }
     public decimal Re { get; set; }
     
-    public PaymentType PaymentMethod { get; set; }
+    public string PaymentMethod { get; set; }
     
     public decimal Transport { get; set; }
     public List<CalculableItem> Items { get; set; }

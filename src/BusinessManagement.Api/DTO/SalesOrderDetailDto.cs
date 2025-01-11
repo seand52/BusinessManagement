@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using BusinessManagementApi.Models;
 
 namespace BusinessManagementApi.Dto;
@@ -18,9 +19,6 @@ public class BaseSalesOrderDto
     [Required]
     public DateTime DateIssued { get; set; }
 
-    [Required]
-    // [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: CASH, CARD, TRANSFER")]
-    public PaymentType PaymentType { get; set; }
 }
 
 public class SalesOrderDetailDto: BaseSalesOrderDto
@@ -30,6 +28,7 @@ public class SalesOrderDetailDto: BaseSalesOrderDto
     public decimal TotalPrice { get; set; }
     [Required]
     public ClientDto Client { get; set; }
+    public string PaymentType { get; set; }
 
     [Required] public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
     [Required]
@@ -52,6 +51,11 @@ public class CreateSalesOrderDto : BaseSalesOrderDto
     [Required]
     public int ClientId { get; set; }
     public byte Expired { get; set; } = 0;
+    
+    [Required]
+    [EnumDataType(typeof(PaymentType), ErrorMessage = "PaymentType must be one of the following: Cash, Card, Transfer")]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public PaymentType PaymentType { get; set; }
 
     [Required] public List<CreateSalesOrderProductDto> SalesOrderProducts { get; set; } = [];
 }

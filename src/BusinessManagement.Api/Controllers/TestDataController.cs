@@ -47,7 +47,7 @@ public class TestDataController : ControllerBase
             {
                 clients.Add(new Client
                 {
-                    Name = Faker.LocationFaker.Street(),
+                    Name = Faker.NameFaker.MaleFirstName() + " " + Faker.NameFaker.LastName(),
                     Address = Faker.LocationFaker.Street(),
                     Email = Faker.InternetFaker.Email(),
                     ShopName = Faker.CompanyFaker.Name(),
@@ -100,7 +100,7 @@ public class TestDataController : ControllerBase
                     Tax = 0.21m,
                     TransportPrice = 0,
                     DateIssued = DateTime.UtcNow,
-                    PaymentType = PaymentType.CASH,
+                    PaymentType = PaymentType.Cash,
                 };
                 invoice.InvoiceProducts.Add(new InvoiceProduct
                 {
@@ -138,7 +138,7 @@ public class TestDataController : ControllerBase
                     Tax = 0.21m,
                     TransportPrice = 0,
                     DateIssued = DateTime.UtcNow,
-                    PaymentType = PaymentType.CASH,
+                    PaymentType = PaymentType.Cash,
                 };
                 salesOrder.SalesOrderProducts.Add(new SalesOrderProduct()
                 {
