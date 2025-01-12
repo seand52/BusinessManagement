@@ -1,4 +1,5 @@
 using BusinessManagement.DAL;
+using BusinessManagement.Helpers;
 using BusinessManagement.Templates;
 using BusinessManagementApi.Extensions.Events;
 using BusinessManagementApi.Models;
@@ -9,12 +10,14 @@ public class InvoiceCreatedEventHandler : INotificationHandler<InvoiceCreatedEve
 {
     private IInvoiceDocumentBuilder _builder;
     private IUnitOfWork _unitOfWork;
-    
-    
-    public InvoiceCreatedEventHandler (IInvoiceDocumentBuilder builder, IUnitOfWork unitOfWork)
+    private readonly IAwsPublisher _awsPublisher;
+
+
+    public InvoiceCreatedEventHandler (IInvoiceDocumentBuilder builder, IUnitOfWork unitOfWork, IAwsPublisher awsPublisher)
     {
         _builder = builder;
         _unitOfWork = unitOfWork;
+        _awsPublisher = awsPublisher;
     }
 
     public async Task Handle(InvoiceCreatedEvent notification, CancellationToken cancellationToken)
@@ -22,6 +25,9 @@ public class InvoiceCreatedEventHandler : INotificationHandler<InvoiceCreatedEve
         var invoice = notification.Invoice;
         var businessInfo = await _unitOfWork.BusinessInfoRepository.GetBy(item => item.UserId == invoice.UserId);
         var documentBuilder = _builder.Build();
-        documentBuilder.CreateInvoiceDocument(invoice, businessInfo.ToDto()).GeneratePdf($"invoices/user_{invoice.UserId}_invoice_{invoice.Id}.pdf");
+        documentBuilder.CreateInvoiceDocument(invoice, businessInfo.ToDto());
+        var pdfBytes = documentBuilder.GeneratePdf();
+        using var memoryStream = new MemoryStream(pdfBytes);
+        await _awsPublisher.Publish($"invoices/{invoice.Id}", memoryStream);
     }
 }

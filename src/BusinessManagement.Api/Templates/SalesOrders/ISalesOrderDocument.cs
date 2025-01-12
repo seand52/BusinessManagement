@@ -8,7 +8,7 @@ public interface ISalesOrderBuilder
 {
     ISalesOrderBuilder Build();
     ISalesOrderBuilder CreateSalesOrder(SalesOrderDetailDto data, BusinessInfoDto businessInfo);
-    void GeneratePdf(string path);
+    byte[] GeneratePdf();
 }
 
 public class SalesOrderBuilder : ISalesOrderBuilder
@@ -26,8 +26,8 @@ public class SalesOrderBuilder : ISalesOrderBuilder
         return this;
     }
 
-    public void GeneratePdf(string path)
+    public byte[] GeneratePdf()
     {
-        _document.GeneratePdf(path);
+       return _document.GeneratePdf();
     }
 }

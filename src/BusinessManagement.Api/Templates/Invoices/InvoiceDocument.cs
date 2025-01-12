@@ -89,7 +89,7 @@ public class InvoiceDocument : IDocument
         var clientInfo = new Person()
         {
             Name = Model.Client.Name,
-            DocumentType = Model.Client.DocumentType.ToString(),
+            DocumentType = Model.Client.DocumentType,
             DocumentNumber = Model.Client.DocumentNum,
         };
         
@@ -172,10 +172,10 @@ public class InvoiceDocument : IDocument
             foreach (var item in Model.InvoiceProducts)
             {
                 table.Cell().Element(CellStyle).Text(item.Reference);
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price}$");
+                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price}€");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
                 table.Cell().Element(CellStyle).AlignRight().Text($"{(item.Discount * 100).ToString(CultureInfo.InvariantCulture)}%");
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price * item.Quantity}$");
+                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price * item.Quantity}€");
                 
                 static IContainer CellStyle(IContainer container)
                 {

@@ -59,12 +59,12 @@ public class GrandTotalComponent : IComponent
             });
             
             table.Cell().Element(ItemCellStyle).Text(PriceCalculator.PaymentMethod);
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTotalPriceOfProducts()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTax()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateRe()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateSubTotal()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTransport()}$");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateGrandTotal()}$");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTotalPriceOfProducts()}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTax()}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateRe()}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateSubTotal()}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTransport()}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateGrandTotal()}€");
             
             static IContainer ItemCellStyle(IContainer container)
             {

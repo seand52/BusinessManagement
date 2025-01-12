@@ -1,6 +1,8 @@
+using Amazon.S3;
 using BusinessManagement.DAL;
 using Microsoft.EntityFrameworkCore;
 using BusinessManagement.Database;
+using BusinessManagement.Helpers;
 using BusinessManagement.Templates;
 using BusinessManagementApi.Extensions;
 using BusinessManagementApi.Models;
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<ApplicationContext>(
     options => options.UseNpgsql("Host=localhost;Port=5432;Username=root;Password=root;Database=dev_business_management")
 );
 
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 builder.Services.AddAuthentication();
@@ -63,6 +66,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IInvoiceDocumentBuilder, InvoiceDocumentBuilder>();
 builder.Services.AddScoped<ISalesOrderBuilder, SalesOrderBuilder>();
+builder.Services.AddScoped<IAwsPublisher, AwsPublisher>();
 
 //Inject the MediatR to oun DI
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies((typeof(Program)).Assembly));

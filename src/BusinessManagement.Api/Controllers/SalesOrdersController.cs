@@ -44,8 +44,7 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             var result = await _mediator.Send(new CreateSalesOrderRequest(salesOrder, GetUserId()));
-            // TODO: change to s3 instead of local
-            // await _mediator.Publish(new SalesOrderCreatedEvent(result));
+            await _mediator.Publish(new SalesOrderCreatedEvent(result));
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
         

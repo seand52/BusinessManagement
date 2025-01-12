@@ -8,7 +8,7 @@ public interface IInvoiceDocumentBuilder
 {
     IInvoiceDocumentBuilder Build();
     IInvoiceDocumentBuilder CreateInvoiceDocument(InvoiceDetailDto data, BusinessInfoDto businessInfo);
-    void GeneratePdf(string path);
+    byte[] GeneratePdf();
 }
 
 public class InvoiceDocumentBuilder : IInvoiceDocumentBuilder
@@ -26,8 +26,8 @@ public class InvoiceDocumentBuilder : IInvoiceDocumentBuilder
         return this;
     }
 
-    public void GeneratePdf(string path)
+    public byte[] GeneratePdf()
     {
-        _document.GeneratePdf(path);
+        return _document.GeneratePdf();
     }
 }

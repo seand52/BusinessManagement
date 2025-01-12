@@ -16,10 +16,12 @@ namespace BusinessManagement.Controllers
     public class InvoicesController : BusinessManagementController
     {
         private readonly IMediator _mediator;
+        private readonly IAwsPublisher _awsPublisher;
 
-        public InvoicesController(IMediator mediator)
+        public InvoicesController(IMediator mediator, IAwsPublisher awsPublisher)
         {
             _mediator = mediator;
+            _awsPublisher = awsPublisher;
         }
         
         [HttpGet("{id}")]
@@ -46,8 +48,7 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             var result = await _mediator.Send(new CreateInvoiceRequest(invoice, GetUserId()));
-            // will need to update to s3 instead of local
-            // await _mediator.Publish(new InvoiceCreatedEvent(result));
+            await _mediator.Publish(new InvoiceCreatedEvent(result));
             return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
         
