@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BusinessManagementApi.Extensions.Events;
 
-public class SalesOrderCreatedEvent : INotification
+public class SalesOrderCreatedEvent : IRequest<byte[]>
 {
     public SalesOrderDetailDto SalesOrder { get; private set; }
 

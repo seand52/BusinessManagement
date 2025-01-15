@@ -6,7 +6,7 @@ using BusinessManagementApi.Models;
 using MediatR;
 namespace BusinessManagement.Handlers;
 
-public class InvoiceCreatedEventHandler : INotificationHandler<InvoiceCreatedEvent>
+public class InvoiceCreatedEventHandler : IRequestHandler<InvoiceCreatedEvent, byte[]>
 {
     private IInvoiceDocumentBuilder _builder;
     private IUnitOfWork _unitOfWork;
@@ -20,7 +20,7 @@ public class InvoiceCreatedEventHandler : INotificationHandler<InvoiceCreatedEve
         _awsPublisher = awsPublisher;
     }
 
-    public async Task Handle(InvoiceCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task<byte[]> Handle(InvoiceCreatedEvent notification, CancellationToken cancellationToken)
     {
         var invoice = notification.Invoice;
         var businessInfo = await _unitOfWork.BusinessInfoRepository.GetBy(item => item.UserId == invoice.UserId);
@@ -29,5 +29,6 @@ public class InvoiceCreatedEventHandler : INotificationHandler<InvoiceCreatedEve
         var pdfBytes = documentBuilder.GeneratePdf();
         using var memoryStream = new MemoryStream(pdfBytes);
         await _awsPublisher.Publish($"invoices/{invoice.Id}", memoryStream);
+        return pdfBytes;
     }
 }

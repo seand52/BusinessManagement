@@ -48,8 +48,8 @@ namespace BusinessManagement.Controllers
                 return BadRequest();
             }
             var result = await _mediator.Send(new CreateInvoiceRequest(invoice, GetUserId()));
-            await _mediator.Publish(new InvoiceCreatedEvent(result));
-            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
+            var pdfBytes = await _mediator.Send(new InvoiceCreatedEvent(result));
+            return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");
         }
         
         [HttpPut("{id}")]

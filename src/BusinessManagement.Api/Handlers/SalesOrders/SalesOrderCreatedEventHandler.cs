@@ -6,7 +6,7 @@ using BusinessManagementApi.Models;
 using MediatR;
 namespace BusinessManagement.Handlers;
 
-public class SalesOrderCreatedEventHandler : INotificationHandler<SalesOrderCreatedEvent>
+public class SalesOrderCreatedEventHandler : IRequestHandler<SalesOrderCreatedEvent, byte[]>
 {
     private ISalesOrderBuilder _builder;
     private IUnitOfWork _unitOfWork;
@@ -20,7 +20,7 @@ public class SalesOrderCreatedEventHandler : INotificationHandler<SalesOrderCrea
         _awsPublisher = awsPublisher;
     }
 
-    public async Task Handle(SalesOrderCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task<byte[]> Handle(SalesOrderCreatedEvent notification, CancellationToken cancellationToken)
     {
         var salesOrder = notification.SalesOrder;
         var businessInfo = await _unitOfWork.BusinessInfoRepository.GetBy(item => item.UserId == salesOrder.UserId);
@@ -29,5 +29,6 @@ public class SalesOrderCreatedEventHandler : INotificationHandler<SalesOrderCrea
         var pdfBytes = documentBuilder.GeneratePdf();
         using var memoryStream = new MemoryStream(pdfBytes);
         await _awsPublisher.Publish($"salesOrders/{salesOrder.Id}", memoryStream);
+        return pdfBytes;
     }
 }
