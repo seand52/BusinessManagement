@@ -29,6 +29,14 @@ namespace BusinessManagement.Controllers
             return result != null ? Ok(result) : NotFound();
         }
         
+        [HttpGet("{id}/generate")]
+        public async Task<ActionResult<SalesOrderDetailDto>> Generate(int id)
+        {
+            var result = await _mediator.Send(new GetSalesOrderQuery(id, GetUserId()));
+            var pdfBytes = await _mediator.Send(new SalesOrderCreatedEvent(result));
+            return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");
+        }
+        
         [HttpGet]
         public async Task<ActionResult<PagedList<SalesOrderDto>>> GetSalesOrders([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
         {
@@ -62,7 +70,7 @@ namespace BusinessManagement.Controllers
             }
             
             var success = await _mediator.Send(new UpdateSalesOrderRequest(salesOrder, id, GetUserId()));
-            
+            await _mediator.Send(new SalesOrderUpdatedEvent(id, GetUserId()));
             return success ? NoContent() : BadRequest();
         }
         

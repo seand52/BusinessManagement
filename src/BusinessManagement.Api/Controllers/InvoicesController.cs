@@ -28,9 +28,15 @@ namespace BusinessManagement.Controllers
         public async Task<ActionResult<InvoiceDetailDto>> Get(int id)
         {
             var result = await _mediator.Send(new GetInvoiceQuery(id, GetUserId()));
-            // var document = new InvoiceDocument(result);
-            // document.GeneratePdf("invoice.pdf");
             return result != null ? Ok(result) : NotFound();
+        }
+        
+        [HttpGet("{id}/generate")]
+        public async Task<ActionResult<InvoiceDetailDto>> GenerateInvoice(int id)
+        {
+            var result = await _mediator.Send(new GetInvoiceQuery(id, GetUserId()));
+            var pdfBytes = await _mediator.Send(new InvoiceCreatedEvent(result));
+            return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");
         }
         
         [HttpGet]
@@ -66,7 +72,7 @@ namespace BusinessManagement.Controllers
             }
             
             var success = await _mediator.Send(new UpdateInvoiceRequest(invoice, id, GetUserId()));
-            
+            await _mediator.Send(new InvoiceUpdatedEvent(id, GetUserId()));
             return success ? NoContent() : BadRequest();
         }
         
