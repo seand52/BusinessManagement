@@ -4,7 +4,7 @@ using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
 
-namespace BusinessManagement.Handlers;
+namespace BusinessManagement.Handlers.Invoices;
 
 public class GetInvoiceHandler: IRequestHandler<GetInvoiceQuery, InvoiceDetailDto?>
 {

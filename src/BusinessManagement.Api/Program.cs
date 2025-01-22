@@ -81,8 +81,8 @@ app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExte
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // app.UseSwagger();
+    // app.UseSwaggerUI();
 }
 
 // TODO: this is temporary during dev phase

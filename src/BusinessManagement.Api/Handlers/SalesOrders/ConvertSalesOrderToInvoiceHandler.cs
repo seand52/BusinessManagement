@@ -1,11 +1,13 @@
 using BusinessManagement.Commands;
+using BusinessManagement.Commands.SalesOrders;
 using BusinessManagement.DAL;
+using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
 
 namespace BusinessManagement.Handlers;
 
-public class ConvertSalesOrderToInvoiceHandler:  IRequestHandler<ConvertSalesOrderToInvoiceRequest, bool>
+public class ConvertSalesOrderToInvoiceHandler:  IRequestHandler<ConvertSalesOrderToInvoiceRequest, InvoiceDetailDto?>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -14,24 +16,18 @@ public class ConvertSalesOrderToInvoiceHandler:  IRequestHandler<ConvertSalesOrd
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<bool> Handle(ConvertSalesOrderToInvoiceRequest request, CancellationToken cancellationToken)
+    public async Task<InvoiceDetailDto?> Handle(ConvertSalesOrderToInvoiceRequest request, CancellationToken cancellationToken)
     {
         var salesOrder = await _unitOfWork.SalesOrderRepository.GetBy(request.SalesOrderId, request.UserId);
         if (salesOrder == null)
         {
-            return false;
+            return null;
         }
 
         if (salesOrder.Expired == 1)
         {
-            return false;
+            return null;
         }
-        
-        if (salesOrder.SalesOrderProducts.Count == 0)
-        {
-            return false;
-        }
-
         var invoice = salesOrder.ToInvoice();
         await _unitOfWork.InvoiceRepository.Insert(invoice);
         
@@ -39,6 +35,15 @@ public class ConvertSalesOrderToInvoiceHandler:  IRequestHandler<ConvertSalesOrd
         _unitOfWork.SalesOrderRepository.Update(salesOrder);
         
         await _unitOfWork.Save();
-        return true;
+        // TODO: find a better way of returning the client
+        var client =
+            await _unitOfWork.ClientRepository.GetBy(p => p.Id == invoice.ClientId && p.UserId == request.UserId);
+        if (client == null)
+        {
+            throw new Exception("Client not found");
+        }
+
+        invoice.Client = client;
+        return invoice.ToDetailDto();
     }
 }

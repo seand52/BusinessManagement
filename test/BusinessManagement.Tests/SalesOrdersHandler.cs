@@ -1,6 +1,7 @@
 
 using System.Linq.Expressions;
 using BusinessManagement.Commands;
+using BusinessManagement.Commands.SalesOrders;
 using BusinessManagement.DAL;
 using BusinessManagement.Filter;
 using BusinessManagement.Handlers;

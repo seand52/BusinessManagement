@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BusinessManagement.Commands;
+using BusinessManagement.Commands.SalesOrders;
 using BusinessManagement.Filter;
 using BusinessManagement.Helpers;
 using BusinessManagement.Queries;
@@ -16,10 +17,12 @@ namespace BusinessManagement.Controllers
     public class SalesOrdersController : BusinessManagementController
     {
         private readonly IMediator _mediator;
+        private readonly IAwsPublisher _awsPublisher;
 
-        public SalesOrdersController(IMediator mediator)
+        public SalesOrdersController(IMediator mediator, IAwsPublisher _awsPublisher)
         {
             _mediator = mediator;
+            this._awsPublisher = _awsPublisher;
         }
         
         [HttpGet("{id}")]
@@ -32,6 +35,12 @@ namespace BusinessManagement.Controllers
         [HttpGet("{id}/generate")]
         public async Task<ActionResult<SalesOrderDetailDto>> Generate(int id)
         {
+            var key = $"salesOrders/{id}";
+            var pdf = await _awsPublisher.Download(key);
+            if (pdf != null)
+            {
+                return File(pdf, "application/pdf", $"{id}.pdf");
+            }
             var result = await _mediator.Send(new GetSalesOrderQuery(id, GetUserId()));
             var pdfBytes = await _mediator.Send(new SalesOrderCreatedEvent(result));
             return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");
@@ -82,12 +91,16 @@ namespace BusinessManagement.Controllers
         }
         
         [Route("{salesOrderId}/convertToInvoice")]
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult<SalesOrderDetailDto>> ConvertToInvoice(int salesOrderId)
         {
             var result = await _mediator.Send(new ConvertSalesOrderToInvoiceRequest(salesOrderId, GetUserId()));
-            // TODO: handle different error types
-            return result ? Ok() : BadRequest();
+            if (result == null)
+            {
+                return BadRequest("Sales order not able to be converted to invoice");
+            }
+            var pdfBytes = await _mediator.Send(new InvoiceCreatedEvent(result));
+            return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");
         }
     }
 }

@@ -2,7 +2,7 @@ using BusinessManagement.Commands;
 using BusinessManagement.DAL;
 using MediatR;
 
-namespace BusinessManagement.Handlers;
+namespace BusinessManagement.Handlers.Invoices;
 
 public class DeleteInvoiceHandler: IRequestHandler<DeleteInvoiceRequest, bool>
 {

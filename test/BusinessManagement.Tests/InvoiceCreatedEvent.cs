@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using BusinessManagement.DAL;
 using BusinessManagement.Handlers;
+using BusinessManagement.Handlers.Invoices;
 using BusinessManagementApi.Extensions.Events;
 using BusinessManagement.Templates;
 using BusinessManagementApi.Dto;

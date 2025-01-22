@@ -1,8 +1,9 @@
+using BusinessManagementApi.Dto;
 using MediatR;
 
-namespace BusinessManagement.Commands;
+namespace BusinessManagement.Commands.SalesOrders;
 
-public class ConvertSalesOrderToInvoiceRequest : IRequest<bool>
+public class ConvertSalesOrderToInvoiceRequest : IRequest<InvoiceDetailDto?>
 {
     public int SalesOrderId { get; }
     public string UserId { get; }

@@ -8,6 +8,7 @@ namespace BusinessManagement.Helpers;
 public interface IAwsPublisher
 {
     public Task Publish(string key, MemoryStream doc);
+    public Task<Stream?> Download(string key);
 }
 
 public class AwsPublisher: IAwsPublisher
@@ -29,5 +30,25 @@ public class AwsPublisher: IAwsPublisher
             ContentType = "application/pdf"
         };
         await _s3Client.PutObjectAsync(putRequest);
+    }
+
+    public async Task<Stream?> Download(string key)
+    {
+        try
+        {
+            var getRequest = new GetObjectRequest
+            {
+                BucketName = "valmiki-invoices",
+                Key = $"{key}.pdf",
+            };
+            var response = await _s3Client.GetObjectAsync(getRequest);
+            return response.ResponseStream;
+        }
+        catch (AmazonS3Exception e)
+        {
+            //TODO: log message here
+            return null;
+        }
+        
     }
 }

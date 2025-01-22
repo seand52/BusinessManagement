@@ -4,7 +4,8 @@ using BusinessManagement.Templates;
 using BusinessManagementApi.Extensions.Events;
 using BusinessManagementApi.Models;
 using MediatR;
-namespace BusinessManagement.Handlers;
+
+namespace BusinessManagement.Handlers.Invoices;
 
 public class InvoiceCreatedEventHandler : IRequestHandler<InvoiceCreatedEvent, byte[]>
 {

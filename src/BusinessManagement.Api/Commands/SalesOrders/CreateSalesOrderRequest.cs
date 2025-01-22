@@ -1,7 +1,7 @@
 using BusinessManagementApi.Dto;
 using MediatR;
 
-namespace BusinessManagement.Commands;
+namespace BusinessManagement.Commands.SalesOrders;
 
 public class CreateSalesOrderRequest: IRequest<SalesOrderDetailDto>
 {

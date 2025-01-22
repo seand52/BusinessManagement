@@ -1,4 +1,5 @@
 using BusinessManagement.Commands;
+using BusinessManagement.Commands.SalesOrders;
 using BusinessManagement.DAL;
 using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
@@ -14,6 +15,17 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
     {
         _unitOfWork = unitOfWork;
     }
+    
+    private SalesOrder GetTransportSalesOrder(CreateSalesOrderRequest request)
+    {
+        var salesOrder = request.SalesOrder;
+        var transportSalesOrder = salesOrder.ToTransportOnly();
+        transportSalesOrder.UserId = request.UserId;
+        transportSalesOrder.TotalPrice = transportSalesOrder.CalculateTotalPrice();
+        transportSalesOrder.DateIssued = request.SalesOrder.DateIssued.ToUniversalTime();
+        return transportSalesOrder;
+    }
+    
     public async Task<SalesOrderDetailDto> Handle(CreateSalesOrderRequest request, CancellationToken cancellationToken)
     {
         var salesOrder = request.SalesOrder.ToModel();
@@ -21,8 +33,12 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
         salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
         salesOrder.DateIssued = salesOrder.DateIssued.ToUniversalTime();
         await _unitOfWork.SalesOrderRepository.Insert(salesOrder);
+        if (salesOrder.TransportPrice != 0)
+        {
+            var transportInvoice = GetTransportSalesOrder(request);
+            await _unitOfWork.SalesOrderRepository.Insert(transportInvoice);
+        }
         await _unitOfWork.Save();
-        // TODO: find a better way of returning the client
         var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == salesOrder.ClientId && p.UserId == request.UserId);
         if (client == null)
         {

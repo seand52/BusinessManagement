@@ -63,6 +63,20 @@ public static class ModelExtensions
             InvoiceProducts = createInvoiceDto.InvoiceProducts.Select(x => x.ToModel()).ToList(),
         };
     }
+    
+    public static Invoice ToTransportOnly(this CreateInvoiceDto createInvoiceDto)
+    {
+        return new Invoice()
+        {
+            Re = 0,
+            Tax = 0,
+            TransportPrice = createInvoiceDto.TransportPrice,
+            PaymentType = createInvoiceDto.PaymentType,
+            ClientId = createInvoiceDto.ClientId,
+            DateIssued = createInvoiceDto.DateIssued,
+            InvoiceProducts = new List<InvoiceProduct>(),
+        };
+    }
 
     public static Invoice ToInvoice(this SalesOrder salesOrder)
     {
@@ -243,6 +257,20 @@ public static class ModelExtensions
             ClientId = salesOrderDto.ClientId,
             DateIssued = salesOrderDto.DateIssued,
             SalesOrderProducts = salesOrderDto.SalesOrderProducts.Select(x => x.ToModel()).ToList()
+        };
+    }
+    
+    public static SalesOrder ToTransportOnly(this CreateSalesOrderDto createInvoiceDto)
+    {
+        return new SalesOrder()
+        {
+            Re = 0,
+            Tax = 0,
+            TransportPrice = createInvoiceDto.TransportPrice,
+            PaymentType = createInvoiceDto.PaymentType,
+            ClientId = createInvoiceDto.ClientId,
+            DateIssued = createInvoiceDto.DateIssued,
+            SalesOrderProducts = new List<SalesOrderProduct>(),
         };
     }
     

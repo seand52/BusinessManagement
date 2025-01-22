@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace BusinessManagement.Commands;
+namespace BusinessManagement.Commands.SalesOrders;
 
 public class DeleteSalesOrderRequest: IRequest<bool>
 {

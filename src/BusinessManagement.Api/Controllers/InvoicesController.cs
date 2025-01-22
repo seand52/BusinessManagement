@@ -34,6 +34,12 @@ namespace BusinessManagement.Controllers
         [HttpGet("{id}/generate")]
         public async Task<ActionResult<InvoiceDetailDto>> GenerateInvoice(int id)
         {
+            var key = $"invoices/{id}";
+            var pdf = await _awsPublisher.Download(key);
+            if (pdf != null)
+            {
+                return File(pdf, "application/pdf", $"{id}.pdf");
+            }
             var result = await _mediator.Send(new GetInvoiceQuery(id, GetUserId()));
             var pdfBytes = await _mediator.Send(new InvoiceCreatedEvent(result));
             return File(pdfBytes, "application/pdf", $"{result.Id}.pdf");

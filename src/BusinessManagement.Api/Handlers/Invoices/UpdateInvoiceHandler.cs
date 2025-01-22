@@ -3,7 +3,7 @@ using BusinessManagement.DAL;
 using BusinessManagementApi.Models;
 using MediatR;
 
-namespace BusinessManagement.Handlers;
+namespace BusinessManagement.Handlers.Invoices;
 
 public class UpdateInvoiceHandler: IRequestHandler<UpdateInvoiceRequest, bool>
 {

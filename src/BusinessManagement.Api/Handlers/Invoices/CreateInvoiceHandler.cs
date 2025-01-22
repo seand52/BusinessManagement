@@ -4,16 +4,27 @@ using BusinessManagementApi.Dto;
 using BusinessManagementApi.Models;
 using MediatR;
 
-namespace BusinessManagement.Handlers;
+namespace BusinessManagement.Handlers.Invoices;
 
-public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, InvoiceDetailDto> 
+public class CreateInvoiceHandler : IRequestHandler<CreateInvoiceRequest, InvoiceDetailDto>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateInvoiceHandler (IUnitOfWork unitOfWork)
+    public CreateInvoiceHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
+
+    private Invoice GetTransportInvoice(CreateInvoiceRequest request)
+    {
+        var invoice = request.Invoice;
+        var transportInvoice = invoice.ToTransportOnly();
+        transportInvoice.UserId = request.UserId;
+        transportInvoice.TotalPrice = transportInvoice.CalculateTotalPrice();
+        transportInvoice.DateIssued = request.Invoice.DateIssued.ToUniversalTime();
+        return transportInvoice;
+    }
+
     public async Task<InvoiceDetailDto> Handle(CreateInvoiceRequest request, CancellationToken cancellationToken)
     {
         var invoice = request.Invoice.ToModel();
@@ -21,13 +32,21 @@ public class CreateInvoiceHandler: IRequestHandler<CreateInvoiceRequest, Invoice
         invoice.TotalPrice = invoice.CalculateTotalPrice();
         invoice.DateIssued = request.Invoice.DateIssued.ToUniversalTime();
         await _unitOfWork.InvoiceRepository.Insert(invoice);
+        if (invoice.TransportPrice != 0)
+        {
+            var transportInvoice = GetTransportInvoice(request);
+            await _unitOfWork.InvoiceRepository.Insert(transportInvoice);
+        }
+
         await _unitOfWork.Save();
         // TODO: find a better way of returning the client
-        var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == invoice.ClientId && p.UserId == request.UserId);
+        var client =
+            await _unitOfWork.ClientRepository.GetBy(p => p.Id == invoice.ClientId && p.UserId == request.UserId);
         if (client == null)
         {
             throw new Exception("Client not found");
         }
+
         invoice.Client = client;
         return invoice.ToDetailDto();
     }
