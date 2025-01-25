@@ -18,6 +18,7 @@ public class BaseInvoiceDto
     
     [Required]
     public DateTime DateIssued { get; set; } = DateTime.UtcNow;
+    public DateTime? ExpirationDate { get; set; } = null;
 }
 
 public class InvoiceDetailDto: BaseInvoiceDto
@@ -45,6 +46,7 @@ public class InvoiceDto
     public DateTime DateIssued { get; set; }
     public string PaymentType { get; set; }
     public string ClientName { get; set; }
+    public DateTime? ExpirationDate { get; set; } = null;
         
 }
 
@@ -58,6 +60,7 @@ public class CreateInvoiceDto : BaseInvoiceDto
     public PaymentType PaymentType { get; set; }
     [Required]
     public List<CreateInvoiceProductDto> InvoiceProducts { get; set; } = new List<CreateInvoiceProductDto>();
+    public DateTime? ExpirationDate { get; set; } = null;
 }
 
 public class UpdateInvoiceDto : CreateInvoiceDto

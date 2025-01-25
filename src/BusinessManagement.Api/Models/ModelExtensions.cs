@@ -21,7 +21,8 @@ public static class ModelExtensions
             DateIssued = invoice.DateIssued,
             Client = invoice.Client.ToDto(),
             InvoiceProducts = invoice.InvoiceProducts,
-            UserId = invoice.UserId
+            UserId = invoice.UserId,
+            ExpirationDate = invoice.ExpirationDate,
         };
     }
     
@@ -39,6 +40,7 @@ public static class ModelExtensions
             TotalPrice = invoice.TotalPrice,
             DateIssued = invoice.DateIssued,
             ClientName = invoice.Client.Name,
+            ExpirationDate = invoice.ExpirationDate,
         };
     }
 
@@ -61,6 +63,7 @@ public static class ModelExtensions
             ClientId = createInvoiceDto.ClientId,
             DateIssued = createInvoiceDto.DateIssued,
             InvoiceProducts = createInvoiceDto.InvoiceProducts.Select(x => x.ToModel()).ToList(),
+            ExpirationDate = createInvoiceDto.ExpirationDate,
         };
     }
     
@@ -75,6 +78,7 @@ public static class ModelExtensions
             ClientId = createInvoiceDto.ClientId,
             DateIssued = createInvoiceDto.DateIssued,
             InvoiceProducts = new List<InvoiceProduct>(),
+            ExpirationDate = createInvoiceDto.ExpirationDate,
         };
     }
 
@@ -90,7 +94,7 @@ public static class ModelExtensions
             UserId = salesOrder.UserId,
             TotalPrice = salesOrder.TotalPrice,
             DateIssued = salesOrder.DateIssued,
-            InvoiceProducts = salesOrder.SalesOrderProducts.Select(x => x.ToInvoiceProduct()).ToList()
+            InvoiceProducts = salesOrder.SalesOrderProducts.Select(x => x.ToInvoiceProduct()).ToList(),
         };
     }
 
