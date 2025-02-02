@@ -57,10 +57,18 @@ public class InvoiceDocument : IDocument
 
                 column.Item().Text(text =>
                 {
-                    // TODO: implement date issued
                     text.Span("Fecha de emisión: ").SemiBold();
                     text.Span(Model.DateIssued.ToString("dd/MM/yyyy"));
                 });
+
+                if (Model.ExpirationDate != null)
+                {
+                    column.Item().Text(text =>
+                    {
+                        text.Span("Fecha de expiración: ").SemiBold();
+                        text.Span(Model.ExpirationDate.Value.ToString("dd/MM/yyyy"));
+                    });
+                }
             });
             
             row.ConstantItem(100).Height(50).Image(Path.GetFullPath("logo.png")).FitHeight();

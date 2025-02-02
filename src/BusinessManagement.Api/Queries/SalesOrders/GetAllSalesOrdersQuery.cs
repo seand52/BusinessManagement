@@ -9,13 +9,13 @@ namespace BusinessManagement.Queries;
 public class GetAllSalesOrdersQuery: IRequest<PagedList<SalesOrderDto>>
 {
     public PaginationFilter Filter;
-    public string SearchTerm;
+    public SearchParams? SearchParams;
     public string UserId;
 
-    public GetAllSalesOrdersQuery(PaginationFilter filter, string searchTerm, string userId)
+    public GetAllSalesOrdersQuery(PaginationFilter filter, SearchParams? searchParams, string userId)
     {
         Filter = filter;
-        SearchTerm = searchTerm;
+        SearchParams = searchParams;
         UserId = userId;
     }
 }

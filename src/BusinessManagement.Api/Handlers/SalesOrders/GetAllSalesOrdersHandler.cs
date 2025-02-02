@@ -19,12 +19,20 @@ public class GetAllSalesOrdersHandler: IRequestHandler<GetAllSalesOrdersQuery, P
     }
     private Expression<Func<SalesOrder, bool>>?  BuildSearchTerm(GetAllSalesOrdersQuery request)
     {
-        if (request.SearchTerm == null)
+        if (request?.SearchParams?.ClientName != null)
         {
-            return null;
+            return p => p.Client.Name.ToLower().Contains(request.SearchParams.ClientName.ToLower());
+
+        }
+        
+        if (request?.SearchParams?.ClientId != null)
+        {
+            return p => p.Client.Id == request.SearchParams.ClientId;
+
         }
 
-        return p => p.Client.Name.ToLower().Contains(request.SearchTerm.ToLower());
+        return null;
+
     }
     public async Task<PagedList<SalesOrderDto>> Handle(GetAllSalesOrdersQuery request, CancellationToken cancellationToken)
     {

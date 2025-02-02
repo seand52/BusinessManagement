@@ -46,9 +46,9 @@ namespace BusinessManagement.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<PagedList<InvoiceDto>>> GetInvoices([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
+        public async Task<ActionResult<PagedList<InvoiceDto>>> GetInvoices([FromQuery] PaginationFilter filter, [FromQuery] SearchParams? searchParams)
         {
-            var result = await _mediator.Send(new GetAllInvoicesQuery(filter, SearchTerm, GetUserId()));
+            var result = await _mediator.Send(new GetAllInvoicesQuery(filter, searchParams, GetUserId()));
             return Ok(result);
         }
 

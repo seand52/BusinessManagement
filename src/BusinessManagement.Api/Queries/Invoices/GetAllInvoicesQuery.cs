@@ -8,14 +8,14 @@ namespace BusinessManagement.Queries;
 
 public class GetAllInvoicesQuery: IRequest<PagedList<InvoiceDto>>
 {
-    public PaginationFilter Filter;
-    public string SearchTerm;
-    public string UserId;
+    public readonly PaginationFilter Filter;
+    public readonly SearchParams? SearchParams;
+    public readonly string UserId;
 
-    public GetAllInvoicesQuery(PaginationFilter filter, string searchTerm, string userId)
+    public GetAllInvoicesQuery(PaginationFilter filter, SearchParams? searchParams, string userId)
     {
         Filter = filter;
-        SearchTerm = searchTerm;
+        SearchParams = searchParams;
         UserId = userId;
     }
 }

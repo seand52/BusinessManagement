@@ -47,9 +47,9 @@ namespace BusinessManagement.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<PagedList<SalesOrderDto>>> GetSalesOrders([FromQuery] PaginationFilter filter, [FromQuery] string? SearchTerm)
+        public async Task<ActionResult<PagedList<SalesOrderDto>>> GetSalesOrders([FromQuery] PaginationFilter filter, [FromQuery] SearchParams? searchParams = null)
         {
-            var result = await _mediator.Send(new GetAllSalesOrdersQuery(filter, SearchTerm, GetUserId()));
+            var result = await _mediator.Send(new GetAllSalesOrdersQuery(filter, searchParams, GetUserId()));
             return Ok(result);
         }
 

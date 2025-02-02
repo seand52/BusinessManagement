@@ -19,12 +19,19 @@ public class GetAllInvoicesHandler: IRequestHandler<GetAllInvoicesQuery, PagedLi
     }
     private Expression<Func<Invoice, bool>>?  BuildSearchTerm(GetAllInvoicesQuery request)
     {
-        if (request.SearchTerm == null)
+
+        if (request?.SearchParams?.ClientName != null)
         {
-            return null;
+            return p => p.Client.Name.ToLower().Contains(request.SearchParams.ClientName.ToLower());
+
         }
 
-        return p => p.Client.Name.ToLower().Contains(request.SearchTerm.ToLower());
+        if (request?.SearchParams?.ClientId != null)
+        {
+            return p => p.Client.Id == request.SearchParams.ClientId;
+        }
+        
+        return null;
     }
     public async Task<PagedList<InvoiceDto>> Handle(GetAllInvoicesQuery request, CancellationToken cancellationToken)
     {
