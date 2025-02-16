@@ -56,7 +56,7 @@ public class TestDataController : ControllerBase
                     Postcode = "08001",
                     DocumentNum = "479725158",
                     DocumentType = DocumentType.Nif,
-                    Telephone = Faker.PhoneFaker.Phone().Substring(0,12  ),
+                    Telephone1 = Faker.PhoneFaker.Phone().Substring(0,12  ),
                     UserId = user.Id
                 
                 });

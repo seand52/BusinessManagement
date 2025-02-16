@@ -15,7 +15,8 @@ namespace BusinessManagementApi.Dto
         public string Postcode { get; set; }
         public string DocumentNum { get; set; }
         public string DocumentType { get; set; }
-        public string Telephone { get; set; }
+        public string Telephone1 { get; set; }
+        public string Telephone2 { get; set; }
         public string Email { get; set; }
         public string UserId { get; set; }
     }
@@ -43,7 +44,9 @@ namespace BusinessManagementApi.Dto
         public DocumentType DocumentType { get; set; }
         [Required]
         [StringLength(12)]
-        public string Telephone { get; set; }
+        public string Telephone1 { get; set; }
+        [StringLength(12)]
+        public string Telephone2 { get; set; }
         [EmailAddress]
         public string Email { get; set; }
     }

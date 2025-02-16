@@ -39,7 +39,10 @@ public class Client
 
     [Required]
     [StringLength(12)]
-    public string Telephone { get; set; } = string.Empty;
+    public string Telephone1 { get; set; } = string.Empty;
+    
+    [StringLength(12)]
+    public string Telephone2 { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]

@@ -141,7 +141,8 @@ public static class ModelExtensions
             Postcode = client.Postcode,
             DocumentNum = client.DocumentNum,
             DocumentType = client.DocumentType.ToString(),
-            Telephone = client.Telephone,
+            Telephone1 = client.Telephone1,
+            Telephone2 = client.Telephone2,
             Email = client.Email,
             UserId = client.UserId
         };
@@ -159,7 +160,8 @@ public static class ModelExtensions
             Postcode = client.Postcode,
             DocumentNum = client.DocumentNum,
             DocumentType = client.DocumentType,
-            Telephone = client.Telephone,
+            Telephone1 = client.Telephone1,
+            Telephone2 = client.Telephone2,
             Email = client.Email
         };
     }
