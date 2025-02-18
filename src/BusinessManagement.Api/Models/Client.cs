@@ -16,8 +16,7 @@ public class Client
 
     [Required]
     public string Name { get; set; }
-    [Required]
-    public string ShopName { get; set; }
+    public string? ShopName { get; set; }
     [Required]
     public string Address { get; set; }
     [Required]
@@ -29,24 +28,20 @@ public class Client
     [Required]
     [StringLength(7)]
     public string Postcode { get; set; }
-    
-    [Required]
-    public string DocumentNum { get; set; }
-    
-    [Required]
-    [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]  
-    public DocumentType DocumentType { get; set; }
 
-    [Required]
+    public string? DocumentNum { get; set; }
+
+    [EnumDataType(typeof(DocumentType), ErrorMessage = "DocumentType must be one of the following: Nif, Nie, Cif")]
+    public DocumentType? DocumentType { get; set; }
+
     [StringLength(12)]
-    public string Telephone1 { get; set; } = string.Empty;
+    public string? Telephone1 { get; set; } = string.Empty;
     
     [StringLength(12)]
-    public string Telephone2 { get; set; } = string.Empty;
+    public string? Telephone2 { get; set; } = string.Empty;
 
-    [Required]
     [EmailAddress]
-    public string Email { get; set; } = string.Empty;
+    public string? Email { get; set; } = string.Empty;
     
     public string UserId { get; set; }
 

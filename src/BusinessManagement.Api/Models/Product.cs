@@ -15,7 +15,7 @@ public class Product
     [Required]
     public decimal Price { get; set; }
 
-    public int Stock { get; set; }
+    public int? Stock { get; set; }
 
     // [Required]
     public string UserId { get; set; }

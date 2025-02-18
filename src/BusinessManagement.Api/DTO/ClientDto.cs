@@ -25,8 +25,7 @@ namespace BusinessManagementApi.Dto
     {
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string ShopName { get; set; }
+        public string? ShopName { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]

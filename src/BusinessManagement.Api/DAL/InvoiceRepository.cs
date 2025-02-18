@@ -31,7 +31,6 @@ namespace BusinessManagementApi.DAL
             invoice.Tax = newData.Tax;
             invoice.PaymentType = newData.PaymentType;
             invoice.DateIssued = newData.DateIssued;
-            invoice.ExpirationDate = newData.ExpirationDate;
 
             var newProducts = newData.InvoiceProducts;
             foreach (var product in newProducts)

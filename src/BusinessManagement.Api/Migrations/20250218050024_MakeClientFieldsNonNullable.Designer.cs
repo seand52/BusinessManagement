@@ -3,6 +3,7 @@ using System;
 using BusinessManagement.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BusinessManagement.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250218050024_MakeClientFieldsNonNullable")]
+    partial class MakeClientFieldsNonNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,6 +168,9 @@ namespace BusinessManagement.Migrations
                     b.Property<DateTime>("DateIssued")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("PaymentType")
                         .HasColumnType("integer");
 
@@ -258,7 +264,7 @@ namespace BusinessManagement.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("Stock")
+                    b.Property<int>("Stock")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")

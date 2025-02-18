@@ -8,7 +8,7 @@ namespace BusinessManagementApi.Dto
         public string Reference { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public int Stock { get; set; }
+        public int? Stock { get; set; }
         public string UserId { get; set; }
     }
 
@@ -20,7 +20,7 @@ namespace BusinessManagementApi.Dto
         public string Description { get; set; }
         [Required] 
         public decimal Price { get; set; }
-        public int Stock { get; set; }
+        public int? Stock { get; set; }
     }
 
     public class UpdateProductDto : CreateProductDto

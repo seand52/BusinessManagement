@@ -45,8 +45,6 @@ public class Invoice: IPriceCalculable
     [BindProperty]
     public DateTime DateIssued { get; set; } = DateTime.UtcNow;
     public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
-
-    public DateTime? ExpirationDate { get; set; } = null!;
     IEnumerable<ICalculableItem> IPriceCalculable.Items => InvoiceProducts;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
