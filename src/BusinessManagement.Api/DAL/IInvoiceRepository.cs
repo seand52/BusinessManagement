@@ -9,6 +9,8 @@ namespace BusinessManagementApi.DAL
     {
         Task<Invoice?> GetBy(int invoiceId, string userId);
         Task<PagedList<Invoice>> GetAllBy(string userId, PaginationFilter paginationFilter, SearchParams? searchTerm);
+        
+        Task Insert(Invoice invoice, string userId);
         void Update(Invoice invoice, Invoice newData);
         
     }

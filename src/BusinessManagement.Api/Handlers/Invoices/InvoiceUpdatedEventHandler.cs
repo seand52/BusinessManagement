@@ -29,6 +29,6 @@ public class InvoiceUpdatedEventHandler : IRequestHandler<InvoiceUpdatedEvent>
         documentBuilder.CreateInvoiceDocument(invoice.ToDetailDto(), businessInfo.ToDto());
         var pdfBytes = documentBuilder.GeneratePdf();
         using var memoryStream = new MemoryStream(pdfBytes);
-        await _awsPublisher.Publish($"invoices/{invoice.Id}", memoryStream);
+        await _awsPublisher.Publish($"invoices/{invoice.InvoiceNumber}", memoryStream);
     }
 }

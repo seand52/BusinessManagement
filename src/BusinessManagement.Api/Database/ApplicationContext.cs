@@ -15,6 +15,7 @@ public class ApplicationContext : IdentityDbContext<User>
     public DbSet<SalesOrder> SalesOrders { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<BusinessInfo> BusinessInfo { get; set; }
+    public DbSet<InvoiceCount> InvoiceCount { get; set; }
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options) { }

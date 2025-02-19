@@ -31,11 +31,11 @@ public class CreateInvoiceHandler : IRequestHandler<CreateInvoiceRequest, Invoic
         invoice.UserId = request.UserId;
         invoice.TotalPrice = invoice.CalculateTotalPrice();
         invoice.DateIssued = request.Invoice.DateIssued.ToUniversalTime();
-        await _unitOfWork.InvoiceRepository.Insert(invoice);
+        await _unitOfWork.InvoiceRepository.Insert(invoice, request.UserId);
         if (invoice.TransportPrice != 0)
         {
             var transportInvoice = GetTransportInvoice(request);
-            await _unitOfWork.InvoiceRepository.Insert(transportInvoice);
+            await _unitOfWork.InvoiceRepository.Insert(transportInvoice, request.UserId);
         }
 
         await _unitOfWork.Save();

@@ -40,6 +40,8 @@ public class Invoice: IPriceCalculable
     public int ClientId { get; set; }
     public Client Client { get; set; } = null!;
     public List<Product> Products { get; } = [];
+
+    public int InvoiceNumber { get; set; } = 0;
     
     [Required]
     [BindProperty]

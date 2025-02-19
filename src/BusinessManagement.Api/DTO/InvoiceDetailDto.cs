@@ -34,6 +34,8 @@ public class InvoiceDetailDto: BaseInvoiceDto
     [Required]
     public string PaymentType { get; set; }
     
+    public int InvoiceNumber { get; set; }
+    
     [Required]
     public string UserId { get; set; }
 }
@@ -46,6 +48,9 @@ public class InvoiceDto
     public DateTime DateIssued { get; set; }
     public string PaymentType { get; set; }
     public string ClientName { get; set; }
+    
+    public int InvoiceNumber { get; set; }
+    
     public DateTime? ExpirationDate { get; set; } = null;
         
 }
@@ -65,4 +70,6 @@ public class CreateInvoiceDto : BaseInvoiceDto
 
 public class UpdateInvoiceDto : CreateInvoiceDto
 {
+    [Required]
+    public int InvoiceNumber { get; set; }
 }

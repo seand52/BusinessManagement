@@ -12,7 +12,7 @@ public static class ModelExtensions
         }
         return new InvoiceDetailDto
         {
-            Id = invoice.Id,
+            Id = invoice.InvoiceNumber,
             Re = invoice.Re,
             Tax = invoice.Tax,
             TransportPrice = invoice.TransportPrice,
@@ -33,7 +33,7 @@ public static class ModelExtensions
         }
         return new InvoiceDto()
         {
-            Id = invoice.Id,
+            Id = invoice.InvoiceNumber,
             TransportPrice = invoice.TransportPrice,
             PaymentType = invoice.PaymentType.ToString(),
             TotalPrice = invoice.TotalPrice,

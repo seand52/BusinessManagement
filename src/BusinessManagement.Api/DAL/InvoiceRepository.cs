@@ -31,7 +31,7 @@ namespace BusinessManagementApi.DAL
                 query = query.Where(p => p.Client.Id == searchParams.ClientId);
             }
             
-            query = query.Include("Client").OrderByDescending(c => c.Id).AsNoTracking();
+            query = query.Include("Client").OrderByDescending(c => c.InvoiceNumber).AsNoTracking();
 
             return await PagedList<Invoice>.CreateAsync(query, paginationFilter.PageNumber, paginationFilter.PageSize);
         }
@@ -42,6 +42,40 @@ namespace BusinessManagementApi.DAL
                 .Include(p => p.Client)
                 .Include(x => x.InvoiceProducts)
                 .FirstOrDefaultAsync();
+        }
+        
+        public async Task Insert(Invoice entity, string userId)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var counter = await _context.InvoiceCount
+                        .Where(c => c.UserId == userId)
+                        .FirstOrDefaultAsync();
+
+                    if (counter == null)
+                    {
+                        var newCount = 1;
+                        entity.InvoiceNumber = newCount;
+                        await _context.InvoiceCount.AddAsync(new InvoiceCount{UserId = userId, count = newCount});
+                    } else
+                    {
+                        var newCount = counter.count + 1;
+                        entity.InvoiceNumber = newCount;
+                        counter.count = newCount;
+                        _context.InvoiceCount.Update(counter);
+                    }
+                    await _context.Invoices.AddAsync(entity);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
 
         public void Update(Invoice invoice, Invoice newData)
@@ -56,7 +90,7 @@ namespace BusinessManagementApi.DAL
             var newProducts = newData.InvoiceProducts;
             foreach (var product in newProducts)
             {
-                product.InvoiceId = invoice.Id;
+                product.InvoiceId = invoice.InvoiceNumber;
             }
 
             _context.Invoices.Update(invoice);

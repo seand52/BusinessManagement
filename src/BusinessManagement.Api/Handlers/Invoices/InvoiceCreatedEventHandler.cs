@@ -29,7 +29,7 @@ public class InvoiceCreatedEventHandler : IRequestHandler<InvoiceCreatedEvent, b
         documentBuilder.CreateInvoiceDocument(invoice, businessInfo.ToDto());
         var pdfBytes = documentBuilder.GeneratePdf();
         using var memoryStream = new MemoryStream(pdfBytes);
-        await _awsPublisher.Publish($"invoices/{invoice.Id}", memoryStream);
+        await _awsPublisher.Publish($"invoices/{invoice.InvoiceNumber}", memoryStream);
         return pdfBytes;
     }
 }
