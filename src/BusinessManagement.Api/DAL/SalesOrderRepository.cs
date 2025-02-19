@@ -1,4 +1,6 @@
 using BusinessManagement.Database;
+using BusinessManagement.Filter;
+using BusinessManagement.Helpers;
 using BusinessManagementApi.Models;
 using ContosoUniversity.DAL;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,26 @@ namespace BusinessManagementApi.DAL
         {
             _context = context;
         }
+        
+        public async Task<PagedList<SalesOrder>> GetAllBy(string userId, PaginationFilter paginationFilter, SearchParams? searchParams)
+        {
+            var query = _context.SalesOrders.Where(t => t.UserId == userId);
+            
+            if (searchParams?.ClientName != null)
+            {
+                query = query.Where(p => p.Client.Name.ToLower().Contains(searchParams.ClientName.ToLower()));
+            }
+
+            if (searchParams?.ClientId != null)
+            {
+                query = query.Where(p => p.Client.Id == searchParams.ClientId);
+            }
+            
+            query = query.Include("Client").OrderByDescending(c => c.Id).AsNoTracking();
+
+            return await PagedList<SalesOrder>.CreateAsync(query, paginationFilter.PageNumber, paginationFilter.PageSize);
+        }
+
         
         public async Task<SalesOrder?> GetBy(int salesOrder, string userId)
         {

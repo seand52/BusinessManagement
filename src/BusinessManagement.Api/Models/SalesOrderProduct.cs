@@ -6,8 +6,7 @@ public class SalesOrderProduct: ICalculableItem{
     public int Id { get; set; }
     [Required]
     public int SalesOrderId { get; set; }
-    [Required]
-    public int ProductId { get; set; }
+    public int? ProductId { get; set; }
     [Required]
     public int Quantity { get; set; }
     [Required]
@@ -19,6 +18,5 @@ public class SalesOrderProduct: ICalculableItem{
     [Required]
     public string Reference { get; set; } = null!;
 
-    [Required]
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; } = null!;
 }

@@ -12,5 +12,5 @@ public class InvoiceProduct: ICalculableItem {
     public decimal Discount { get; set; }
     public decimal Price { get; set; }
     public string Reference { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }

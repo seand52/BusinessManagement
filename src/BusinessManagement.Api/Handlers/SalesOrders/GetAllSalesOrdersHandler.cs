@@ -17,28 +17,11 @@ public class GetAllSalesOrdersHandler: IRequestHandler<GetAllSalesOrdersQuery, P
     {
         _unitOfWork = unitOfWork;
     }
-    private Expression<Func<SalesOrder, bool>>?  BuildSearchTerm(GetAllSalesOrdersQuery request)
-    {
-        if (request?.SearchParams?.ClientName != null)
-        {
-            return p => p.Client.Name.ToLower().Contains(request.SearchParams.ClientName.ToLower());
-
-        }
-        
-        if (request?.SearchParams?.ClientId != null)
-        {
-            return p => p.Client.Id == request.SearchParams.ClientId;
-
-        }
-
-        return null;
-
-    }
+    
     public async Task<PagedList<SalesOrderDto>> Handle(GetAllSalesOrdersQuery request, CancellationToken cancellationToken)
     {
         var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
-        var searchTerm = BuildSearchTerm(request);
-        var salesOrders = await _unitOfWork.SalesOrderRepository.GetAllBy(p => p.UserId  == request.UserId, validFilter, searchTerm, "Client");
+        var salesOrders = await _unitOfWork.SalesOrderRepository.GetAllBy(request.UserId, validFilter, request.SearchParams);
         var salesOrderDtos = salesOrders.Items.Select(p => p.ToDto()).ToList();
         return new PagedList<SalesOrderDto>(salesOrderDtos, salesOrders.Page, salesOrders.PageSize, salesOrders.TotalCount);
     }

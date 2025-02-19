@@ -9,7 +9,7 @@ namespace ContosoUniversity.DAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext _context;
-        private GenericRepository<Client>? _clientRepository;
+        private ClientRepository? _clientRepository;
         private GenericRepository<Product>? _productRepository;
         private GenericRepository<BusinessInfo>? _businessInfoRepository;
         private InvoiceRepository? _invoiceRepository;
@@ -20,14 +20,14 @@ namespace ContosoUniversity.DAL
             _context = context;
         }
 
-        public IGenericRepository<Client> ClientRepository
+        public IClientRepository ClientRepository
         {
             get
             {
 
                 if (_clientRepository == null)
                 {
-                    _clientRepository = new GenericRepository<Client>(_context);
+                    _clientRepository = new ClientRepository(_context);
                 }
                 return _clientRepository;
             }
