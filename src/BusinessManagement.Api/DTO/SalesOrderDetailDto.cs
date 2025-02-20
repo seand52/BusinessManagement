@@ -29,6 +29,7 @@ public class SalesOrderDetailDto: BaseSalesOrderDto
     [Required]
     public ClientDto Client { get; set; }
     public string PaymentType { get; set; }
+    public int SalesOrderNumber { get; set; }
 
     [Required] public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
     [Required]
@@ -43,6 +44,7 @@ public class SalesOrderDto
     public decimal TransportPrice { get; set; }
     public DateTime DateIssued { get; set; }
     public string PaymentType { get; set; }
+    public int SalesOrderNumber { get; set; }
         
 }
 
@@ -62,5 +64,5 @@ public class CreateSalesOrderDto : BaseSalesOrderDto
 
 public class UpdateSalesOrderDto : CreateSalesOrderDto
 {
-    
+    public int SalesOrderNumber { get; set; }
 }

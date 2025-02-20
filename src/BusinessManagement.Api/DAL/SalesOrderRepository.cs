@@ -31,15 +31,49 @@ namespace BusinessManagementApi.DAL
                 query = query.Where(p => p.Client.Id == searchParams.ClientId);
             }
             
-            query = query.Include("Client").OrderByDescending(c => c.Id).AsNoTracking();
+            query = query.Include("Client").OrderByDescending(c => c.SalesOrderNumber).AsNoTracking();
 
             return await PagedList<SalesOrder>.CreateAsync(query, paginationFilter.PageNumber, paginationFilter.PageSize);
+        }
+        
+        public async Task Insert(SalesOrder entity, string userId)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var counter = await _context.SalesOrderCount
+                        .Where(c => c.UserId == userId)
+                        .FirstOrDefaultAsync();
+
+                    if (counter == null)
+                    {
+                        var newCount = 1;
+                        entity.SalesOrderNumber = newCount;
+                        await _context.SalesOrderCount.AddAsync(new SalesOrderCount{UserId = userId, count = newCount});
+                    } else
+                    {
+                        var newCount = counter.count + 1;
+                        entity.SalesOrderNumber = newCount;
+                        counter.count = newCount;
+                        _context.SalesOrderCount.Update(counter);
+                    }
+                    await _context.SalesOrders.AddAsync(entity);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
 
         
         public async Task<SalesOrder?> GetBy(int salesOrder, string userId)
         {
-            return await _context.SalesOrders.Where(p => p.UserId == userId && p.Id == salesOrder)
+            return await _context.SalesOrders.Where(p => p.UserId == userId && p.SalesOrderNumber == salesOrder)
                 .Include(p => p.Client)
                 .Include(x => x.SalesOrderProducts)
                 .FirstOrDefaultAsync();

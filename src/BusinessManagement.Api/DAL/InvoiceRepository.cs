@@ -38,7 +38,7 @@ namespace BusinessManagementApi.DAL
 
         public async Task<Invoice?> GetBy(int invoiceId, string userId)
         {
-            return await _context.Invoices.Where(p => p.UserId == userId && p.Id == invoiceId)
+            return await _context.Invoices.Where(p => p.UserId == userId && p.InvoiceNumber == invoiceId)
                 .Include(p => p.Client)
                 .Include(x => x.InvoiceProducts)
                 .FirstOrDefaultAsync();
@@ -90,7 +90,7 @@ namespace BusinessManagementApi.DAL
             var newProducts = newData.InvoiceProducts;
             foreach (var product in newProducts)
             {
-                product.InvoiceId = invoice.InvoiceNumber;
+                product.InvoiceId = invoice.Id;
             }
 
             _context.Invoices.Update(invoice);

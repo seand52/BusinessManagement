@@ -38,6 +38,8 @@ namespace BusinessManagementApi.Models
 
         [Required]
         public List<Product> Products { get; } = new();
+        
+        public int SalesOrderNumber { get; set; } = 0;
         public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
         IEnumerable<ICalculableItem> IPriceCalculable.Items => SalesOrderProducts;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -32,11 +32,11 @@ public class CreateSalesOrderHandler: IRequestHandler<CreateSalesOrderRequest, S
         salesOrder.UserId = request.UserId;
         salesOrder.TotalPrice = salesOrder.CalculateTotalPrice();
         salesOrder.DateIssued = salesOrder.DateIssued.ToUniversalTime();
-        await _unitOfWork.SalesOrderRepository.Insert(salesOrder);
+        await _unitOfWork.SalesOrderRepository.Insert(salesOrder, request.UserId);
         if (salesOrder.TransportPrice != 0)
         {
             var transportInvoice = GetTransportSalesOrder(request);
-            await _unitOfWork.SalesOrderRepository.Insert(transportInvoice);
+            await _unitOfWork.SalesOrderRepository.Insert(transportInvoice, request.UserId);
         }
         await _unitOfWork.Save();
         var client = await _unitOfWork.ClientRepository.GetBy(p => p.Id == salesOrder.ClientId && p.UserId == request.UserId);

@@ -222,7 +222,7 @@ public static class ModelExtensions
     {
         return new SalesOrderDetailDto() 
         {
-            Id = salesOrder.Id,
+            Id = salesOrder.SalesOrderNumber,
             Re = salesOrder.Re,
             Tax = salesOrder.Tax,
             TransportPrice = salesOrder.TransportPrice,
@@ -239,7 +239,7 @@ public static class ModelExtensions
     {
         return new SalesOrderDto() 
         {
-            Id = salesOrder.Id,
+            Id = salesOrder.SalesOrderNumber,
             TransportPrice = salesOrder.TransportPrice,
             PaymentType = salesOrder.PaymentType.ToString(),
             TotalPrice = salesOrder.TotalPrice,

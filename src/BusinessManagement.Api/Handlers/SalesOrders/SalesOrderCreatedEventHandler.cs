@@ -28,7 +28,7 @@ public class SalesOrderCreatedEventHandler : IRequestHandler<SalesOrderCreatedEv
         documentBuilder.CreateSalesOrder(salesOrder, businessInfo.ToDto());
         var pdfBytes = documentBuilder.GeneratePdf();
         using var memoryStream = new MemoryStream(pdfBytes);
-        await _awsPublisher.Publish($"salesOrders/{salesOrder.Id}", memoryStream);
+        await _awsPublisher.Publish($"salesOrders/{salesOrder.SalesOrderNumber}", memoryStream);
         return pdfBytes;
     }
 }
