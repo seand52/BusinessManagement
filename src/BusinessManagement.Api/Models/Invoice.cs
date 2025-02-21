@@ -11,7 +11,7 @@ public enum PaymentType
     Transfer
 }
 
-public class Invoice: IPriceCalculable
+public class Invoice: BaseEntity, IPriceCalculable
 {
     [Key]
     public int Id { get; set; }
@@ -48,6 +48,4 @@ public class Invoice: IPriceCalculable
     public DateTime DateIssued { get; set; } = DateTime.UtcNow;
     public List<InvoiceProduct> InvoiceProducts { get; set; } = [];
     IEnumerable<ICalculableItem> IPriceCalculable.Items => InvoiceProducts;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

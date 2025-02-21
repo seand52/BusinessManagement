@@ -10,7 +10,7 @@ public enum DocumentType
     Passport
 }
 
-public class Client
+public class Client: BaseEntity
 {
     public int Id { get; set; }
 
@@ -44,7 +44,4 @@ public class Client
     public string? Email { get; set; } = string.Empty;
     
     public string UserId { get; set; }
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BusinessManagementApi.Models
 {
-    public class SalesOrder: IPriceCalculable
+    public class SalesOrder: BaseEntity, IPriceCalculable
     {
         public int Id { get; set; }
 
@@ -42,7 +42,5 @@ namespace BusinessManagementApi.Models
         public int SalesOrderNumber { get; set; } = 0;
         public List<SalesOrderProduct> SalesOrderProducts { get; set; } = [];
         IEnumerable<ICalculableItem> IPriceCalculable.Items => SalesOrderProducts;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

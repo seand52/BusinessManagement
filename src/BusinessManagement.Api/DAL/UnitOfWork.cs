@@ -10,7 +10,7 @@ namespace ContosoUniversity.DAL
     {
         private readonly ApplicationContext _context;
         private ClientRepository? _clientRepository;
-        private GenericRepository<Product>? _productRepository;
+        private ProductRepository? _productRepository;
         private GenericRepository<BusinessInfo>? _businessInfoRepository;
         private InvoiceRepository? _invoiceRepository;
         private SalesOrderRepository? _salesOrderRepository;
@@ -33,14 +33,14 @@ namespace ContosoUniversity.DAL
             }
         }
         
-        public IGenericRepository<Product> ProductRepository
+        public IProductRepository ProductRepository
         {
             get
             {
 
                 if (_productRepository == null)
                 {
-                    _productRepository = new GenericRepository<Product>(_context);
+                    _productRepository = new ProductRepository(_context);
                 }
                 return _productRepository;
             }
