@@ -1,4 +1,5 @@
 using BusinessManagement.Helpers;
+using BusinessManagementApi.Extensions.Templates;
 using BusinessManagementApi.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -16,7 +17,7 @@ public class PriceData {
     public decimal Transport { get; set; }
     public List<CalculableItem> Items { get; set; }
 }
-public class GrandTotalComponent : IComponent
+public class GrandTotalComponent : BasePresenter, IComponent
 {
     private Calculator PriceCalculator { get; }
 
@@ -24,9 +25,6 @@ public class GrandTotalComponent : IComponent
     {
         PriceCalculator = calculator;
     }
-
-    
-    
     public void Compose(IContainer container)
     {
         container.PaddingVertical(25).Table(table =>
@@ -58,13 +56,13 @@ public class GrandTotalComponent : IComponent
                 }
             });
             
-            table.Cell().Element(ItemCellStyle).Text(PriceCalculator.PaymentMethod);
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTotalPriceOfProducts()}€");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTax()}€");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateRe()}€");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateSubTotal()}€");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateTransport()}€");
-            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{PriceCalculator.CalculateGrandTotal()}€");
+            table.Cell().Element(ItemCellStyle).Text(PaymentTypeMapper(PriceCalculator.PaymentMethod));
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateTotalPriceOfProducts())}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateTax())}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateRe())}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateSubTotal())}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateTransport())}€");
+            table.Cell().Element(ItemCellStyle).AlignRight().Text($"{RoundNumber(PriceCalculator.CalculateGrandTotal())}€");
             
             static IContainer ItemCellStyle(IContainer container)
             {

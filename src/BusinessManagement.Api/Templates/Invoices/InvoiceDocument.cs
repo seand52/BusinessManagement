@@ -1,6 +1,7 @@
 using System.Globalization;
 using BusinessManagement.Helpers;
 using BusinessManagementApi.Dto;
+using BusinessManagementApi.Extensions.Templates;
 using BusinessManagementApi.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -8,7 +9,7 @@ using QuestPDF.Infrastructure;
 
 namespace BusinessManagement.Templates;
 
-public class InvoiceDocument : IDocument
+public class InvoiceDocument : BasePresenter, IDocument
 {
     private InvoiceDetailDto Model { get; }
     private BusinessInfoDto BusinessInfo { get; }
@@ -21,7 +22,6 @@ public class InvoiceDocument : IDocument
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
     public DocumentSettings GetSettings() => DocumentSettings.Default;
-    
 
     public void Compose(IDocumentContainer container)
     {
@@ -180,10 +180,10 @@ public class InvoiceDocument : IDocument
             foreach (var item in Model.InvoiceProducts)
             {
                 table.Cell().Element(CellStyle).Text(item.Reference);
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price}€");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
+                table.Cell().Element(CellStyle).AlignRight().Text($"{RoundNumber(item.Price)}€");
                 table.Cell().Element(CellStyle).AlignRight().Text($"{(item.Discount * 100).ToString(CultureInfo.InvariantCulture)}%");
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price * item.Quantity}€");
+                table.Cell().Element(CellStyle).AlignRight().Text($"{RoundNumber(item.Price * item.Quantity)}€");
                 
                 static IContainer CellStyle(IContainer container)
                 {

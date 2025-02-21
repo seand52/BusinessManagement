@@ -6,10 +6,12 @@ namespace BusinessManagement.Helpers;
 public class Calculator
 {
     private PriceData Data { get; set; }
+    private readonly decimal _totalPriceOfProducts;
     
     public Calculator(PriceData priceData)
     {
         Data = priceData;
+        _totalPriceOfProducts = CalculateTotalPriceOfProducts();
     }
     
     public string PaymentMethod => Data.PaymentMethod;
@@ -21,17 +23,17 @@ public class Calculator
     
     public decimal CalculateTax()
     {
-        return CalculateTotalPriceOfProducts() * Data.Tax;
+        return _totalPriceOfProducts * Data.Tax;
     }
     
     public decimal CalculateRe()
     {
-        return CalculateTotalPriceOfProducts() * Data.Re;
+        return _totalPriceOfProducts * Data.Re;
     }
     
     public decimal CalculateSubTotal()
     {
-        return CalculateRe() + CalculateTax() + CalculateTotalPriceOfProducts();
+        return CalculateRe() + CalculateTax() + _totalPriceOfProducts;
     }
     
     public decimal CalculateTransport()

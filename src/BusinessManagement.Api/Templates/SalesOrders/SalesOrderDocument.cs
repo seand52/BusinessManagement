@@ -1,6 +1,7 @@
 using System.Globalization;
 using BusinessManagement.Helpers;
 using BusinessManagementApi.Dto;
+using BusinessManagementApi.Extensions.Templates;
 using BusinessManagementApi.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -8,7 +9,7 @@ using QuestPDF.Infrastructure;
 
 namespace BusinessManagement.Templates;
 
-public class SalesOrderDocument : IDocument
+public class SalesOrderDocument : BasePresenter, IDocument
 {
     private SalesOrderDetailDto Model { get; }
     private BusinessInfoDto BusinessInfo { get; }
@@ -172,10 +173,10 @@ public class SalesOrderDocument : IDocument
             foreach (var item in Model.SalesOrderProducts)
             {
                 table.Cell().Element(CellStyle).Text(item.Reference);
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price}$");
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
+                table.Cell().Element(CellStyle).AlignRight().Text($"{RoundNumber(item.Price)}€");
                 table.Cell().Element(CellStyle).AlignRight().Text($"{(item.Discount * 100).ToString(CultureInfo.InvariantCulture)}%");
-                table.Cell().Element(CellStyle).AlignRight().Text($"{item.Price * item.Quantity}$");
+                table.Cell().Element(CellStyle).AlignRight().Text($"{RoundNumber(item.Price * item.Quantity)}€");
                 
                 static IContainer CellStyle(IContainer container)
                 {
